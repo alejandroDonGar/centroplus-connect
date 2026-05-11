@@ -3,10 +3,10 @@ package com.centro.modelos;
  * @author AlejandroDonGar
  * @version 1.0.0
  * 
- * Clase usuarios
+ * Clase Usuarios
  */
 public class Usuarios {
-    private int id;
+    private Integer id;
     private String nombre;
     private String dni;
     private String email;
@@ -16,13 +16,6 @@ public class Usuarios {
      * Constructor vacio de la clase
      */
     public Usuarios(){}
-    /**
-     * Constructor del parametro identificador del usuario
-     * @param id parametro identificador del usuario
-     */
-    public Usuarios(int id) {
-        this.id = id;
-    }
     /**
      * Constructor de la clase usuarios
      * @param id parametro identificador del usuario
