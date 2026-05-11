@@ -11,7 +11,7 @@ public class Usuarios {
     private String dni;
     private String email;
     private String telefono;
-    private String tipo_usuario;
+    private String tipoUsuario;
     /**
      * Constructor vacio de la clase
      */
@@ -25,13 +25,13 @@ public class Usuarios {
      * @param telefono parametro telefono del usuario
      * @param tipo_usuario parametro tipo_usuario del usuario
      */
-    public Usuarios(int id, String nombre, String dni, String email, String telefono, String tipo_usuario) {
+    public Usuarios(int id, String nombre, String dni, String email, String telefono, String tipoUsuario) {
         this.id = id;
         this.nombre = nombre;
         this.dni = dni;
         this.email = email;
         this.telefono = telefono;
-        this.tipo_usuario = tipo_usuario;
+        this.tipoUsuario = tipoUsuario;
     }
     /**
      * Getter del parametro id
@@ -84,13 +84,13 @@ public class Usuarios {
         this.telefono = telefono;
     }
     /**
-     * Getter del parametro tipo_usuario
-     * @return Devuelve el valor de tipo_usuario del usuario
+     * Getter del parametro tipoUsuario
+     * @return Devuelve el valor de tipo de usuario
      */
-    public String getTipo_usuario() {
-        return tipo_usuario;
+    public String getTipoUsuario() {
+        return tipoUsuario;
     }
-    public void setTipo_usuario(String tipo_usuario) {
-        this.tipo_usuario = tipo_usuario;
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }

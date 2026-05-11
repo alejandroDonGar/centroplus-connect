@@ -11,7 +11,7 @@ public class Reservas {
     private Integer idUsuario;
     private Integer idActividad;
     private Date fecha;
-    private boolean estado;
+    private String estado;
     /**
      * Constructor vacio de la clase Reservas
      */
@@ -24,7 +24,7 @@ public class Reservas {
      * @param fecha fecha de la reserva
      * @param estado estado de la reserva
      */
-    public Reservas(Integer id, Integer idUsuario, Integer idActividad, Date fecha, boolean estado){
+    public Reservas(Integer id, Integer idUsuario, Integer idActividad, Date fecha, String estado){
         this.id = id;
         this.idUsuario = idUsuario;
         this.idActividad = idActividad;
@@ -75,10 +75,10 @@ public class Reservas {
      * Getter del parametro estado
      * @return Devuelve el valor del estado de la reserva
      */
-    public boolean isEstado() {
+    public String isEstado() {
         return estado;
     }
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 }
