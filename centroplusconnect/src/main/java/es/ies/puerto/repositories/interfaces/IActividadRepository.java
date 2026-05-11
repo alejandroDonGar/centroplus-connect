@@ -2,7 +2,6 @@ package es.ies.puerto.repositories.interfaces;
 import java.util.List;
 import es.ies.puerto.modelos.Actividades;
 import es.ies.puerto.modelos.Reservas;
-import es.ies.puerto.modelos.Usuarios;
 /**
  * 
  */
@@ -11,31 +10,31 @@ public interface IActividadRepository {
      * Lista todos los usuarios
      * @return Devuelve una lista de todos los usuarios
      */
-    public List<Usuarios> findAll();
+    public List<Actividades> findAll();
     /**
      * Busca un usuario por su id
      * @param id identificador del usuario a buscar
      * @return Devuelve un usuario
      */
-    public Usuarios findByID(Integer id);
+    public Actividades findByID(Integer id);
     /**
      * Guarda un usuario en la base de datos
      * @param usuario usuario a guardar
      * @return Devuelve true o false
      */
-    public boolean save(Usuarios usuario);
+    public boolean save(Actividades actividad);
     /**
      * Actualiza un usuario
      * @param usuario usuario a actualizar
      * @return Devuelve true o false
      */
-    public boolean update(Usuarios usuario);
+    public boolean update(Actividades actividad);
     /**
      * Borra un usuario
      * @param usuario usuario a borrar
      * @return Devuelve true o false
      */
-    public boolean delete(Usuarios usuario);
+    public boolean delete(Actividades actividad);
     /**
      * Crea una nueva reserva
      * @param idCliente cliente que realiza la reserva

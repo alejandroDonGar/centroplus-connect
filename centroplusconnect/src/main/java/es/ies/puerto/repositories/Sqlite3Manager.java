@@ -19,7 +19,7 @@ public class Sqlite3Manager {
     public static String getDatabasePath() { 
         return databasePath; 
     }
-    public Connection getConnection() throws SQLException { 
+    public static Connection getConnection() throws SQLException { 
         Connection c = DriverManager.getConnection("jdbc:sqlite:"+databasePath); 
         try(Statement st = c.createStatement()) { 
             st.execute("PRAGMA foreign_keys = ON"); 
