@@ -46,5 +46,4 @@ public class UsuarioService implements IUsuarioService{
         }
         return usuarioRepository.delete(usuario);
     }
-
 }
