@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IncidenciaRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-skills-sqlite-ejercicio</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.repositories</a> &gt; <span class="el_source">IncidenciaRepository.java</span></div><h1>IncidenciaRepository.java</h1><pre class="source lang-java linenums">package es.ies.puerto.repositories;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import es.ies.puerto.modelos.Incidencias;
+import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
+/**
+ * @author AlejandroDonGar y JavierReyPer
+ * @version 1.0.0
+ * 
+ * Clase IncidenciaRepository donde implementamos los metodos de IIncidenciaRepository
+ */
+<span class="nc" id="L16">public class IncidenciaRepository implements IIncidenciaRepository{</span>
+
+    @Override
+    public List&lt;Incidencias&gt; findAll() {
+<span class="nc" id="L20">        List&lt;Incidencias&gt; incidenciasEncontradas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L21">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L22">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM incidencias&quot;)) {</span>
+<span class="nc" id="L23">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">                while (resultado.next()) {</span>
+<span class="nc" id="L25">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L26">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
+<span class="nc" id="L27">                    String asunto = resultado.getString(&quot;asunto&quot;);</span>
+<span class="nc" id="L28">                    String description = resultado.getString(&quot;descripcion&quot;);</span>
+<span class="nc" id="L29">                    Date fecha = resultado.getDate(&quot;fecha&quot;);</span>
+<span class="nc" id="L30">                    String estado = resultado.getString(&quot;estado&quot;);</span>
+<span class="nc" id="L31">                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, description, fecha, estado);</span>
+<span class="nc" id="L32">                    incidenciasEncontradas.add(incidencia);</span>
+<span class="nc" id="L33">                }</span>
+            
+<span class="nc" id="L35">        } catch (Exception e) {</span>
+<span class="nc" id="L36">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
+<span class="nc" id="L37">            return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L38">        }</span>
+<span class="nc" id="L39">        return incidenciasEncontradas;</span>
+    }
+    @Override
+    public Incidencias findByID(Integer id) {
+<span class="nc" id="L43">        Incidencias incidenciaEncontrada = null;</span>
+<span class="nc" id="L44">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L45">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM incidencias WHERE id=?&quot;)) {</span>
+<span class="nc" id="L46">                sentencia.setInt(1, id);</span>
+<span class="nc" id="L47">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">                while (resultado.next()) {</span>
+<span class="nc" id="L49">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
+<span class="nc" id="L50">                    String asunto = resultado.getString(&quot;asunto&quot;);</span>
+<span class="nc" id="L51">                    String description = resultado.getString(&quot;descripcion&quot;);</span>
+<span class="nc" id="L52">                    Date fecha = resultado.getDate(&quot;fecha&quot;);</span>
+<span class="nc" id="L53">                    String estado = resultado.getString(&quot;estado&quot;);</span>
+<span class="nc" id="L54">                    incidenciaEncontrada = new Incidencias(id, idUsuario, asunto, description, fecha, estado);</span>
+<span class="nc" id="L55">                    return incidenciaEncontrada;</span>
+                }
+            
+<span class="nc bnc" id="L58" title="All 4 branches missed.">        } catch (Exception e) {</span>
+<span class="nc" id="L59">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
+<span class="nc" id="L60">            return null;</span>
+<span class="nc" id="L61">        }</span>
+<span class="nc" id="L62">        return incidenciaEncontrada;</span>
+    }
+    @Override
+    public boolean save(Incidencias incidencia) {
+<span class="nc" id="L66">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L67">            PreparedStatement sentencia = connection.prepareStatement(&quot;INSERT INTO incidencias VALUES (?,?,?,?,?,?)&quot;)) {</span>
+<span class="nc" id="L68">                sentencia.setInt(1, incidencia.getId());</span>
+<span class="nc" id="L69">                sentencia.setInt(2, incidencia.getIdUsuario());</span>
+<span class="nc" id="L70">                sentencia.setString(3, incidencia.getAsunto());</span>
+<span class="nc" id="L71">                sentencia.setString(4, incidencia.getDescripcion());</span>
+<span class="nc" id="L72">                sentencia.setString(5, incidencia.getFecha().toString());</span>
+<span class="nc" id="L73">                sentencia.setString(6, incidencia.getEstado());</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            System.err.println(&quot;No se ha podido guardar la inicidencia&quot;);</span>
+<span class="nc" id="L78">            return false;</span>
+        }
+    }
+    @Override
+    public boolean update(Incidencias incidencia) {
+<span class="nc" id="L83">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L84">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE incidencias SET id_usuario=?, asunto=?, descripcion=?, fecha=?, estado=? WHERE id=?&quot;)) {</span>
+<span class="nc" id="L85">                sentencia.setInt(1, incidencia.getIdUsuario());</span>
+<span class="nc" id="L86">                sentencia.setString(2, incidencia.getAsunto());</span>
+<span class="nc" id="L87">                sentencia.setString(3, incidencia.getDescripcion());</span>
+<span class="nc" id="L88">                sentencia.setString(4, incidencia.getFecha().toString());</span>
+<span class="nc" id="L89">                sentencia.setString(5, incidencia.getEstado());</span>
+<span class="nc" id="L90">                sentencia.setInt(6, incidencia.getId());</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L93">        } catch (Exception e) {</span>
+<span class="nc" id="L94">            System.err.println(&quot;No se ha podido actualizar la inicidencia&quot;);</span>
+<span class="nc" id="L95">            return false;</span>
+        }
+    }
+    @Override
+    public boolean delete(Integer id) {
+<span class="nc" id="L100">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L101">            PreparedStatement sentencia = connection.prepareStatement(&quot;DELETE FROM incidencias WHERE id=?&quot;)) {</span>
+<span class="nc" id="L102">                sentencia.setInt(1, id);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L105">        } catch (Exception e) {</span>
+<span class="nc" id="L106">            System.err.println(&quot;No se ha podido eliminar la inicidencia&quot;);</span>
+<span class="nc" id="L107">            return false;</span>
+        }
+    }
+    @Override
+    public List&lt;Incidencias&gt; incidenciasPorIdUsuario(Integer idUsuario) {
+<span class="nc" id="L112">        List&lt;Incidencias&gt; incidenciasPorUsuarioEncontradas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L113">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L114">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM incidencias WHERE id_usuario=?&quot;)) {</span>
+<span class="nc" id="L115">                sentencia.setInt(1, idUsuario);</span>
+<span class="nc" id="L116">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                while (resultado.next()) {</span>
+<span class="nc" id="L118">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L119">                    String asunto = resultado.getString(&quot;asunto&quot;);</span>
+<span class="nc" id="L120">                    String descripcion = resultado.getString(&quot;descripcion&quot;);</span>
+<span class="nc" id="L121">                    Date fecha = resultado.getDate(&quot;fecha&quot;);</span>
+<span class="nc" id="L122">                    String estado = resultado.getString(&quot;estado&quot;);</span>
+<span class="nc" id="L123">                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, descripcion, fecha, estado);</span>
+<span class="nc" id="L124">                    incidenciasPorUsuarioEncontradas.add(incidencia);</span>
+<span class="nc" id="L125">                }</span>
+<span class="nc" id="L126">        } catch (Exception e) {</span>
+<span class="nc" id="L127">            System.err.println(&quot;No se han encontrado los resultado&quot;);</span>
+<span class="nc" id="L128">            return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L129">        }</span>
+<span class="nc" id="L130">        return incidenciasPorUsuarioEncontradas;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

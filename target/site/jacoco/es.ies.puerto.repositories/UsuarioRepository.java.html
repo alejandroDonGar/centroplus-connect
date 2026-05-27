@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-skills-sqlite-ejercicio</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.repositories</a> &gt; <span class="el_source">UsuarioRepository.java</span></div><h1>UsuarioRepository.java</h1><pre class="source lang-java linenums">package es.ies.puerto.repositories;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import es.ies.puerto.modelos.Usuarios;
+import es.ies.puerto.repositories.interfaces.IUsuarioRepository;
+/**
+ * @author AlejandroDonGar y JavierReyPer
+ * @version 1.0.0
+ * 
+ * Clase UsuarioRepository donde implementamos los metodos de IUsuarioRepository
+ */
+<span class="nc" id="L15">public class UsuarioRepository implements IUsuarioRepository{</span>
+
+    @Override
+    public List&lt;Usuarios&gt; findAll() {
+<span class="nc" id="L19">        List&lt;Usuarios&gt; usuariosEncontrados = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L20">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L21">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM usuarios&quot;)) {</span>
+<span class="nc" id="L22">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">                while(resultado.next()) {</span>
+<span class="nc" id="L24">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L25">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
+<span class="nc" id="L26">                    String dni = resultado.getString(&quot;dni&quot;);</span>
+<span class="nc" id="L27">                    String email = resultado.getString(&quot;email&quot;);</span>
+<span class="nc" id="L28">                    String telefono = resultado.getString(&quot;telefono&quot;);</span>
+<span class="nc" id="L29">                    String tipoUsuario = resultado.getString(&quot;tipo_usuario&quot;);</span>
+<span class="nc" id="L30">                    Usuarios usuario = new Usuarios(id, nombre, dni, email, telefono, tipoUsuario);</span>
+<span class="nc" id="L31">                    usuariosEncontrados.add(usuario);</span>
+<span class="nc" id="L32">                }</span>
+<span class="nc" id="L33">        } catch (Exception e) {</span>
+<span class="nc" id="L34">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
+<span class="nc" id="L35">            return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L36">        }</span>
+<span class="nc" id="L37">        return usuariosEncontrados;</span>
+    }
+    @Override
+    public Usuarios findByID(Integer id) {
+<span class="nc" id="L41">        Usuarios usuario = null;</span>
+<span class="nc" id="L42">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L43">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM usuarios WHERE id=?&quot;)) {</span>
+<span class="nc" id="L44">                sentencia.setInt(1, id);</span>
+<span class="nc" id="L45">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">                while(resultado.next()) {</span>
+<span class="nc" id="L47">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
+<span class="nc" id="L48">                    String dni = resultado.getString(&quot;dni&quot;);</span>
+<span class="nc" id="L49">                    String email = resultado.getString(&quot;email&quot;);</span>
+<span class="nc" id="L50">                    String telefono = resultado.getString(&quot;telefono&quot;);</span>
+<span class="nc" id="L51">                    String tipoUsuario = resultado.getString(&quot;tipo_usuario&quot;);</span>
+<span class="nc" id="L52">                    usuario = new Usuarios(id, nombre, dni, email, telefono, tipoUsuario);</span>
+<span class="nc" id="L53">                    return usuario;</span>
+                }
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        } catch (Exception e) {</span>
+<span class="nc" id="L56">            System.err.println(&quot;No se ha encontrado el usuario&quot;);</span>
+<span class="nc" id="L57">            return null;</span>
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">        return usuario;</span>
+    }
+    @Override
+    public boolean save(Usuarios usuario) {
+<span class="nc" id="L63">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L64">            PreparedStatement sentencia = connection.prepareStatement(&quot;INSERT INTO usuarios VALUES (?,?,?,?,?,?)&quot;)) {</span>
+<span class="nc" id="L65">                sentencia.setInt(1, usuario.getId());</span>
+<span class="nc" id="L66">                sentencia.setString(2, usuario.getNombre());</span>
+<span class="nc" id="L67">                sentencia.setString(3, usuario.getDni());</span>
+<span class="nc" id="L68">                sentencia.setString(4, usuario.getEmail());</span>
+<span class="nc" id="L69">                sentencia.setString(5, usuario.getTelefono());</span>
+<span class="nc" id="L70">                sentencia.setString(6, usuario.getTipoUsuario());</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L73">        } catch (Exception e) {</span>
+<span class="nc" id="L74">            System.err.println(&quot;No se ha podido guardar el usuario&quot;);</span>
+<span class="nc" id="L75">            return false;</span>
+        }
+    }
+    @Override
+    public boolean update(Usuarios usuario) {
+<span class="nc" id="L80">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L81">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE usuarios SET nombre=?, dni=?, email=?, telefono=?, tipo_usuario=? WHERE id=?&quot;)) {</span>
+<span class="nc" id="L82">                sentencia.setString(1, usuario.getNombre());</span>
+<span class="nc" id="L83">                sentencia.setString(2, usuario.getDni());</span>
+<span class="nc" id="L84">                sentencia.setString(3, usuario.getEmail());</span>
+<span class="nc" id="L85">                sentencia.setString(4, usuario.getTelefono());</span>
+<span class="nc" id="L86">                sentencia.setString(5, usuario.getTipoUsuario());</span>
+<span class="nc" id="L87">                sentencia.setInt(6, usuario.getId());</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L90">        } catch (Exception e) {</span>
+<span class="nc" id="L91">            System.err.println(&quot;No se ha podido actualizar el usuario&quot;);</span>
+<span class="nc" id="L92">            return false;</span>
+        }
+    }
+    @Override
+    public boolean delete(Usuarios usuario) {
+<span class="nc" id="L97">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="nc" id="L98">            PreparedStatement sentencia = connection.prepareStatement(&quot;DELETE FROM usuarios WHERE id=?&quot;)) {</span>
+<span class="nc" id="L99">                sentencia.setInt(1, usuario.getId());</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+            
+<span class="nc" id="L102">        } catch (Exception e) {</span>
+<span class="nc" id="L103">            System.err.println(&quot;No se ha podido eliminar el usuario&quot;);</span>
+<span class="nc" id="L104">            return false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
