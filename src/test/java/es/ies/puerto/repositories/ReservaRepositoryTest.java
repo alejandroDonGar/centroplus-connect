@@ -3,7 +3,7 @@ package test.java.es.ies.puerto.repositories;
  * @author AlejandroDonGar y JavierReyPer
  * @version 1.0.0
  * 
- * Clase IncidenciasRepoTest
+ * Clase ReservaRepoTest
  */
-public class IncidenciasRepoTest {
+public class ReservaRepositoryTest {
 }
