@@ -32,6 +32,7 @@ public class Actividades {
         this.nombre = nombre;
         this.tipoActividad = tipoActividad;
         this.duracion = duracion;
+        this.precio = precio;
         this.plazasMaximas = plazasMaximas;
         this.plazasOcupadas = plazasOcupadas;
     }
@@ -104,5 +105,18 @@ public class Actividades {
     }
     public void setPlazasOcupadas(Integer plazasOcupadas) {
         this.plazasOcupadas = plazasOcupadas;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Actividades that = (Actividades) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

@@ -23,9 +23,9 @@ public class Usuarios {
      * @param dni parametro dni del usuario
      * @param email parametro emial del usuario
      * @param telefono parametro telefono del usuario
-     * @param tipo_usuario parametro tipo_usuario del usuario
+     * @param tipoUsuario parametro tipo_usuario del usuario
      */
-    public Usuarios(int id, String nombre, String dni, String email, String telefono, String tipoUsuario) {
+    public Usuarios(Integer id, String nombre, String dni, String email, String telefono, String tipoUsuario) {
         this.id = id;
         this.nombre = nombre;
         this.dni = dni;
@@ -37,10 +37,10 @@ public class Usuarios {
      * Getter del parametro id
      * @return Devuelve el valor del identificador
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     /**
@@ -92,5 +92,18 @@ public class Usuarios {
     }
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuarios usuarios = (Usuarios) o;
+        return id != null && id.equals(usuarios.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

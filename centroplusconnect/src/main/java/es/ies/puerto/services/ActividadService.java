@@ -15,7 +15,13 @@ public class ActividadService implements IActividadService {
 
     IActividadRepository actividadRepository;
 
-    @Override
+    public ActividadService() {
+        this.actividadRepository = new es.ies.puerto.repositories.ActividadRepository();
+    }
+
+    public ActividadService(IActividadRepository actividadRepository) {
+        this.actividadRepository = actividadRepository;
+    }
     public List<Actividades> findAll() {
         return actividadRepository.findAll();
     }
@@ -49,7 +55,10 @@ public class ActividadService implements IActividadService {
     }
     @Override
     public Reservas reservarPlaza(Integer idCliente, Integer idActividad) {
-        return null;
+        if(!Validaciones.esIntegerValido(idCliente) || !Validaciones.esIntegerValido(idActividad)) {
+            return null;
+        }
+        return actividadRepository.reservarPlaza(idCliente, idActividad);
     }
     @Override
     public boolean cancelarPlaza(Integer idActividad) {

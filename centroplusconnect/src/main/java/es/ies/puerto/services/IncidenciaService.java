@@ -16,16 +16,18 @@ public class IncidenciaService implements IIncidenciaService{
     
     IIncidenciaRepository incidenciaRepository;
 
-    @Override
+    public IncidenciaService() {
+        this.incidenciaRepository = new es.ies.puerto.repositories.IncidenciaRepository();
+    }
+
+    public IncidenciaService(IIncidenciaRepository incidenciaRepository) {
+        this.incidenciaRepository = incidenciaRepository;
+    }
     public List<Incidencias> findAll() {
         return incidenciaRepository.findAll();
     }
     @Override
     public Incidencias findByID(Integer id) {
-        Incidencias incidencia = new Incidencias(id);
-        if(!incidenciaRepository.findAll().contains(incidencia)) {
-            return null;
-        }
         if(!Validaciones.esIntegerValido(id)) {
             return null;
         }

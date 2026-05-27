@@ -14,7 +14,13 @@ public class UsuarioService implements IUsuarioService{
 
     IUsuarioRepository usuarioRepository;
 
-    @Override
+    public UsuarioService() {
+        this.usuarioRepository = new es.ies.puerto.repositories.UsuarioRepository();
+    }
+
+    public UsuarioService(IUsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
     public List<Usuarios> findAll() {
         return usuarioRepository.findAll();
     }

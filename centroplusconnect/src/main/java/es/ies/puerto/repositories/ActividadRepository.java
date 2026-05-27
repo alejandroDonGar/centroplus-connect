@@ -33,7 +33,6 @@ public class ActividadRepository implements IActividadRepository {
                     Integer plazasOcupadas = resultado.getInt("plazas_ocupadas");
                     Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);
                     actividadesEncontradas.add(actividad);
-                    return actividadesEncontradas;
                 }
         } catch (Exception e) {
             System.err.println("No se han encontrado los resultados");
@@ -102,7 +101,7 @@ public class ActividadRepository implements IActividadRepository {
     public boolean delete(Actividades actividad) {
         try (Connection connection = Sqlite3Manager.getConnection();
             PreparedStatement sentencia = connection.prepareStatement("DELETE FROM actividades WHERE id=?")) {
-                sentencia.setInt(7, actividad.getId());
+                sentencia.setInt(1, actividad.getId());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
             System.err.println("No se ha podido borrar la actividad");
@@ -111,17 +110,25 @@ public class ActividadRepository implements IActividadRepository {
     }
     @Override
     public Reservas reservarPlaza(Integer idCliente, Integer idActividad) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reservarPlaza'");
+        try (Connection connection = Sqlite3Manager.getConnection();
+            PreparedStatement sentencia = connection.prepareStatement("UPDATE actividades SET plazas_ocupadas = plazas_ocupadas + 1 WHERE id=? AND plazas_ocupadas < plazas_maximas")) {
+                sentencia.setInt(1, idActividad);
+                if (sentencia.executeUpdate() > 0) {
+                    return new Reservas(null, idCliente, idActividad, new java.util.Date(), "ACTIVA");
+                }
+        } catch (Exception e) {
+            System.err.println("No se ha podido reservar la plaza");
+        }
+        return null;
     }
     @Override
     public boolean cancelarPlaza(Integer idActividad) {
         try (Connection connection = Sqlite3Manager.getConnection();
-            PreparedStatement sentencia = connection.prepareStatement("UPDATE reservas SET estado=CANCELADA WHERE id_actividad=?")) {
+            PreparedStatement sentencia = connection.prepareStatement("UPDATE actividades SET plazas_ocupadas = plazas_ocupadas - 1 WHERE id=? AND plazas_ocupadas > 0")) {
                 sentencia.setInt(1, idActividad);
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar la reserva");
+            System.err.println("No se ha podido actualizar la actividad");
             return false;
         }
     }
@@ -141,7 +148,6 @@ public class ActividadRepository implements IActividadRepository {
                     Integer plazasOcupadas = resultado.getInt("plazas_ocupadas");
                     Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);
                     actividadesCompletas.add(actividad);
-                    return actividadesCompletas;
                 }
         } catch (Exception e) {
             System.err.println("No se han encontrado los resultados");

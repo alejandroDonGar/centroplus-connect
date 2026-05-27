@@ -29,7 +29,6 @@ public class ReservaRepository implements IReservaRepository{
                     String estado = resultado.getString("estado");
                     Reservas reserva = new Reservas(id, idUsuario, idActividad, fecha, estado);
                     reservasEncontradas.add(reserva);
-                    return reservasEncontradas;
                 }
         } catch (Exception e) {
             System.err.println("No se han encontrado los elementos");
@@ -66,7 +65,7 @@ public class ReservaRepository implements IReservaRepository{
                 sentencia.setInt(2, reserva.getIdUsuario());
                 sentencia.setInt(3, reserva.getIdActividad());
                 sentencia.setString(4, reserva.getFecha().toString());
-                sentencia.setString(5, reserva.isEstado());
+                sentencia.setString(5, reserva.getEstado());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
             System.err.println("No se ha podido guardar la reserva");
@@ -80,7 +79,7 @@ public class ReservaRepository implements IReservaRepository{
                 sentencia.setInt(1, reserva.getIdUsuario());
                 sentencia.setInt(2, reserva.getIdActividad());
                 sentencia.setString(3, reserva.getFecha().toString());
-                sentencia.setString(4, reserva.isEstado());
+                sentencia.setString(4, reserva.getEstado());
                 sentencia.setInt(5, reserva.getId());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
@@ -103,14 +102,13 @@ public class ReservaRepository implements IReservaRepository{
     public Integer numeroDePlazasDisponibles(Integer idActividad) {
         Integer plazasDisponibles = 0;
         try (Connection connection = Sqlite3Manager.getConnection();
-            PreparedStatement sentencia = connection.prepareStatement("SELECT act.plazas_maximas, act.plazas_ocupadas FROM actividades AS act INNER JOIN reservas AS re ON act.id=re.id_actividad WHERE idActividad=?")) {
+            PreparedStatement sentencia = connection.prepareStatement("SELECT plazas_maximas, plazas_ocupadas FROM actividades WHERE id=?")) {
                 sentencia.setInt(1, idActividad);
                 ResultSet resultado = sentencia.executeQuery();
-                while (resultado.next()) {
+                if (resultado.next()) {
                     Integer plazasMaximas = resultado.getInt("plazas_maximas");
                     Integer plazasOcupadas = resultado.getInt("plazas_ocupadas");
                     plazasDisponibles = plazasMaximas - plazasOcupadas;
-                    return plazasDisponibles;
                 }
         } catch (Exception e) {
             System.err.println("No se ha podido calcular el numero de plazas disponibles");

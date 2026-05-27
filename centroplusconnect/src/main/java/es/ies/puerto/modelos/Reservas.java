@@ -82,8 +82,21 @@ public class Reservas {
      * Getter del parametro estado
      * @return Devuelve el valor del estado de la reserva
      */
-    public String isEstado() {
+    public String getEstado() {
         return estado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservas reservas = (Reservas) o;
+        return id != null && id.equals(reservas.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
     public void setEstado(String estado) {
         this.estado = estado;

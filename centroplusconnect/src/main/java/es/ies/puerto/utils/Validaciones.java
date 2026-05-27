@@ -31,27 +31,22 @@ public class Validaciones {
         return value!=null && Pattern.matches("^[+34]?[0-9]{9}$", value);
     }
     public static boolean esTipoUsuarioValido(String value) {
-        return value!=null && Pattern.matches("^[ALUMNO]|[SOCIO]|[AMBOS]$", value);
+        return value!=null && Pattern.matches("^(ALUMNO|SOCIO|AMBOS)$", value);
     }
     public static boolean esTipoActividadValida(String value) {
-        return value!=null && Pattern.matches("^[ACADEMICA]|[DEPORTIVA]$", value);
+        return value!=null && Pattern.matches("^(ACADEMICA|DEPORTIVA)$", value);
     }
     public static boolean esPlazasOcupadas(Integer value) {
-        Actividades actividad = new Actividades();
-        if(value==null || value>actividad.getPlazasMaximas()) {
-            return false;
-        }
-        return true;
+        return value!=null && value >= 0;
     }
     public static boolean esFechaValida(Date value) {
-        String fecha = value.toString();
-        return fecha!=null && Pattern.matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", fecha);
+        return value!=null;
     }
     public static boolean esEstadoReservaValido(String value) {
-        return value!=null && Pattern.matches("^[ACTIVA]|[CANCELADA]$", value);
+        return value!=null && Pattern.matches("^(ACTIVA|CANCELADA)$", value);
     }
     public static boolean esEstadoIncidenciaValido(String value) {
-        return value!=null && Pattern.matches("^[ABIERTA]|[EN_PROCESO]|[CERRADA]$", value);
+        return value!=null && Pattern.matches("^(ABIERTA|EN_PROCESO|CERRADA)$", value);
     }
     public static boolean esUsuarioValido(Usuarios usuario) {
         if(usuario==null 
@@ -84,7 +79,7 @@ public class Validaciones {
             || !esIntegerValido(reserva.getIdUsuario())
             || !esIntegerValido(reserva.getIdActividad())
             || !esFechaValida(reserva.getFecha())
-            || !esEstadoReservaValido(reserva.isEstado())) {
+            || !esEstadoReservaValido(reserva.getEstado())) {
                 return false;
             }
         return true;

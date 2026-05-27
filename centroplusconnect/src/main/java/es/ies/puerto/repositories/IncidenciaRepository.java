@@ -30,7 +30,6 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     String estado = resultado.getString("estado");
                     Incidencias incidencia = new Incidencias(id, idUsuario, asunto, description, fecha, estado);
                     incidenciasEncontradas.add(incidencia);
-                    return incidenciasEncontradas;
                 }
             
         } catch (Exception e) {
@@ -123,7 +122,6 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     String estado = resultado.getString("estado");
                     Incidencias incidencia = new Incidencias(id, idUsuario, asunto, descripcion, fecha, estado);
                     incidenciasPorUsuarioEncontradas.add(incidencia);
-                    return incidenciasPorUsuarioEncontradas;
                 }
         } catch (Exception e) {
             System.err.println("No se han encontrado los resultado");

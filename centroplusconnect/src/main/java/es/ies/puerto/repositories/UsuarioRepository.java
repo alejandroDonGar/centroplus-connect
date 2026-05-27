@@ -29,7 +29,6 @@ public class UsuarioRepository implements IUsuarioRepository{
                     String tipoUsuario = resultado.getString("tipo_usuario");
                     Usuarios usuario = new Usuarios(id, nombre, dni, email, telefono, tipoUsuario);
                     usuariosEncontrados.add(usuario);
-                    return usuariosEncontrados;
                 }
         } catch (Exception e) {
             System.err.println("No se han encontrado los resultados");

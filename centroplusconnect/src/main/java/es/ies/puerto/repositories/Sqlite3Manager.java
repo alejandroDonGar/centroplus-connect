@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class Sqlite3Manager {
 
-    private static String databasePath = "CentroPlus-Connect/centroplusconnect/database/centroplus.db";
+    private static String databasePath = "database/centroplus.db";
     
     public static void setDatabasePath(String path) { 
         databasePath = path; 
