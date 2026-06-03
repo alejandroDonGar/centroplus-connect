@@ -14,6 +14,12 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import es.ies.puerto.modelos.Reservas;
 import es.ies.puerto.services.ReservaService;
+import es.ies.puerto.modelos.Incidencias;
+import es.ies.puerto.services.IncidenciaService;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import java.util.Date;
 
 /**
  * @author AlejandroDonGar y JavierReyPer
@@ -26,6 +32,7 @@ public class MainController {
     private BorderPane root;
     private ActividadService actividadService;
     private ReservaService reservaService;
+    private IncidenciaService incidenciaService;
 
     /**
      * Constructor de la clase MainController
@@ -33,6 +40,7 @@ public class MainController {
     public MainController() {
         actividadService = new ActividadService();
         reservaService = new ReservaService();
+        incidenciaService = new IncidenciaService();
 
         root = new BorderPane();
         root.getStyleClass().add("root-mobile");
@@ -83,10 +91,11 @@ public class MainController {
         listaActividades.getStyleClass().add("lista");
         listaActividades.setItems(FXCollections.observableArrayList(actividadService.findAll()));
         listaActividades.setCellFactory(param -> new ListCell<>() {
+
             /**
              * Metodo updateItem que actualiza el item de la lista de actividades   
              * @param actividad La actividad a mostrar
-             * @param empty
+             * @param empty Si el item está vacío
              */
             @Override
             protected void updateItem(Actividades actividad, boolean empty) { 
@@ -171,6 +180,7 @@ public class MainController {
         listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));
 
         listaReservas.setCellFactory(param -> new ListCell<>() {
+
             /**
              * Metodo updateItem que actualiza el item de la lista de reservas   
              * @param reserva La reserva a mostrar
@@ -200,21 +210,115 @@ public class MainController {
         root.setCenter(contenido);
     }
 
-    /**
-     * Metodo mostrarIncidencias que muestra las incidencias del escenario
-     */
+     /**
+      * Metodo mostrarIncidencias que muestra las incidencias del escenario
+      */
     private void mostrarIncidencias() {
-        VBox contenido = crearContenedorPantalla();
+        VBox contenido = crearContenedorPantalla(); // Contenedor de la pantalla
 
         Label titulo = new Label("Incidencias"); // Título de incidencias
         titulo.getStyleClass().add("titulo");
 
-        Label texto = new Label("Aquí se podrá enviar una incidencia."); // Texto de incidencias
-        texto.getStyleClass().add("texto");
-        texto.setWrapText(true);
+        TextField campoAsunto = new TextField(); // Campo de asunto
+        campoAsunto.setPromptText("Asunto");
+        campoAsunto.getStyleClass().add("campo-texto");
 
-        contenido.getChildren().addAll(titulo, texto);
+        TextArea campoDescripcion = new TextArea(); // Campo de descripción
+        campoDescripcion.setPromptText("Descripción");
+        campoDescripcion.setWrapText(true);
+        campoDescripcion.setPrefRowCount(4);
+        campoDescripcion.getStyleClass().add("campo-texto");
+
+        Button btnEnviar = new Button("Enviar incidencia"); // Botón de enviar incidencia
+        btnEnviar.getStyleClass().add("boton-principal");
+
+        ListView<Incidencias> listaIncidencias = new ListView<>(); // Lista de incidencias
+        listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.findAll()));
+        listaIncidencias.getStyleClass().add("lista");
+
+        listaIncidencias.setCellFactory(param -> new ListCell<>() {
+
+            /**
+             * Metodo updateItem que actualiza el item de la lista de incidencias   
+             * @param incidencia La incidencia a mostrar
+             * @param empty Si el item está vacío
+             */
+            @Override
+            protected void updateItem(Incidencias incidencia, boolean empty) {
+                super.updateItem(incidencia, empty);
+
+                if (empty || incidencia == null) {
+                    setText(null);
+                } else {
+                    setText(
+                        "Incidencia #" + incidencia.getId() + "\n" +
+                        incidencia.getAsunto() + "\n" +
+                        incidencia.getDescripcion() + "\n" +
+                        "Estado: " + incidencia.getEstado()
+                    );
+                }
+            }
+        });
+        btnEnviar.setOnAction(event -> {
+            String asunto = campoAsunto.getText();
+            String descripcion = campoDescripcion.getText();
+
+            if (asunto == null || asunto.trim().isEmpty()) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Validación", "El asunto no puede estar vacío.");
+                return;
+            }
+            if (descripcion == null || descripcion.trim().isEmpty()) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Validación", "La descripción no puede estar vacía.");
+                return;
+            }
+            Incidencias incidencia = new Incidencias(
+                generarIdIncidencia(),
+                1,
+                asunto.trim(),
+                descripcion.trim(),
+                new Date(),
+                "ABIERTA"
+            );
+            boolean guardada = incidenciaService.save(incidencia);
+            if (guardada) {
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Incidencia enviada", "La incidencia se ha registrado correctamente.");
+                campoAsunto.clear();
+                campoDescripcion.clear();
+                mostrarIncidencias();
+            } else {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido registrar la incidencia.");
+            }
+        });
+        contenido.getChildren().addAll(
+            titulo,
+            campoAsunto,
+            campoDescripcion,
+            btnEnviar,
+            listaIncidencias
+        );
         root.setCenter(contenido);
+    }
+
+    /**
+     * Metodo mostrarAlerta que muestra una alerta con un tipo, un título y un mensaje
+     * @param tipo El tipo de alerta
+     * @param titulo El título de alerta
+     * @param mensaje El mensaje de alerta
+     */
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    /**
+     * Metodo generarIdIncidencia que genera un nuevo ID de incidencia
+     * @return El nuevo ID de incidencia
+     */
+    private Integer generarIdIncidencia() {
+        return incidenciaService.findAll().size() + 1;
     }
 
     /**
