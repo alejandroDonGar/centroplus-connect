@@ -31,7 +31,8 @@ public class UsuarioRepository implements IUsuarioRepository{
                     usuariosEncontrados.add(usuario);
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los resultados");
+            System.err.println("No se han encontrado los resultados"); 
+            e.printStackTrace();
             return new ArrayList<>();
         }
         return usuariosEncontrados;
@@ -53,7 +54,8 @@ public class UsuarioRepository implements IUsuarioRepository{
                     return usuario;
                 }
         } catch (Exception e) {
-            System.err.println("No se ha encontrado el usuario");
+            System.err.println("No se ha encontrado el usuario"); 
+            e.printStackTrace();
             return null;
         }
         return usuario;
@@ -71,7 +73,8 @@ public class UsuarioRepository implements IUsuarioRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido guardar el usuario");
+            System.err.println("No se ha podido guardar el usuario"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -88,7 +91,8 @@ public class UsuarioRepository implements IUsuarioRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar el usuario");
+            System.err.println("No se ha podido actualizar el usuario"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -100,7 +104,8 @@ public class UsuarioRepository implements IUsuarioRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido eliminar el usuario");
+            System.err.println("No se ha podido eliminar el usuario"); 
+            e.printStackTrace();
             return false;
         }
     }

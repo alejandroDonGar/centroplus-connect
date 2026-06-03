@@ -182,41 +182,53 @@ public class MainController {
      * Metodo mostrarReservas que muestra las reservas del escenario
      */
     private void mostrarReservas() {
+
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("Mis reservas"); // Título de reservas
+        Label titulo = new Label("Mis reservas"); // Título de la lista de reservas
         titulo.getStyleClass().add("titulo");
 
         ListView<Reservas> listaReservas = new ListView<>(); // Lista de reservas
         listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));
-
         listaReservas.setCellFactory(param -> new ListCell<>() {
 
             /**
-             * Metodo updateItem que actualiza el item de la lista de reservas   
+             * Metodo updateItem que actualiza el contenido de una celda de la lista de reservas
              * @param reserva La reserva a mostrar
-             * @param empty Si el item está vacío
+             * @param empty Si la celda está vacía
              */
             @Override
             protected void updateItem(Reservas reserva, boolean empty) {
                 super.updateItem(reserva, empty);
-                if(empty || reserva == null) {
+                if (empty || reserva == null) {
                     setText(null);
                 } else {
-                    setText(
-                        "Reserva #" + reserva.getId() + "\n" +
-                        "Actividad: " + reserva.getIdActividad() + "\n" +
-                        "Fecha: " + reserva.getFecha() + "\n" +
-                        "Estado: " + reserva.getEstado()
-                    );
+                    setText("Reserva #" + reserva.getId() + "\n" + "Actividad: " + reserva.getIdActividad() + "\n" + "Fecha: " + reserva.getFecha() + "\n" + "Estado: " + reserva.getEstado());
                 }
             }
         });
-        Button btnCancelar = new Button("Cancelar reserva"); // Botón de cancelar reserva
+        Button btnCancelar = new Button("Cancelar reserva");
         btnCancelar.getStyleClass().add("boton-principal");
         btnCancelar.setDisable(true);
-
         listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnCancelar.setDisable(newVal == null));
+        /**
+         * Metodo cancelarReserva que cancela una reserva del escenario
+         * @param event El evento de clic en el botón de cancelar
+        */
+        btnCancelar.setOnAction(event -> {
+            Reservas reservaSeleccionada =listaReservas.getSelectionModel().getSelectedItem();
+            if (reservaSeleccionada == null) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Reserva no seleccionada", "Debes seleccionar una reserva para cancelarla.");
+                return;
+            }
+            boolean cancelada =reservaService.delete(reservaSeleccionada.getId());
+            if (cancelada) {
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Reserva cancelada", "La reserva se ha cancelado correctamente.");
+                mostrarReservas();
+            } else {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido cancelar la reserva.");
+            }
+        });
         contenido.getChildren().addAll(titulo, listaReservas, btnCancelar);
         root.setCenter(contenido);
     }
