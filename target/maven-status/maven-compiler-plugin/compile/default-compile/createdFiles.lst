@@ -23,4 +23,5 @@ es\ies\puerto\modelos\Incidencias.class
 es\ies\puerto\services\interfaces\IReservaService.class
 es\ies\puerto\controllers\MainController.class
 es\ies\puerto\repositories\interfaces\IReservaRepository.class
+es\ies\puerto\controllers\MainController$3.class
 es\ies\puerto\repositories\interfaces\IActividadRepository.class
