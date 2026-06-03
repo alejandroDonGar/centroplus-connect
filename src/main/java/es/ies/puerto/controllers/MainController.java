@@ -158,6 +158,17 @@ public class MainController {
         btnReservar.getStyleClass().add("boton-principal");
         btnReservar.setDisable(plazasDisponibles <= 0);
 
+        btnReservar.setOnAction(event -> {
+            Reservas reserva = new Reservas(generarIdReserva(), 1, actividad.getId(), new Date(), "ACTIVA");
+            boolean resultado = reservaService.save(reserva);
+            if (resultado) {
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Reserva creada", "La reserva se ha realizado correctamente.");
+                mostrarActividades();
+            } else {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido realizar la reserva.");
+            }
+        });
+
         Button btnVolver = new Button("Volver a actividades"); // Botón de volver a actividades
         btnVolver.getStyleClass().add("boton-secundario");
         btnVolver.setOnAction(event -> mostrarActividades());
@@ -208,6 +219,14 @@ public class MainController {
         listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnCancelar.setDisable(newVal == null));
         contenido.getChildren().addAll(titulo, listaReservas, btnCancelar);
         root.setCenter(contenido);
+    }
+
+    /**
+     * Metodo generarIdReserva que genera un nuevo ID de reserva
+     * @return El nuevo ID de reserva
+     */
+    private Integer generarIdReserva() {
+        return reservaService.findAll().size() + 1;
     }
 
      /**
