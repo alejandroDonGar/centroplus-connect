@@ -63,18 +63,25 @@ public class MainController {
     private void mostrarInicio() {
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("CentroPlus Connect"); // Título del escenario
+        Label titulo = new Label("CentroPlus Connect"); // Título del inicio
         titulo.getStyleClass().add("titulo");
 
-        Label descripcion = new Label("Consulta actividades, reserva plazas y comunica incidencias."); // Descripción del escenario
+        Label descripcion = new Label("Consulta actividades, reserva plazas y comunica incidencias."); // Descripción del inicio
         descripcion.getStyleClass().add("texto");
         descripcion.setWrapText(true);
+
+        Label resumen = new Label( // Resumen del inicio
+            "Actividades disponibles: " + actividadService.findAll().size() + "\n" +
+            "Reservas registradas: " + reservaService.findAll().size() + "\n" +
+            "Incidencias registradas: " + incidenciaService.findAll().size()
+        );
+        resumen.getStyleClass().add("tarjeta-resumen");
 
         Button btnActividades = new Button("Ver actividades"); // Botón para ver las actividades
         btnActividades.getStyleClass().add("boton-principal");
         btnActividades.setOnAction(event -> mostrarActividades());
 
-        contenido.getChildren().addAll(titulo, descripcion, btnActividades);
+        contenido.getChildren().addAll(titulo, descripcion, resumen, btnActividades);
         root.setCenter(contenido);
     }
 
@@ -203,7 +210,17 @@ public class MainController {
                 if (empty || reserva == null) {
                     setText(null);
                 } else {
-                    setText("Reserva #" + reserva.getId() + "\n" + "Actividad: " + reserva.getIdActividad() + "\n" + "Fecha: " + reserva.getFecha() + "\n" + "Estado: " + reserva.getEstado());
+                    Actividades actividad = actividadService.findByID(reserva.getIdActividad());
+                    String nombreActividad = "Actividad no encontrada";
+                    if (actividad != null) {
+                        nombreActividad = actividad.getNombre();
+                    }
+                    setText(
+                        "Reserva #" + reserva.getId() + "\n" +
+                        "Actividad: " + nombreActividad + "\n" +
+                        "Fecha: " + reserva.getFecha() + "\n" +
+                        "Estado: " + reserva.getEstado()
+                    );
                 }
             }
         });
@@ -221,7 +238,16 @@ public class MainController {
                 mostrarAlerta(Alert.AlertType.WARNING, "Reserva no seleccionada", "Debes seleccionar una reserva para cancelarla.");
                 return;
             }
-            boolean cancelada =reservaService.delete(reservaSeleccionada.getId());
+            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmar cancelación");
+            confirmacion.setHeaderText(null);
+            confirmacion.setContentText("¿Seguro que quieres cancelar esta reserva?");
+
+            if (confirmacion.showAndWait().isEmpty()
+                    || confirmacion.getResult() != javafx.scene.control.ButtonType.OK) {
+                return;
+            }
+            boolean cancelada = reservaService.delete(reservaSeleccionada.getId());
             if (cancelada) {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Reserva cancelada", "La reserva se ha cancelado correctamente.");
                 mostrarReservas();
