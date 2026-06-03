@@ -31,7 +31,8 @@ public class ReservaRepository implements IReservaRepository{
                     reservasEncontradas.add(reserva);
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los elementos");
+            System.err.println("No se han encontrado los elementos"); 
+            e.printStackTrace();
             return new ArrayList<>();
         }
         return reservasEncontradas;
@@ -52,7 +53,8 @@ public class ReservaRepository implements IReservaRepository{
                     return reservaEncontrada;
                 }
         } catch (Exception e) {
-            System.err.println("No se ha encontrado el elemento");
+            System.err.println("No se ha encontrado el elemento"); 
+            e.printStackTrace();
             return null;
         }
         return reservaEncontrada;
@@ -68,7 +70,8 @@ public class ReservaRepository implements IReservaRepository{
                 sentencia.setString(5, reserva.getEstado());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido guardar la reserva");
+            System.err.println("No se ha podido guardar la reserva"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -83,7 +86,8 @@ public class ReservaRepository implements IReservaRepository{
                 sentencia.setInt(5, reserva.getId());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar la reserva");
+            System.err.println("No se ha podido actualizar la reserva"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -94,7 +98,8 @@ public class ReservaRepository implements IReservaRepository{
                 sentencia.setInt(1, id);
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido borrar la reserva");
+            System.err.println("No se ha podido borrar la reserva"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -111,7 +116,8 @@ public class ReservaRepository implements IReservaRepository{
                     plazasDisponibles = plazasMaximas - plazasOcupadas;
                 }
         } catch (Exception e) {
-            System.err.println("No se ha podido calcular el numero de plazas disponibles");
+            System.err.println("No se ha podido calcular el numero de plazas disponibles"); 
+            e.printStackTrace();
             return -1;
         }
         return plazasDisponibles;

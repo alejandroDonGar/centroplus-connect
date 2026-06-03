@@ -33,7 +33,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 }
             
         } catch (Exception e) {
-            System.err.println("No se han encontrado los elementos");
+            System.err.println("No se han encontrado los elementos"); 
+            e.printStackTrace();
             return new ArrayList<>();
         }
         return incidenciasEncontradas;
@@ -56,7 +57,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 }
             
         } catch (Exception e) {
-            System.err.println("No se han encontrado los elementos");
+            System.err.println("No se han encontrado los elementos"); 
+            e.printStackTrace();
             return null;
         }
         return incidenciaEncontrada;
@@ -74,7 +76,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido guardar la inicidencia");
+            System.err.println("No se ha podido guardar la inicidencia"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -91,7 +94,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar la inicidencia");
+            System.err.println("No se ha podido actualizar la inicidencia"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -103,7 +107,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 return sentencia.executeUpdate() > 0;
             
         } catch (Exception e) {
-            System.err.println("No se ha podido eliminar la inicidencia");
+            System.err.println("No se ha podido eliminar la inicidencia"); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -124,7 +129,8 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     incidenciasPorUsuarioEncontradas.add(incidencia);
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los resultado");
+            System.err.println("No se han encontrado los resultados"); 
+            e.printStackTrace();
             return new ArrayList<>();
         }
         return incidenciasPorUsuarioEncontradas;
