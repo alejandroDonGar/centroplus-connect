@@ -35,3 +35,22 @@
     -fx-padding: 8 9;
     -fx-background-radius: 10;
 }
+
+.lista {
+    -fx-background-color: transparent;
+    -fx-pref-height: 560;
+}
+
+.list-cell {
+    -fx-background-color: white;
+    -fx-padding: 14;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-font-size: 14px;
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
