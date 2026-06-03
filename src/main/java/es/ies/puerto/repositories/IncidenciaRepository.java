@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import es.ies.puerto.modelos.Incidencias;
 import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
+import java.text.SimpleDateFormat;
 /**
  * @author AlejandroDonGar y JavierReyPer
  * @version 1.0.0
@@ -25,10 +26,10 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     Integer id = resultado.getInt("id");
                     Integer idUsuario = resultado.getInt("id_usuario");
                     String asunto = resultado.getString("asunto");
-                    String description = resultado.getString("descripcion");
-                    Date fecha = resultado.getDate("fecha");
+                    String descripcion = resultado.getString("descripcion");
+                    Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(resultado.getString("fecha"));
                     String estado = resultado.getString("estado");
-                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, description, fecha, estado);
+                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, descripcion, fecha, estado);
                     incidenciasEncontradas.add(incidencia);
                 }
             
@@ -50,7 +51,7 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     Integer idUsuario = resultado.getInt("id_usuario");
                     String asunto = resultado.getString("asunto");
                     String description = resultado.getString("descripcion");
-                    Date fecha = resultado.getDate("fecha");
+                    Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(resultado.getString("fecha"));
                     String estado = resultado.getString("estado");
                     incidenciaEncontrada = new Incidencias(id, idUsuario, asunto, description, fecha, estado);
                     return incidenciaEncontrada;
@@ -71,7 +72,7 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 sentencia.setInt(2, incidencia.getIdUsuario());
                 sentencia.setString(3, incidencia.getAsunto());
                 sentencia.setString(4, incidencia.getDescripcion());
-                sentencia.setString(5, incidencia.getFecha().toString());
+                sentencia.setString(5, new SimpleDateFormat("yyyy-MM-dd").format(incidencia.getFecha()));
                 sentencia.setString(6, incidencia.getEstado());
                 return sentencia.executeUpdate() > 0;
             
@@ -88,7 +89,7 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                 sentencia.setInt(1, incidencia.getIdUsuario());
                 sentencia.setString(2, incidencia.getAsunto());
                 sentencia.setString(3, incidencia.getDescripcion());
-                sentencia.setString(4, incidencia.getFecha().toString());
+                sentencia.setString(4, new SimpleDateFormat("yyyy-MM-dd").format(incidencia.getFecha()));
                 sentencia.setString(5, incidencia.getEstado());
                 sentencia.setInt(6, incidencia.getId());
                 return sentencia.executeUpdate() > 0;
@@ -123,7 +124,7 @@ public class IncidenciaRepository implements IIncidenciaRepository{
                     Integer id = resultado.getInt("id");
                     String asunto = resultado.getString("asunto");
                     String descripcion = resultado.getString("descripcion");
-                    Date fecha = resultado.getDate("fecha");
+                    Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(resultado.getString("fecha"));
                     String estado = resultado.getString("estado");
                     Incidencias incidencia = new Incidencias(id, idUsuario, asunto, descripcion, fecha, estado);
                     incidenciasPorUsuarioEncontradas.add(incidencia);
