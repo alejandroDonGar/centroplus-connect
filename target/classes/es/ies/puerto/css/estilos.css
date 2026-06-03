@@ -1,0 +1,37 @@
+.root-mobile {
+    -fx-background-color: #f4f6f8;
+    -fx-font-family: "Arial";
+}
+
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.texto {
+    -fx-font-size: 15px;
+    -fx-text-fill: #374151;
+}
+
+.boton-principal {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 12 20;
+    -fx-background-radius: 12;
+}
+
+.nav-inferior {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
+}
+
+.boton-nav {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: #111827;
+    -fx-font-size: 11px;
+    -fx-padding: 8 9;
+    -fx-background-radius: 10;
+}
