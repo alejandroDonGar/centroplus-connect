@@ -54,3 +54,11 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
+
+.boton-secundario {
+    -fx-background-color: #d1d5db;
+    -fx-text-fill: #111827;
+    -fx-font-size: 15px;
+    -fx-padding: 10 18;
+    -fx-background-radius: 12;
+}
