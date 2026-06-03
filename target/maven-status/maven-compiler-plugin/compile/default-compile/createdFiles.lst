@@ -8,6 +8,7 @@ es\ies\puerto\services\ActividadService.class
 es\ies\puerto\modelos\Actividades.class
 es\ies\puerto\repositories\interfaces\IIncidenciaRepository.class
 es\ies\puerto\modelos\Reservas.class
+es\ies\puerto\controllers\MainController$2.class
 es\ies\puerto\services\UsuarioService.class
 es\ies\puerto\services\interfaces\IActividadService.class
 es\ies\puerto\modelos\Usuarios.class

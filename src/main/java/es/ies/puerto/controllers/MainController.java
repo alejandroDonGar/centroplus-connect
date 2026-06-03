@@ -12,6 +12,8 @@ import es.ies.puerto.services.ActividadService;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import es.ies.puerto.modelos.Reservas;
+import es.ies.puerto.services.ReservaService;
 
 /**
  * @author AlejandroDonGar y JavierReyPer
@@ -23,12 +25,14 @@ public class MainController {
 
     private BorderPane root;
     private ActividadService actividadService;
+    private ReservaService reservaService;
 
     /**
      * Constructor de la clase MainController
      */
     public MainController() {
         actividadService = new ActividadService();
+        reservaService = new ReservaService();
 
         root = new BorderPane();
         root.getStyleClass().add("root-mobile");
@@ -163,11 +167,36 @@ public class MainController {
         Label titulo = new Label("Mis reservas"); // Título de reservas
         titulo.getStyleClass().add("titulo");
 
-        Label texto = new Label("Aquí se mostrarán las reservas activas del usuario."); // Texto de reservas
-        texto.getStyleClass().add("texto");
-        texto.setWrapText(true);
+        ListView<Reservas> listaReservas = new ListView<>(); // Lista de reservas
+        listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));
 
-        contenido.getChildren().addAll(titulo, texto);
+        listaReservas.setCellFactory(param -> new ListCell<>() {
+            /**
+             * Metodo updateItem que actualiza el item de la lista de reservas   
+             * @param reserva La reserva a mostrar
+             * @param empty Si el item está vacío
+             */
+            @Override
+            protected void updateItem(Reservas reserva, boolean empty) {
+                super.updateItem(reserva, empty);
+                if(empty || reserva == null) {
+                    setText(null);
+                } else {
+                    setText(
+                        "Reserva #" + reserva.getId() + "\n" +
+                        "Actividad: " + reserva.getIdActividad() + "\n" +
+                        "Fecha: " + reserva.getFecha() + "\n" +
+                        "Estado: " + reserva.getEstado()
+                    );
+                }
+            }
+        });
+        Button btnCancelar = new Button("Cancelar reserva"); // Botón de cancelar reserva
+        btnCancelar.getStyleClass().add("boton-principal");
+        btnCancelar.setDisable(true);
+
+        listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnCancelar.setDisable(newVal == null));
+        contenido.getChildren().addAll(titulo, listaReservas, btnCancelar);
         root.setCenter(contenido);
     }
 
@@ -233,6 +262,7 @@ public class MainController {
     private Button crearBotonNav(String texto) {
         Button boton = new Button(texto); // Botón de navegación
         boton.getStyleClass().add("boton-nav");
+
         return boton;
     }
 }
