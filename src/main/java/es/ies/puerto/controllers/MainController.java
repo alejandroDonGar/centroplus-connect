@@ -1,5 +1,4 @@
 package es.ies.puerto.controllers;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -8,6 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import es.ies.puerto.modelos.Actividades;
+import es.ies.puerto.services.ActividadService;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 
 /**
  * @author AlejandroDonGar y JavierReyPer
@@ -18,8 +22,11 @@ import javafx.scene.layout.VBox;
 public class MainController {
 
     private BorderPane root;
+    private ActividadService actividadService;
 
     public MainController() {
+        actividadService = new ActividadService();
+
         root = new BorderPane();
         root.getStyleClass().add("root-mobile");
 
@@ -54,12 +61,29 @@ public class MainController {
 
         Label titulo = new Label("Actividades");
         titulo.getStyleClass().add("titulo");
-
-        Label texto = new Label("Aquí se mostrará el listado de actividades disponibles.");
-        texto.getStyleClass().add("texto");
-        texto.setWrapText(true);
-
-        contenido.getChildren().addAll(titulo, texto);
+        
+        ListView<Actividades> listaActividades = new ListView<>();
+        listaActividades.setItems(FXCollections.observableArrayList(actividadService.findAll()));
+        listaActividades.getStyleClass().add("lista");
+        listaActividades.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Actividades actividad, boolean empty) {
+                super.updateItem(actividad, empty);
+                if (empty || actividad == null) {
+                    setText(null);
+                } else {
+                    int plazasDisponibles = actividad.getPlazasMaximas() - actividad.getPlazasOcupadas();
+                    setText(
+                        actividad.getNombre() + "\n" +
+                        actividad.getTipoActividad() + " · " +
+                        actividad.getDuracion() + " min\n" +
+                        "Precio: " + actividad.getPrecio() + " € · " +
+                        "Plazas libres: " + plazasDisponibles
+                    );
+                }
+            }
+        });
+        contenido.getChildren().addAll(titulo, listaActividades);
         root.setCenter(contenido);
     }
 
