@@ -13,27 +13,27 @@ import es.ies.puerto.repositories.interfaces.IReservaRepository;
  * 
  * Clase ReservaRepository donde implementamos los metodos de IReservaRepository
  */
-<span class="nc" id="L16">public class ReservaRepository implements IReservaRepository{</span>
+<span class="fc" id="L16">public class ReservaRepository implements IReservaRepository{</span>
 
     @Override
     public List&lt;Reservas&gt; findAll() {
-<span class="nc" id="L20">        List&lt;Reservas&gt; reservasEncontradas = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L21">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L22">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM reservas&quot;)) {</span>
-<span class="nc" id="L23">                ResultSet resultado = sentencia.executeQuery();</span>
-<span class="nc bnc" id="L24" title="All 2 branches missed.">                while (resultado.next()) {</span>
-<span class="nc" id="L25">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
-<span class="nc" id="L26">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
-<span class="nc" id="L27">                    Integer idActividad = resultado.getInt(&quot;id_actividad&quot;);</span>
+<span class="fc" id="L20">        List&lt;Reservas&gt; reservasEncontradas = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L21">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L22">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM reservas&quot;)) {</span>
+<span class="fc" id="L23">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">                while (resultado.next()) {</span>
+<span class="fc" id="L25">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L26">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
+<span class="fc" id="L27">                    Integer idActividad = resultado.getInt(&quot;id_actividad&quot;);</span>
 <span class="nc" id="L28">                    Date fecha = resultado.getDate(&quot;fecha&quot;);</span>
 <span class="nc" id="L29">                    String estado = resultado.getString(&quot;estado&quot;);</span>
 <span class="nc" id="L30">                    Reservas reserva = new Reservas(id, idUsuario, idActividad, fecha, estado);</span>
 <span class="nc" id="L31">                    reservasEncontradas.add(reserva);</span>
-<span class="nc" id="L32">                }</span>
-<span class="nc" id="L33">        } catch (Exception e) {</span>
-<span class="nc" id="L34">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
-<span class="nc" id="L35">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L36">        }</span>
+                }
+<span class="fc" id="L33">        } catch (Exception e) {</span>
+<span class="fc" id="L34">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
+<span class="fc" id="L35">            return new ArrayList&lt;&gt;();</span>
+        }
 <span class="nc" id="L37">        return reservasEncontradas;</span>
     }
     @Override
@@ -51,10 +51,10 @@ import es.ies.puerto.repositories.interfaces.IReservaRepository;
 <span class="nc" id="L51">                    reservaEncontrada = new Reservas(id, idUsuario, idActividad, fecha, estado);</span>
 <span class="nc" id="L52">                    return reservaEncontrada;</span>
                 }
-<span class="nc bnc" id="L54" title="All 4 branches missed.">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        } catch (Exception e) {</span>
 <span class="nc" id="L55">            System.err.println(&quot;No se ha encontrado el elemento&quot;);</span>
 <span class="nc" id="L56">            return null;</span>
-<span class="nc" id="L57">        }</span>
+        }
 <span class="nc" id="L58">        return reservaEncontrada;</span>
     }
     @Override
@@ -113,7 +113,7 @@ import es.ies.puerto.repositories.interfaces.IReservaRepository;
 <span class="nc" id="L113">        } catch (Exception e) {</span>
 <span class="nc" id="L114">            System.err.println(&quot;No se ha podido calcular el numero de plazas disponibles&quot;);</span>
 <span class="nc" id="L115">            return -1;</span>
-<span class="nc" id="L116">        }</span>
+        }
 <span class="nc" id="L117">        return plazasDisponibles;</span>
     }
 }

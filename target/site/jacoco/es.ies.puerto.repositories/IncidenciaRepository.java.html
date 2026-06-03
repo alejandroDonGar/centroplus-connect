@@ -13,29 +13,29 @@ import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
  * 
  * Clase IncidenciaRepository donde implementamos los metodos de IIncidenciaRepository
  */
-<span class="nc" id="L16">public class IncidenciaRepository implements IIncidenciaRepository{</span>
+<span class="fc" id="L16">public class IncidenciaRepository implements IIncidenciaRepository{</span>
 
     @Override
     public List&lt;Incidencias&gt; findAll() {
-<span class="nc" id="L20">        List&lt;Incidencias&gt; incidenciasEncontradas = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L21">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L22">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM incidencias&quot;)) {</span>
-<span class="nc" id="L23">                ResultSet resultado = sentencia.executeQuery();</span>
-<span class="nc bnc" id="L24" title="All 2 branches missed.">                while (resultado.next()) {</span>
-<span class="nc" id="L25">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
-<span class="nc" id="L26">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
-<span class="nc" id="L27">                    String asunto = resultado.getString(&quot;asunto&quot;);</span>
-<span class="nc" id="L28">                    String description = resultado.getString(&quot;descripcion&quot;);</span>
+<span class="fc" id="L20">        List&lt;Incidencias&gt; incidenciasEncontradas = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L21">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L22">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM incidencias&quot;)) {</span>
+<span class="fc" id="L23">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">                while (resultado.next()) {</span>
+<span class="fc" id="L25">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L26">                    Integer idUsuario = resultado.getInt(&quot;id_usuario&quot;);</span>
+<span class="fc" id="L27">                    String asunto = resultado.getString(&quot;asunto&quot;);</span>
+<span class="fc" id="L28">                    String description = resultado.getString(&quot;descripcion&quot;);</span>
 <span class="nc" id="L29">                    Date fecha = resultado.getDate(&quot;fecha&quot;);</span>
 <span class="nc" id="L30">                    String estado = resultado.getString(&quot;estado&quot;);</span>
 <span class="nc" id="L31">                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, description, fecha, estado);</span>
 <span class="nc" id="L32">                    incidenciasEncontradas.add(incidencia);</span>
-<span class="nc" id="L33">                }</span>
+                }
             
-<span class="nc" id="L35">        } catch (Exception e) {</span>
-<span class="nc" id="L36">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
-<span class="nc" id="L37">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L38">        }</span>
+<span class="fc" id="L35">        } catch (Exception e) {</span>
+<span class="fc" id="L36">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
+<span class="fc" id="L37">            return new ArrayList&lt;&gt;();</span>
+        }
 <span class="nc" id="L39">        return incidenciasEncontradas;</span>
     }
     @Override
@@ -55,10 +55,10 @@ import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
 <span class="nc" id="L55">                    return incidenciaEncontrada;</span>
                 }
             
-<span class="nc bnc" id="L58" title="All 4 branches missed.">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        } catch (Exception e) {</span>
 <span class="nc" id="L59">            System.err.println(&quot;No se han encontrado los elementos&quot;);</span>
 <span class="nc" id="L60">            return null;</span>
-<span class="nc" id="L61">        }</span>
+        }
 <span class="nc" id="L62">        return incidenciaEncontrada;</span>
     }
     @Override
@@ -122,11 +122,11 @@ import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
 <span class="nc" id="L122">                    String estado = resultado.getString(&quot;estado&quot;);</span>
 <span class="nc" id="L123">                    Incidencias incidencia = new Incidencias(id, idUsuario, asunto, descripcion, fecha, estado);</span>
 <span class="nc" id="L124">                    incidenciasPorUsuarioEncontradas.add(incidencia);</span>
-<span class="nc" id="L125">                }</span>
+                }
 <span class="nc" id="L126">        } catch (Exception e) {</span>
 <span class="nc" id="L127">            System.err.println(&quot;No se han encontrado los resultado&quot;);</span>
 <span class="nc" id="L128">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L129">        }</span>
+        }
 <span class="nc" id="L130">        return incidenciasPorUsuarioEncontradas;</span>
     }
 }

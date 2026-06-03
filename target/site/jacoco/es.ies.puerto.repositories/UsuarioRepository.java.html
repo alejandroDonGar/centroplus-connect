@@ -29,11 +29,11 @@ import es.ies.puerto.repositories.interfaces.IUsuarioRepository;
 <span class="nc" id="L29">                    String tipoUsuario = resultado.getString(&quot;tipo_usuario&quot;);</span>
 <span class="nc" id="L30">                    Usuarios usuario = new Usuarios(id, nombre, dni, email, telefono, tipoUsuario);</span>
 <span class="nc" id="L31">                    usuariosEncontrados.add(usuario);</span>
-<span class="nc" id="L32">                }</span>
+                }
 <span class="nc" id="L33">        } catch (Exception e) {</span>
 <span class="nc" id="L34">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
 <span class="nc" id="L35">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L36">        }</span>
+        }
 <span class="nc" id="L37">        return usuariosEncontrados;</span>
     }
     @Override
@@ -52,10 +52,10 @@ import es.ies.puerto.repositories.interfaces.IUsuarioRepository;
 <span class="nc" id="L52">                    usuario = new Usuarios(id, nombre, dni, email, telefono, tipoUsuario);</span>
 <span class="nc" id="L53">                    return usuario;</span>
                 }
-<span class="nc bnc" id="L55" title="All 4 branches missed.">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        } catch (Exception e) {</span>
 <span class="nc" id="L56">            System.err.println(&quot;No se ha encontrado el usuario&quot;);</span>
 <span class="nc" id="L57">            return null;</span>
-<span class="nc" id="L58">        }</span>
+        }
 <span class="nc" id="L59">        return usuario;</span>
     }
     @Override

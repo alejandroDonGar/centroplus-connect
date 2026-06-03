@@ -1,12 +1,12 @@
-package es.ies.puerto.models;
+package es.ies.puerto.modelos;
 import org.junit.jupiter.api.Test;
-import es.ies.puerto.modelos.Actividades;
 import org.junit.jupiter.api.Assertions;
+
 /**
  * @author AlejandroDonGar y JavierReyPer
  * @version 1.0.0
  * 
- *          Clase ActividadTest
+ * Clase ActividadTest
  */
 public class ActividadTest {
 

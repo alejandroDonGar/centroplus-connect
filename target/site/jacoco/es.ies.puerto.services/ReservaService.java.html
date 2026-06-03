@@ -22,15 +22,15 @@ public class ReservaService implements IReservaService{
 <span class="nc" id="L22">        this.actividadRepository = new es.ies.puerto.repositories.ActividadRepository();</span>
 <span class="nc" id="L23">    }</span>
 
-<span class="nc" id="L25">    public ReservaService(IReservaRepository reservaRepository, es.ies.puerto.repositories.interfaces.IUsuarioRepository usuarioRepository, es.ies.puerto.repositories.interfaces.IActividadRepository actividadRepository) {</span>
-<span class="nc" id="L26">        this.reservaRepository = reservaRepository;</span>
-<span class="nc" id="L27">        this.usuarioRepository = usuarioRepository;</span>
-<span class="nc" id="L28">        this.actividadRepository = actividadRepository;</span>
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L25">    public ReservaService(IReservaRepository reservaRepository, es.ies.puerto.repositories.interfaces.IUsuarioRepository usuarioRepository, es.ies.puerto.repositories.interfaces.IActividadRepository actividadRepository) {</span>
+<span class="fc" id="L26">        this.reservaRepository = reservaRepository;</span>
+<span class="fc" id="L27">        this.usuarioRepository = usuarioRepository;</span>
+<span class="fc" id="L28">        this.actividadRepository = actividadRepository;</span>
+<span class="fc" id="L29">    }</span>
 
     @Override
     public List&lt;Reservas&gt; findAll() {
-<span class="nc" id="L33">        return reservaRepository.findAll();</span>
+<span class="fc" id="L33">        return reservaRepository.findAll();</span>
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ReservaService implements IReservaService{
 <span class="nc bnc" id="L70" title="All 2 branches missed.">                &quot;ACTIVA&quot;.equalsIgnoreCase(r.getEstado())) {</span>
 <span class="nc" id="L71">                return false;</span>
             }
-<span class="nc" id="L73">        }</span>
+        }
 
         // 5. Incrementar plazas ocupadas en la actividad
 <span class="nc bnc" id="L76" title="All 2 branches missed.">        if (actividadRepository.reservarPlaza(reserva.getIdUsuario(), reserva.getIdActividad()) == null) {</span>

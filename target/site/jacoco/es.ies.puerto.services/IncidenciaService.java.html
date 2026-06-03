@@ -20,11 +20,11 @@ public class IncidenciaService implements IIncidenciaService{
 <span class="nc" id="L20">        this.incidenciaRepository = new es.ies.puerto.repositories.IncidenciaRepository();</span>
 <span class="nc" id="L21">    }</span>
 
-<span class="nc" id="L23">    public IncidenciaService(IIncidenciaRepository incidenciaRepository) {</span>
-<span class="nc" id="L24">        this.incidenciaRepository = incidenciaRepository;</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L23">    public IncidenciaService(IIncidenciaRepository incidenciaRepository) {</span>
+<span class="fc" id="L24">        this.incidenciaRepository = incidenciaRepository;</span>
+<span class="fc" id="L25">    }</span>
     public List&lt;Incidencias&gt; findAll() {
-<span class="nc" id="L27">        return incidenciaRepository.findAll();</span>
+<span class="fc" id="L27">        return incidenciaRepository.findAll();</span>
     }
     @Override
     public Incidencias findByID(Integer id) {

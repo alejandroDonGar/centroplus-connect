@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 <span class="nc" id="L12">public class Sqlite3Manager {</span>
 
-<span class="nc" id="L14">    private static String databasePath = &quot;database/centroplus.db&quot;;</span>
+<span class="fc" id="L14">    private static String databasePath = &quot;database/centroplus.db&quot;;</span>
     
     public static void setDatabasePath(String path) { 
 <span class="nc" id="L17">        databasePath = path; </span>
@@ -20,11 +20,11 @@ import java.sql.SQLException;
 <span class="nc" id="L20">        return databasePath; </span>
     }
     public static Connection getConnection() throws SQLException { 
-<span class="nc" id="L23">        Connection c = DriverManager.getConnection(&quot;jdbc:sqlite:&quot;+databasePath); </span>
-<span class="nc" id="L24">        try(Statement st = c.createStatement()) { </span>
-<span class="nc" id="L25">            st.execute(&quot;PRAGMA foreign_keys = ON&quot;); </span>
+<span class="fc" id="L23">        Connection c = DriverManager.getConnection(&quot;jdbc:sqlite:&quot;+databasePath); </span>
+<span class="fc" id="L24">        try(Statement st = c.createStatement()) { </span>
+<span class="fc" id="L25">            st.execute(&quot;PRAGMA foreign_keys = ON&quot;); </span>
         } 
-<span class="nc" id="L27">        return c; </span>
+<span class="fc" id="L27">        return c; </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
