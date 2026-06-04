@@ -503,16 +503,4 @@ public class MainController {
             }
         }
     }
-
-    /**
-     * Metodo crearBotonNav que crea un botón de navegación con un texto
-     * @param texto El texto del botón
-     * @return El botón de navegación Button
-     */
-    private Button crearBotonNav(String texto) {
-        Button boton = new Button(texto); // Botón de navegación
-        boton.getStyleClass().add("boton-nav");
-
-        return boton;
-    }
 }
