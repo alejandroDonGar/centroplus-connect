@@ -1,5 +1,5 @@
 package es.ies.puerto.repositories;
-import es.ies.puerto.modelos.Incidencias;
+import es.ies.puerto.modelos.Usuarios;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +9,15 @@ import java.util.List;
  * @author AlejandroDonGar
  * @version 1.0.0
  * 
- * Clase IncidenciasRepositoryTest donde implementamos los metodos de test de IncidenciaRepository
+ * Clase UsuarioRepositoryTest donde implementamos los metodos de test de UsuarioRepository
  */
-public class IncidenciasRepositoryTest {
+public class UsuarioRepositoryTest {
 
-    private IncidenciaRepository incidenciaRepository;
+    private UsuarioRepository usuarioRepository;
 
     @BeforeEach
     public void setUp() {
-        incidenciaRepository = new IncidenciaRepository();
+        usuarioRepository = new UsuarioRepository();
         Sqlite3Manager.setDatabasePath("src/main/resources/es/ies/puerto/database/centroplus.db");
     }
 
@@ -27,7 +27,7 @@ public class IncidenciasRepositoryTest {
      */
     @Test
     public void findAllTestOk() {
-        List<Incidencias> resultado = incidenciaRepository.findAll();
+        List<Usuarios> resultado = usuarioRepository.findAll();
         Assertions.assertNotNull(resultado);
     }
 
@@ -37,7 +37,7 @@ public class IncidenciasRepositoryTest {
      */
     @Test
     public void findByIDTestNotFound() {
-        Incidencias resultado = incidenciaRepository.findByID(-1);
+        Usuarios resultado = usuarioRepository.findByID(-1);
         Assertions.assertNull(resultado);
     }
 }

@@ -19,10 +19,14 @@ import es.ies.puerto.services.IncidenciaService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import java.util.Date;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Priority;
 
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  *
  * Clase MainController
@@ -33,6 +37,7 @@ public class MainController {
     private ActividadService actividadService;
     private ReservaService reservaService;
     private IncidenciaService incidenciaService;
+    private HBox navBar;
 
     /**
      * Constructor de la clase MainController
@@ -45,8 +50,9 @@ public class MainController {
         root = new BorderPane();
         root.getStyleClass().add("root-mobile");
 
+        navBar = crearNavegacionInferior();
+        root.setBottom(navBar);
         mostrarInicio();
-        root.setBottom(crearNavegacionInferior());
     }
 
     /**
@@ -61,27 +67,36 @@ public class MainController {
      * Metodo mostrarInicio que muestra el inicio del escenario
      */
     private void mostrarInicio() {
+        actualizarNavActivo(0);
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("CentroPlus Connect"); // Título del inicio
+        Label titulo = new Label("CentroPlus\nConnect");
         titulo.getStyleClass().add("titulo");
+        titulo.setAlignment(Pos.CENTER);
 
-        Label descripcion = new Label("Consulta actividades, reserva plazas y comunica incidencias."); // Descripción del inicio
+        Label descripcion = new Label("Gestiona tus actividades y reservas desde un solo lugar.");
         descripcion.getStyleClass().add("texto");
         descripcion.setWrapText(true);
+        descripcion.setAlignment(Pos.CENTER);
 
-        Label resumen = new Label( // Resumen del inicio
-            "Actividades disponibles: " + actividadService.findAll().size() + "\n" +
-            "Reservas registradas: " + reservaService.findAll().size() + "\n" +
-            "Incidencias registradas: " + incidenciaService.findAll().size()
-        );
-        resumen.getStyleClass().add("tarjeta-resumen");
+        VBox tarjeta = new VBox(15);
+        tarjeta.getStyleClass().add("tarjeta-resumen");
+        
+        Label lblActividades = new Label("Actividades: " + actividadService.findAll().size());
+        lblActividades.getStyleClass().add("card-titulo");
+        Label lblReservas = new Label("Reservas: " + reservaService.findAll().size());
+        lblReservas.getStyleClass().add("card-titulo");
+        Label lblIncidencias = new Label("Incidencias: " + incidenciaService.findAll().size());
+        lblIncidencias.getStyleClass().add("card-titulo");
+        
+        tarjeta.getChildren().addAll(lblActividades, lblReservas, lblIncidencias);
 
-        Button btnActividades = new Button("Ver actividades"); // Botón para ver las actividades
+        Button btnActividades = new Button("Explorar Actividades");
         btnActividades.getStyleClass().add("boton-principal");
+        btnActividades.setMaxWidth(Double.MAX_VALUE);
         btnActividades.setOnAction(event -> mostrarActividades());
 
-        contenido.getChildren().addAll(titulo, descripcion, resumen, btnActividades);
+        contenido.getChildren().addAll(titulo, descripcion, tarjeta, btnActividades);
         root.setCenter(contenido);
     }
 
@@ -89,50 +104,65 @@ public class MainController {
      * Metodo mostrarActividades que muestra las actividades del escenario
      */
     private void mostrarActividades() {
+        actualizarNavActivo(1);
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("Actividades"); // Título de la lista de actividades
+        Label titulo = new Label("Actividades");
         titulo.getStyleClass().add("titulo");
 
-        ListView<Actividades> listaActividades = new ListView<>(); // Lista de actividades
+        ListView<Actividades> listaActividades = new ListView<>();
         listaActividades.getStyleClass().add("lista");
+        VBox.setVgrow(listaActividades, Priority.ALWAYS);
         listaActividades.setItems(FXCollections.observableArrayList(actividadService.findAll()));
         listaActividades.setCellFactory(param -> new ListCell<>() {
-
-            /**
-             * Metodo updateItem que actualiza el item de la lista de actividades   
-             * @param actividad La actividad a mostrar
-             * @param empty Si el item está vacío
-             */
             @Override
             protected void updateItem(Actividades actividad, boolean empty) { 
                 super.updateItem(actividad, empty);
                 if (empty || actividad == null) {
-                    setText(null);
+                    setGraphic(null);
                 } else {
+                    VBox card = new VBox(5);
+                    card.getStyleClass().add("card-container");
+                    
+                    Label nombre = new Label(actividad.getNombre());
+                    nombre.getStyleClass().add("card-titulo");
+                    
+                    Label tipo = new Label(actividad.getTipoActividad());
+                    tipo.getStyleClass().add("card-subtitulo");
+                    
                     int plazasDisponibles = actividad.getPlazasMaximas() - actividad.getPlazasOcupadas();
-                    setText(
-                        actividad.getNombre() + "\n" +
-                        actividad.getTipoActividad() + " · " +
-                        actividad.getDuracion() + " min\n" +
-                        "Precio: " + actividad.getPrecio() + " € · " +
-                        "Plazas libres: " + plazasDisponibles
-                    );
+                    Label info = new Label(actividad.getDuracion() + " min · " + actividad.getPrecio() + " € · " + plazasDisponibles + " libres");
+                    info.getStyleClass().add("card-info");
+                    
+                    card.getChildren().addAll(nombre, tipo, info);
+                    setGraphic(card);
                 }
             }
         });
 
-        /**
-         * Metodo setMouseClicked que agrega un evento de clic a la lista de actividades
-         */
         listaActividades.setOnMouseClicked(event -> {
             Actividades actividadSeleccionada = listaActividades.getSelectionModel().getSelectedItem();
-
             if (actividadSeleccionada != null) {
                 mostrarDetalleActividad(actividadSeleccionada);
             }
         });
-        contenido.getChildren().addAll(titulo, listaActividades);
+
+        StackPane stack = new StackPane();
+        VBox.setVgrow(stack, Priority.ALWAYS);
+        
+        Region fadeTop = new Region();
+        fadeTop.getStyleClass().add("fade-overlay");
+        fadeTop.setMouseTransparent(true);
+        StackPane.setAlignment(fadeTop, Pos.TOP_CENTER);
+        
+        Region fadeBottom = new Region();
+        fadeBottom.getStyleClass().add("fade-overlay-bottom");
+        fadeBottom.setMouseTransparent(true);
+        StackPane.setAlignment(fadeBottom, Pos.BOTTOM_CENTER);
+
+        stack.getChildren().addAll(listaActividades, fadeTop, fadeBottom);
+        
+        contenido.getChildren().addAll(titulo, stack);
         root.setCenter(contenido);
     }
 
@@ -189,38 +219,40 @@ public class MainController {
      * Metodo mostrarReservas que muestra las reservas del escenario
      */
     private void mostrarReservas() {
-
+        actualizarNavActivo(2);
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("Mis reservas"); // Título de la lista de reservas
+        Label titulo = new Label("Mis Reservas");
         titulo.getStyleClass().add("titulo");
 
-        ListView<Reservas> listaReservas = new ListView<>(); // Lista de reservas
+        ListView<Reservas> listaReservas = new ListView<>();
+        listaReservas.getStyleClass().add("lista");
+        VBox.setVgrow(listaReservas, Priority.ALWAYS);
         listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));
         listaReservas.setCellFactory(param -> new ListCell<>() {
-
-            /**
-             * Metodo updateItem que actualiza el contenido de una celda de la lista de reservas
-             * @param reserva La reserva a mostrar
-             * @param empty Si la celda está vacía
-             */
             @Override
             protected void updateItem(Reservas reserva, boolean empty) {
                 super.updateItem(reserva, empty);
                 if (empty || reserva == null) {
-                    setText(null);
+                    setGraphic(null);
                 } else {
+                    VBox card = new VBox(5);
+                    card.getStyleClass().add("card-container");
+                    
                     Actividades actividad = actividadService.findByID(reserva.getIdActividad());
-                    String nombreActividad = "Actividad no encontrada";
-                    if (actividad != null) {
-                        nombreActividad = actividad.getNombre();
-                    }
-                    setText(
-                        "Reserva #" + reserva.getId() + "\n" +
-                        "Actividad: " + nombreActividad + "\n" +
-                        "Fecha: " + reserva.getFecha() + "\n" +
-                        "Estado: " + reserva.getEstado()
-                    );
+                    String nombreActividad = actividad != null ? actividad.getNombre() : "Actividad #" + reserva.getIdActividad();
+                    
+                    Label nombre = new Label(nombreActividad);
+                    nombre.getStyleClass().add("card-titulo");
+                    
+                    Label estado = new Label(reserva.getEstado());
+                    estado.getStyleClass().add("card-subtitulo");
+                    
+                    Label info = new Label("Reserva #" + reserva.getId() + " · " + reserva.getFecha());
+                    info.getStyleClass().add("card-info");
+                    
+                    card.getChildren().addAll(nombre, estado, info);
+                    setGraphic(card);
                 }
             }
         });
@@ -228,10 +260,7 @@ public class MainController {
         btnCancelar.getStyleClass().add("boton-principal");
         btnCancelar.setDisable(true);
         listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnCancelar.setDisable(newVal == null));
-        /**
-         * Metodo cancelarReserva que cancela una reserva del escenario
-         * @param event El evento de clic en el botón de cancelar
-        */
+
         btnCancelar.setOnAction(event -> {
             Reservas reservaSeleccionada =listaReservas.getSelectionModel().getSelectedItem();
             if (reservaSeleccionada == null) {
@@ -255,7 +284,23 @@ public class MainController {
                 mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido cancelar la reserva.");
             }
         });
-        contenido.getChildren().addAll(titulo, listaReservas, btnCancelar);
+
+        StackPane stack = new StackPane();
+        VBox.setVgrow(stack, Priority.ALWAYS);
+        
+        Region fadeTop = new Region();
+        fadeTop.getStyleClass().add("fade-overlay");
+        fadeTop.setMouseTransparent(true);
+        StackPane.setAlignment(fadeTop, Pos.TOP_CENTER);
+        
+        Region fadeBottom = new Region();
+        fadeBottom.getStyleClass().add("fade-overlay-bottom");
+        fadeBottom.setMouseTransparent(true);
+        StackPane.setAlignment(fadeBottom, Pos.BOTTOM_CENTER);
+
+        stack.getChildren().addAll(listaReservas, fadeTop, fadeBottom);
+
+        contenido.getChildren().addAll(titulo, stack, btnCancelar);
         root.setCenter(contenido);
     }
 
@@ -271,51 +316,62 @@ public class MainController {
       * Metodo mostrarIncidencias que muestra las incidencias del escenario
       */
     private void mostrarIncidencias() {
-        VBox contenido = crearContenedorPantalla(); // Contenedor de la pantalla
+        actualizarNavActivo(3);
+        VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label("Incidencias"); // Título de incidencias
+        Label titulo = new Label("Incidencias");
         titulo.getStyleClass().add("titulo");
 
-        TextField campoAsunto = new TextField(); // Campo de asunto
-        campoAsunto.setPromptText("Asunto");
+        VBox form = new VBox(12);
+        form.getStyleClass().add("tarjeta-resumen");
+        
+        TextField campoAsunto = new TextField();
+        campoAsunto.setPromptText("Asunto de la incidencia");
         campoAsunto.getStyleClass().add("campo-texto");
 
-        TextArea campoDescripcion = new TextArea(); // Campo de descripción
-        campoDescripcion.setPromptText("Descripción");
+        TextArea campoDescripcion = new TextArea();
+        campoDescripcion.setPromptText("Cuéntanos qué ha pasado...");
         campoDescripcion.setWrapText(true);
-        campoDescripcion.setPrefRowCount(4);
+        campoDescripcion.setPrefRowCount(3);
         campoDescripcion.getStyleClass().add("campo-texto");
 
-        Button btnEnviar = new Button("Enviar incidencia"); // Botón de enviar incidencia
+        Button btnEnviar = new Button("Enviar Incidencia");
         btnEnviar.getStyleClass().add("boton-principal");
+        btnEnviar.setMaxWidth(Double.MAX_VALUE);
+        
+        form.getChildren().addAll(campoAsunto, campoDescripcion, btnEnviar);
 
-        ListView<Incidencias> listaIncidencias = new ListView<>(); // Lista de incidencias
-        listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.findAll()));
+        ListView<Incidencias> listaIncidencias = new ListView<>();
         listaIncidencias.getStyleClass().add("lista");
+        VBox.setVgrow(listaIncidencias, Priority.ALWAYS);
+        listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.findAll()));
 
         listaIncidencias.setCellFactory(param -> new ListCell<>() {
-
-            /**
-             * Metodo updateItem que actualiza el item de la lista de incidencias   
-             * @param incidencia La incidencia a mostrar
-             * @param empty Si el item está vacío
-             */
             @Override
             protected void updateItem(Incidencias incidencia, boolean empty) {
                 super.updateItem(incidencia, empty);
-
                 if (empty || incidencia == null) {
-                    setText(null);
+                    setGraphic(null);
                 } else {
-                    setText(
-                        "Incidencia #" + incidencia.getId() + "\n" +
-                        incidencia.getAsunto() + "\n" +
-                        incidencia.getDescripcion() + "\n" +
-                        "Estado: " + incidencia.getEstado()
-                    );
+                    VBox card = new VBox(5);
+                    card.getStyleClass().add("card-container");
+                    
+                    Label asunto = new Label(incidencia.getAsunto());
+                    asunto.getStyleClass().add("card-titulo");
+                    
+                    Label estado = new Label(incidencia.getEstado());
+                    estado.getStyleClass().add("card-subtitulo");
+                    
+                    Label desc = new Label(incidencia.getDescripcion());
+                    desc.getStyleClass().add("card-info");
+                    desc.setWrapText(true);
+                    
+                    card.getChildren().addAll(asunto, estado, desc);
+                    setGraphic(card);
                 }
             }
         });
+
         btnEnviar.setOnAction(event -> {
             String asunto = campoAsunto.getText();
             String descripcion = campoDescripcion.getText();
@@ -346,12 +402,26 @@ public class MainController {
                 mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido registrar la incidencia.");
             }
         });
+
+        StackPane stack = new StackPane();
+        VBox.setVgrow(stack, Priority.ALWAYS);
+        
+        Region fadeTop = new Region();
+        fadeTop.getStyleClass().add("fade-overlay");
+        fadeTop.setMouseTransparent(true);
+        StackPane.setAlignment(fadeTop, Pos.TOP_CENTER);
+        
+        Region fadeBottom = new Region();
+        fadeBottom.getStyleClass().add("fade-overlay-bottom");
+        fadeBottom.setMouseTransparent(true);
+        StackPane.setAlignment(fadeBottom, Pos.BOTTOM_CENTER);
+
+        stack.getChildren().addAll(listaIncidencias, fadeTop, fadeBottom);
+
         contenido.getChildren().addAll(
             titulo,
-            campoAsunto,
-            campoDescripcion,
-            btnEnviar,
-            listaIncidencias
+            form,
+            stack
         );
         root.setCenter(contenido);
     }
@@ -383,8 +453,8 @@ public class MainController {
      * @return El contenedor VBox
      */
     private VBox crearContenedorPantalla() {
-        VBox contenedor = new VBox(20);
-        contenedor.setPadding(new Insets(25));
+        VBox contenedor = new VBox(25);
+        contenedor.setPadding(new Insets(30, 25, 30, 25));
         contenedor.setAlignment(Pos.TOP_CENTER);
         return contenedor;
     }
@@ -394,25 +464,44 @@ public class MainController {
      * @return La barra de navegación inferior HBox
      */
     private HBox crearNavegacionInferior() {
-        HBox navegacion = new HBox(8);
-        navegacion.setPadding(new Insets(12));
+        HBox navegacion = new HBox(15);
+        navegacion.setPadding(new Insets(15));
         navegacion.setAlignment(Pos.CENTER);
         navegacion.getStyleClass().add("nav-inferior");
 
-        Button btnInicio = crearBotonNav("Inicio"); // Botón de inicio
+        Button btnInicio = new Button("🏠");
+        btnInicio.getStyleClass().add("boton-nav");
+        btnInicio.setTooltip(new Tooltip("Inicio"));
         btnInicio.setOnAction(event -> mostrarInicio());
 
-        Button btnActividades = crearBotonNav("Actividades"); // Botón de actividades
+        Button btnActividades = new Button("🎯");
+        btnActividades.getStyleClass().add("boton-nav");
+        btnActividades.setTooltip(new Tooltip("Actividades"));
         btnActividades.setOnAction(event -> mostrarActividades());
 
-        Button btnReservas = crearBotonNav("Reservas"); // Botón de reservas
+        Button btnReservas = new Button("📅");
+        btnReservas.getStyleClass().add("boton-nav");
+        btnReservas.setTooltip(new Tooltip("Reservas"));
         btnReservas.setOnAction(event -> mostrarReservas());
 
-        Button btnIncidencias = crearBotonNav("Incidencias"); // Botón de incidencias
+        Button btnIncidencias = new Button("⚠️");
+        btnIncidencias.getStyleClass().add("boton-nav");
+        btnIncidencias.setTooltip(new Tooltip("Incidencias"));
         btnIncidencias.setOnAction(event -> mostrarIncidencias());
 
         navegacion.getChildren().addAll(btnInicio, btnActividades, btnReservas, btnIncidencias);
         return navegacion;
+    }
+
+    private void actualizarNavActivo(int index) {
+        if (navBar == null) return;
+        for (int i = 0; i < navBar.getChildren().size(); i++) {
+            Button btn = (Button) navBar.getChildren().get(i);
+            btn.getStyleClass().remove("boton-nav-activo");
+            if (i == index) {
+                btn.getStyleClass().add("boton-nav-activo");
+            }
+        }
     }
 
     /**

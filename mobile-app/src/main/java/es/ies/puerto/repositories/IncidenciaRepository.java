@@ -9,7 +9,7 @@ import es.ies.puerto.modelos.Incidencias;
 import es.ies.puerto.repositories.interfaces.IIncidenciaRepository;
 import java.text.SimpleDateFormat;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase IncidenciaRepository donde implementamos los metodos de IIncidenciaRepository

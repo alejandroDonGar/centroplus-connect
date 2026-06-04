@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  *
  * Clase PrincipalApplication

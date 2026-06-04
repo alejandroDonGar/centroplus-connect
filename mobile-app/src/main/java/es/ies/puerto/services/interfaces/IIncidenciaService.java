@@ -2,7 +2,7 @@ package es.ies.puerto.services.interfaces;
 import java.util.List;
 import es.ies.puerto.modelos.Incidencias;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Interfaz IIncidenciaService que realiza la logica de la incidencia

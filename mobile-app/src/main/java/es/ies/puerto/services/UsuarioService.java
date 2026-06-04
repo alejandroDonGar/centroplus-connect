@@ -5,7 +5,7 @@ import es.ies.puerto.repositories.interfaces.IUsuarioRepository;
 import es.ies.puerto.services.interfaces.IUsuarioService;
 import es.ies.puerto.utils.Validaciones;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase UsuarioService donde implementamos los metodos de IUsuarioService

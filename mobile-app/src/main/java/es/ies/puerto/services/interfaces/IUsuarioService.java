@@ -2,7 +2,7 @@ package es.ies.puerto.services.interfaces;
 import java.util.List;
 import es.ies.puerto.modelos.Usuarios;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Interfaz IUsuarioService que realiza la logica del usuario

@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase Sqlite3Manager que maneja la conexión con la base de datos
  */
 public class Sqlite3Manager {
 
-    private static String databasePath = "mobile-app/src/main/resources/es/ies/puerto/database/centroplus.db";
+    private static String databasePath = "src/main/resources/es/ies/puerto/database/centroplus.db";
     
     public static void setDatabasePath(String path) { 
         databasePath = path; 

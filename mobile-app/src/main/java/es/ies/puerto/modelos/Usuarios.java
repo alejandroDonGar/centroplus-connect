@@ -1,6 +1,6 @@
 package es.ies.puerto.modelos;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase Usuarios

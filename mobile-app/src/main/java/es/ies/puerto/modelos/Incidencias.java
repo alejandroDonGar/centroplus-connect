@@ -1,7 +1,7 @@
 package es.ies.puerto.modelos;
 import java.util.Date;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase Incidencias

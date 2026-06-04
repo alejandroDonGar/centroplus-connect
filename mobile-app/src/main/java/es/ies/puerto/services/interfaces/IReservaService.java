@@ -2,7 +2,7 @@ package es.ies.puerto.services.interfaces;
 import java.util.List;
 import es.ies.puerto.modelos.Reservas;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Interfaz IReservaService que realiza la logica de la reserva

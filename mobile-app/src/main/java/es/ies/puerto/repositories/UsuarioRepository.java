@@ -7,7 +7,7 @@ import java.util.List;
 import es.ies.puerto.modelos.Usuarios;
 import es.ies.puerto.repositories.interfaces.IUsuarioRepository;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase UsuarioRepository donde implementamos los metodos de IUsuarioRepository

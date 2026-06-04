@@ -5,7 +5,7 @@ import es.ies.puerto.repositories.interfaces.IReservaRepository;
 import es.ies.puerto.services.interfaces.IReservaService;
 import es.ies.puerto.utils.Validaciones;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase ReservaService donde implementamos los metodos de IReservaService

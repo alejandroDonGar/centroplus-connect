@@ -9,7 +9,7 @@ import es.ies.puerto.modelos.Reservas;
 import es.ies.puerto.repositories.interfaces.IReservaRepository;
 import java.text.SimpleDateFormat;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase ReservaRepository donde implementamos los metodos de IReservaRepository
