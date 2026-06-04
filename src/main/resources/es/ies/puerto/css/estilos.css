@@ -71,3 +71,13 @@
     -fx-padding: 10;
     -fx-font-size: 14px;
 }
+
+.tarjeta-resumen {
+    -fx-background-color: white;
+    -fx-padding: 18;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-font-size: 15px;
+    -fx-text-fill: #111827;
+}
