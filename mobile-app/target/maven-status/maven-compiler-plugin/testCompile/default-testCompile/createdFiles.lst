@@ -1,0 +1,10 @@
+es\ies\puerto\services\IncidenciasServiceTest.class
+es\ies\puerto\repositories\ActividadRepositoryTest.class
+es\ies\puerto\services\ReservaServiceTest.class
+es\ies\puerto\repositories\ReservaRepositoryTest.class
+es\ies\puerto\modelos\IncidenciasTest.class
+es\ies\puerto\modelos\UsuarioTest.class
+es\ies\puerto\modelos\ReservaTest.class
+es\ies\puerto\modelos\ActividadTest.class
+es\ies\puerto\services\ActividadServiceTest.class
+es\ies\puerto\repositories\IncidenciasRepositoryTest.class

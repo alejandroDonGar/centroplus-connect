@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-skills-sqlite-ejercicio</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.controllers</a> &gt; <span class="el_source">MainController.java</span></div><h1>MainController.java</h1><pre class="source lang-java linenums">package es.ies.puerto.controllers;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import es.ies.puerto.modelos.Actividades;
+import es.ies.puerto.services.ActividadService;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import es.ies.puerto.modelos.Reservas;
+import es.ies.puerto.services.ReservaService;
+import es.ies.puerto.modelos.Incidencias;
+import es.ies.puerto.services.IncidenciaService;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import java.util.Date;
+
+/**
+ * @author AlejandroDonGar y JavierReyPer
+ * @version 1.0.0
+ *
+ * Clase MainController
+ */
+public class MainController {
+
+    private BorderPane root;
+    private ActividadService actividadService;
+    private ReservaService reservaService;
+    private IncidenciaService incidenciaService;
+
+    /**
+     * Constructor de la clase MainController
+     */
+<span class="nc" id="L40">    public MainController() {</span>
+<span class="nc" id="L41">        actividadService = new ActividadService();</span>
+<span class="nc" id="L42">        reservaService = new ReservaService();</span>
+<span class="nc" id="L43">        incidenciaService = new IncidenciaService();</span>
+
+<span class="nc" id="L45">        root = new BorderPane();</span>
+<span class="nc" id="L46">        root.getStyleClass().add(&quot;root-mobile&quot;);</span>
+
+<span class="nc" id="L48">        mostrarInicio();</span>
+<span class="nc" id="L49">        root.setBottom(crearNavegacionInferior());</span>
+<span class="nc" id="L50">    }</span>
+
+    /**
+     * Metodo getView que devuelve el nodo raiz del escenario
+        * @return El nodo raiz del escenario
+     */
+    public Parent getView() {
+<span class="nc" id="L57">        return root;</span>
+    }
+
+    /**
+     * Metodo mostrarInicio que muestra el inicio del escenario
+     */
+    private void mostrarInicio() {
+<span class="nc" id="L64">        VBox contenido = crearContenedorPantalla();</span>
+
+<span class="nc" id="L66">        Label titulo = new Label(&quot;CentroPlus Connect&quot;); // Título del inicio</span>
+<span class="nc" id="L67">        titulo.getStyleClass().add(&quot;titulo&quot;);</span>
+
+<span class="nc" id="L69">        Label descripcion = new Label(&quot;Consulta actividades, reserva plazas y comunica incidencias.&quot;); // Descripción del inicio</span>
+<span class="nc" id="L70">        descripcion.getStyleClass().add(&quot;texto&quot;);</span>
+<span class="nc" id="L71">        descripcion.setWrapText(true);</span>
+
+<span class="nc" id="L73">        Label resumen = new Label( // Resumen del inicio</span>
+<span class="nc" id="L74">            &quot;Actividades disponibles: &quot; + actividadService.findAll().size() + &quot;\n&quot; +</span>
+<span class="nc" id="L75">            &quot;Reservas registradas: &quot; + reservaService.findAll().size() + &quot;\n&quot; +</span>
+<span class="nc" id="L76">            &quot;Incidencias registradas: &quot; + incidenciaService.findAll().size()</span>
+        );
+<span class="nc" id="L78">        resumen.getStyleClass().add(&quot;tarjeta-resumen&quot;);</span>
+
+<span class="nc" id="L80">        Button btnActividades = new Button(&quot;Ver actividades&quot;); // Botón para ver las actividades</span>
+<span class="nc" id="L81">        btnActividades.getStyleClass().add(&quot;boton-principal&quot;);</span>
+<span class="nc" id="L82">        btnActividades.setOnAction(event -&gt; mostrarActividades());</span>
+
+<span class="nc" id="L84">        contenido.getChildren().addAll(titulo, descripcion, resumen, btnActividades);</span>
+<span class="nc" id="L85">        root.setCenter(contenido);</span>
+<span class="nc" id="L86">    }</span>
+
+    /**
+     * Metodo mostrarActividades que muestra las actividades del escenario
+     */
+    private void mostrarActividades() {
+<span class="nc" id="L92">        VBox contenido = crearContenedorPantalla();</span>
+
+<span class="nc" id="L94">        Label titulo = new Label(&quot;Actividades&quot;); // Título de la lista de actividades</span>
+<span class="nc" id="L95">        titulo.getStyleClass().add(&quot;titulo&quot;);</span>
+
+<span class="nc" id="L97">        ListView&lt;Actividades&gt; listaActividades = new ListView&lt;&gt;(); // Lista de actividades</span>
+<span class="nc" id="L98">        listaActividades.getStyleClass().add(&quot;lista&quot;);</span>
+<span class="nc" id="L99">        listaActividades.setItems(FXCollections.observableArrayList(actividadService.findAll()));</span>
+<span class="nc" id="L100">        listaActividades.setCellFactory(param -&gt; new ListCell&lt;&gt;() {</span>
+
+            /**
+             * Metodo updateItem que actualiza el item de la lista de actividades   
+             * @param actividad La actividad a mostrar
+             * @param empty Si el item está vacío
+             */
+            @Override
+            protected void updateItem(Actividades actividad, boolean empty) { 
+<span class="nc" id="L109">                super.updateItem(actividad, empty);</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">                if (empty || actividad == null) {</span>
+<span class="nc" id="L111">                    setText(null);</span>
+                } else {
+<span class="nc" id="L113">                    int plazasDisponibles = actividad.getPlazasMaximas() - actividad.getPlazasOcupadas();</span>
+<span class="nc" id="L114">                    setText(</span>
+<span class="nc" id="L115">                        actividad.getNombre() + &quot;\n&quot; +</span>
+<span class="nc" id="L116">                        actividad.getTipoActividad() + &quot; · &quot; +</span>
+<span class="nc" id="L117">                        actividad.getDuracion() + &quot; min\n&quot; +</span>
+<span class="nc" id="L118">                        &quot;Precio: &quot; + actividad.getPrecio() + &quot; € · &quot; +</span>
+                        &quot;Plazas libres: &quot; + plazasDisponibles
+                    );
+                }
+<span class="nc" id="L122">            }</span>
+        });
+
+        /**
+         * Metodo setMouseClicked que agrega un evento de clic a la lista de actividades
+         */
+<span class="nc" id="L128">        listaActividades.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L129">            Actividades actividadSeleccionada = listaActividades.getSelectionModel().getSelectedItem();</span>
+
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (actividadSeleccionada != null) {</span>
+<span class="nc" id="L132">                mostrarDetalleActividad(actividadSeleccionada);</span>
+            }
+<span class="nc" id="L134">        });</span>
+<span class="nc" id="L135">        contenido.getChildren().addAll(titulo, listaActividades);</span>
+<span class="nc" id="L136">        root.setCenter(contenido);</span>
+<span class="nc" id="L137">    }</span>
+
+    /**
+     * Metodo mostrarDetalleActividad que muestra el detalle de una actividad del escenario
+     * @param actividad La actividad a mostrar
+     */
+    private void mostrarDetalleActividad(Actividades actividad) {
+<span class="nc" id="L144">        VBox contenido = crearContenedorPantalla();</span>
+
+<span class="nc" id="L146">        Label titulo = new Label(actividad.getNombre()); // Título de la actividad</span>
+<span class="nc" id="L147">        titulo.getStyleClass().add(&quot;titulo&quot;);</span>
+<span class="nc" id="L148">        titulo.setWrapText(true);</span>
+
+<span class="nc" id="L150">        int plazasDisponibles = actividad.getPlazasMaximas() - actividad.getPlazasOcupadas();</span>
+
+<span class="nc" id="L152">        Label tipo = new Label(&quot;Tipo: &quot; + actividad.getTipoActividad()); // Tipo de actividad</span>
+<span class="nc" id="L153">        tipo.getStyleClass().add(&quot;texto&quot;);</span>
+
+<span class="nc" id="L155">        Label duracion = new Label(&quot;Duración: &quot; + actividad.getDuracion() + &quot; minutos&quot;); // Duración de la actividad</span>
+<span class="nc" id="L156">        duracion.getStyleClass().add(&quot;texto&quot;);</span>
+
+<span class="nc" id="L158">        Label precio = new Label(&quot;Precio: &quot; + actividad.getPrecio() + &quot;€&quot;); // Precio de la actividad</span>
+<span class="nc" id="L159">        precio.getStyleClass().add(&quot;texto&quot;);</span>
+
+<span class="nc" id="L161">        Label plazas = new Label(&quot;Plazas: &quot; + plazasDisponibles); // Plazas disponibles</span>
+<span class="nc" id="L162">        plazas.getStyleClass().add(&quot;texto&quot;);</span>
+
+<span class="nc" id="L164">        Button btnReservar = new Button(&quot;Reservar plaza&quot;); // Botón de reservar plaza</span>
+<span class="nc" id="L165">        btnReservar.getStyleClass().add(&quot;boton-principal&quot;);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        btnReservar.setDisable(plazasDisponibles &lt;= 0);</span>
+
+<span class="nc" id="L168">        btnReservar.setOnAction(event -&gt; {</span>
+<span class="nc" id="L169">            Reservas reserva = new Reservas(generarIdReserva(), 1, actividad.getId(), new Date(), &quot;ACTIVA&quot;);</span>
+<span class="nc" id="L170">            boolean resultado = reservaService.save(reserva);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (resultado) {</span>
+<span class="nc" id="L172">                mostrarAlerta(Alert.AlertType.INFORMATION, &quot;Reserva creada&quot;, &quot;La reserva se ha realizado correctamente.&quot;);</span>
+<span class="nc" id="L173">                mostrarActividades();</span>
+            } else {
+<span class="nc" id="L175">                mostrarAlerta(Alert.AlertType.ERROR, &quot;Error&quot;, &quot;No se ha podido realizar la reserva.&quot;);</span>
+            }
+<span class="nc" id="L177">        });</span>
+
+<span class="nc" id="L179">        Button btnVolver = new Button(&quot;Volver a actividades&quot;); // Botón de volver a actividades</span>
+<span class="nc" id="L180">        btnVolver.getStyleClass().add(&quot;boton-secundario&quot;);</span>
+<span class="nc" id="L181">        btnVolver.setOnAction(event -&gt; mostrarActividades());</span>
+
+<span class="nc" id="L183">        contenido.getChildren().addAll(titulo, tipo, duracion, precio, plazas, btnReservar, btnVolver);</span>
+
+<span class="nc" id="L185">        root.setCenter(contenido);</span>
+<span class="nc" id="L186">    }</span>
+
+    /**
+     * Metodo mostrarReservas que muestra las reservas del escenario
+     */
+    private void mostrarReservas() {
+
+<span class="nc" id="L193">        VBox contenido = crearContenedorPantalla();</span>
+
+<span class="nc" id="L195">        Label titulo = new Label(&quot;Mis reservas&quot;); // Título de la lista de reservas</span>
+<span class="nc" id="L196">        titulo.getStyleClass().add(&quot;titulo&quot;);</span>
+
+<span class="nc" id="L198">        ListView&lt;Reservas&gt; listaReservas = new ListView&lt;&gt;(); // Lista de reservas</span>
+<span class="nc" id="L199">        listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));</span>
+<span class="nc" id="L200">        listaReservas.setCellFactory(param -&gt; new ListCell&lt;&gt;() {</span>
+
+            /**
+             * Metodo updateItem que actualiza el contenido de una celda de la lista de reservas
+             * @param reserva La reserva a mostrar
+             * @param empty Si la celda está vacía
+             */
+            @Override
+            protected void updateItem(Reservas reserva, boolean empty) {
+<span class="nc" id="L209">                super.updateItem(reserva, empty);</span>
+<span class="nc bnc" id="L210" title="All 4 branches missed.">                if (empty || reserva == null) {</span>
+<span class="nc" id="L211">                    setText(null);</span>
+                } else {
+<span class="nc" id="L213">                    Actividades actividad = actividadService.findByID(reserva.getIdActividad());</span>
+<span class="nc" id="L214">                    String nombreActividad = &quot;Actividad no encontrada&quot;;</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                    if (actividad != null) {</span>
+<span class="nc" id="L216">                        nombreActividad = actividad.getNombre();</span>
+                    }
+<span class="nc" id="L218">                    setText(</span>
+<span class="nc" id="L219">                        &quot;Reserva #&quot; + reserva.getId() + &quot;\n&quot; +</span>
+                        &quot;Actividad: &quot; + nombreActividad + &quot;\n&quot; +
+<span class="nc" id="L221">                        &quot;Fecha: &quot; + reserva.getFecha() + &quot;\n&quot; +</span>
+<span class="nc" id="L222">                        &quot;Estado: &quot; + reserva.getEstado()</span>
+                    );
+                }
+<span class="nc" id="L225">            }</span>
+        });
+<span class="nc" id="L227">        Button btnCancelar = new Button(&quot;Cancelar reserva&quot;);</span>
+<span class="nc" id="L228">        btnCancelar.getStyleClass().add(&quot;boton-principal&quot;);</span>
+<span class="nc" id="L229">        btnCancelar.setDisable(true);</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">        listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -&gt; btnCancelar.setDisable(newVal == null));</span>
+        /**
+         * Metodo cancelarReserva que cancela una reserva del escenario
+         * @param event El evento de clic en el botón de cancelar
+        */
+<span class="nc" id="L235">        btnCancelar.setOnAction(event -&gt; {</span>
+<span class="nc" id="L236">            Reservas reservaSeleccionada =listaReservas.getSelectionModel().getSelectedItem();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (reservaSeleccionada == null) {</span>
+<span class="nc" id="L238">                mostrarAlerta(Alert.AlertType.WARNING, &quot;Reserva no seleccionada&quot;, &quot;Debes seleccionar una reserva para cancelarla.&quot;);</span>
+<span class="nc" id="L239">                return;</span>
+            }
+<span class="nc" id="L241">            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);</span>
+<span class="nc" id="L242">            confirmacion.setTitle(&quot;Confirmar cancelación&quot;);</span>
+<span class="nc" id="L243">            confirmacion.setHeaderText(null);</span>
+<span class="nc" id="L244">            confirmacion.setContentText(&quot;¿Seguro que quieres cancelar esta reserva?&quot;);</span>
+
+<span class="nc bnc" id="L246" title="All 2 branches missed.">            if (confirmacion.showAndWait().isEmpty()</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">                    || confirmacion.getResult() != javafx.scene.control.ButtonType.OK) {</span>
+<span class="nc" id="L248">                return;</span>
+            }
+<span class="nc" id="L250">            boolean cancelada = reservaService.delete(reservaSeleccionada.getId());</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            if (cancelada) {</span>
+<span class="nc" id="L252">                mostrarAlerta(Alert.AlertType.INFORMATION, &quot;Reserva cancelada&quot;, &quot;La reserva se ha cancelado correctamente.&quot;);</span>
+<span class="nc" id="L253">                mostrarReservas();</span>
+            } else {
+<span class="nc" id="L255">                mostrarAlerta(Alert.AlertType.ERROR, &quot;Error&quot;, &quot;No se ha podido cancelar la reserva.&quot;);</span>
+            }
+<span class="nc" id="L257">        });</span>
+<span class="nc" id="L258">        contenido.getChildren().addAll(titulo, listaReservas, btnCancelar);</span>
+<span class="nc" id="L259">        root.setCenter(contenido);</span>
+<span class="nc" id="L260">    }</span>
+
+    /**
+     * Metodo generarIdReserva que genera un nuevo ID de reserva
+     * @return El nuevo ID de reserva
+     */
+    private Integer generarIdReserva() {
+<span class="nc" id="L267">        return reservaService.findAll().size() + 1;</span>
+    }
+
+     /**
+      * Metodo mostrarIncidencias que muestra las incidencias del escenario
+      */
+    private void mostrarIncidencias() {
+<span class="nc" id="L274">        VBox contenido = crearContenedorPantalla(); // Contenedor de la pantalla</span>
+
+<span class="nc" id="L276">        Label titulo = new Label(&quot;Incidencias&quot;); // Título de incidencias</span>
+<span class="nc" id="L277">        titulo.getStyleClass().add(&quot;titulo&quot;);</span>
+
+<span class="nc" id="L279">        TextField campoAsunto = new TextField(); // Campo de asunto</span>
+<span class="nc" id="L280">        campoAsunto.setPromptText(&quot;Asunto&quot;);</span>
+<span class="nc" id="L281">        campoAsunto.getStyleClass().add(&quot;campo-texto&quot;);</span>
+
+<span class="nc" id="L283">        TextArea campoDescripcion = new TextArea(); // Campo de descripción</span>
+<span class="nc" id="L284">        campoDescripcion.setPromptText(&quot;Descripción&quot;);</span>
+<span class="nc" id="L285">        campoDescripcion.setWrapText(true);</span>
+<span class="nc" id="L286">        campoDescripcion.setPrefRowCount(4);</span>
+<span class="nc" id="L287">        campoDescripcion.getStyleClass().add(&quot;campo-texto&quot;);</span>
+
+<span class="nc" id="L289">        Button btnEnviar = new Button(&quot;Enviar incidencia&quot;); // Botón de enviar incidencia</span>
+<span class="nc" id="L290">        btnEnviar.getStyleClass().add(&quot;boton-principal&quot;);</span>
+
+<span class="nc" id="L292">        ListView&lt;Incidencias&gt; listaIncidencias = new ListView&lt;&gt;(); // Lista de incidencias</span>
+<span class="nc" id="L293">        listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.findAll()));</span>
+<span class="nc" id="L294">        listaIncidencias.getStyleClass().add(&quot;lista&quot;);</span>
+
+<span class="nc" id="L296">        listaIncidencias.setCellFactory(param -&gt; new ListCell&lt;&gt;() {</span>
+
+            /**
+             * Metodo updateItem que actualiza el item de la lista de incidencias   
+             * @param incidencia La incidencia a mostrar
+             * @param empty Si el item está vacío
+             */
+            @Override
+            protected void updateItem(Incidencias incidencia, boolean empty) {
+<span class="nc" id="L305">                super.updateItem(incidencia, empty);</span>
+
+<span class="nc bnc" id="L307" title="All 4 branches missed.">                if (empty || incidencia == null) {</span>
+<span class="nc" id="L308">                    setText(null);</span>
+                } else {
+<span class="nc" id="L310">                    setText(</span>
+<span class="nc" id="L311">                        &quot;Incidencia #&quot; + incidencia.getId() + &quot;\n&quot; +</span>
+<span class="nc" id="L312">                        incidencia.getAsunto() + &quot;\n&quot; +</span>
+<span class="nc" id="L313">                        incidencia.getDescripcion() + &quot;\n&quot; +</span>
+<span class="nc" id="L314">                        &quot;Estado: &quot; + incidencia.getEstado()</span>
+                    );
+                }
+<span class="nc" id="L317">            }</span>
+        });
+<span class="nc" id="L319">        btnEnviar.setOnAction(event -&gt; {</span>
+<span class="nc" id="L320">            String asunto = campoAsunto.getText();</span>
+<span class="nc" id="L321">            String descripcion = campoDescripcion.getText();</span>
+
+<span class="nc bnc" id="L323" title="All 4 branches missed.">            if (asunto == null || asunto.trim().isEmpty()) {</span>
+<span class="nc" id="L324">                mostrarAlerta(Alert.AlertType.WARNING, &quot;Validación&quot;, &quot;El asunto no puede estar vacío.&quot;);</span>
+<span class="nc" id="L325">                return;</span>
+            }
+<span class="nc bnc" id="L327" title="All 4 branches missed.">            if (descripcion == null || descripcion.trim().isEmpty()) {</span>
+<span class="nc" id="L328">                mostrarAlerta(Alert.AlertType.WARNING, &quot;Validación&quot;, &quot;La descripción no puede estar vacía.&quot;);</span>
+<span class="nc" id="L329">                return;</span>
+            }
+<span class="nc" id="L331">            Incidencias incidencia = new Incidencias(</span>
+<span class="nc" id="L332">                generarIdIncidencia(),</span>
+<span class="nc" id="L333">                1,</span>
+<span class="nc" id="L334">                asunto.trim(),</span>
+<span class="nc" id="L335">                descripcion.trim(),</span>
+                new Date(),
+                &quot;ABIERTA&quot;
+            );
+<span class="nc" id="L339">            boolean guardada = incidenciaService.save(incidencia);</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">            if (guardada) {</span>
+<span class="nc" id="L341">                mostrarAlerta(Alert.AlertType.INFORMATION, &quot;Incidencia enviada&quot;, &quot;La incidencia se ha registrado correctamente.&quot;);</span>
+<span class="nc" id="L342">                campoAsunto.clear();</span>
+<span class="nc" id="L343">                campoDescripcion.clear();</span>
+<span class="nc" id="L344">                mostrarIncidencias();</span>
+            } else {
+<span class="nc" id="L346">                mostrarAlerta(Alert.AlertType.ERROR, &quot;Error&quot;, &quot;No se ha podido registrar la incidencia.&quot;);</span>
+            }
+<span class="nc" id="L348">        });</span>
+<span class="nc" id="L349">        contenido.getChildren().addAll(</span>
+            titulo,
+            campoAsunto,
+            campoDescripcion,
+            btnEnviar,
+            listaIncidencias
+        );
+<span class="nc" id="L356">        root.setCenter(contenido);</span>
+<span class="nc" id="L357">    }</span>
+
+    /**
+     * Metodo mostrarAlerta que muestra una alerta con un tipo, un título y un mensaje
+     * @param tipo El tipo de alerta
+     * @param titulo El título de alerta
+     * @param mensaje El mensaje de alerta
+     */
+    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String mensaje) {
+<span class="nc" id="L366">        Alert alert = new Alert(tipo);</span>
+<span class="nc" id="L367">        alert.setTitle(titulo);</span>
+<span class="nc" id="L368">        alert.setHeaderText(null);</span>
+<span class="nc" id="L369">        alert.setContentText(mensaje);</span>
+<span class="nc" id="L370">        alert.showAndWait();</span>
+<span class="nc" id="L371">    }</span>
+
+    /**
+     * Metodo generarIdIncidencia que genera un nuevo ID de incidencia
+     * @return El nuevo ID de incidencia
+     */
+    private Integer generarIdIncidencia() {
+<span class="nc" id="L378">        return incidenciaService.findAll().size() + 1;</span>
+    }
+
+    /**
+     * Metodo crearContenedorPantalla que crea un contenedor VBox con un espacio entre los elementos
+     * @return El contenedor VBox
+     */
+    private VBox crearContenedorPantalla() {
+<span class="nc" id="L386">        VBox contenedor = new VBox(20);</span>
+<span class="nc" id="L387">        contenedor.setPadding(new Insets(25));</span>
+<span class="nc" id="L388">        contenedor.setAlignment(Pos.TOP_CENTER);</span>
+<span class="nc" id="L389">        return contenedor;</span>
+    }
+
+    /**
+     * Metodo crearNavegacionInferior que crea una barra de navegación inferior con botones
+     * @return La barra de navegación inferior HBox
+     */
+    private HBox crearNavegacionInferior() {
+<span class="nc" id="L397">        HBox navegacion = new HBox(8);</span>
+<span class="nc" id="L398">        navegacion.setPadding(new Insets(12));</span>
+<span class="nc" id="L399">        navegacion.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L400">        navegacion.getStyleClass().add(&quot;nav-inferior&quot;);</span>
+
+<span class="nc" id="L402">        Button btnInicio = crearBotonNav(&quot;Inicio&quot;); // Botón de inicio</span>
+<span class="nc" id="L403">        btnInicio.setOnAction(event -&gt; mostrarInicio());</span>
+
+<span class="nc" id="L405">        Button btnActividades = crearBotonNav(&quot;Actividades&quot;); // Botón de actividades</span>
+<span class="nc" id="L406">        btnActividades.setOnAction(event -&gt; mostrarActividades());</span>
+
+<span class="nc" id="L408">        Button btnReservas = crearBotonNav(&quot;Reservas&quot;); // Botón de reservas</span>
+<span class="nc" id="L409">        btnReservas.setOnAction(event -&gt; mostrarReservas());</span>
+
+<span class="nc" id="L411">        Button btnIncidencias = crearBotonNav(&quot;Incidencias&quot;); // Botón de incidencias</span>
+<span class="nc" id="L412">        btnIncidencias.setOnAction(event -&gt; mostrarIncidencias());</span>
+
+<span class="nc" id="L414">        navegacion.getChildren().addAll(btnInicio, btnActividades, btnReservas, btnIncidencias);</span>
+<span class="nc" id="L415">        return navegacion;</span>
+    }
+
+    /**
+     * Metodo crearBotonNav que crea un botón de navegación con un texto
+     * @param texto El texto del botón
+     * @return El botón de navegación Button
+     */
+    private Button crearBotonNav(String texto) {
+<span class="nc" id="L424">        Button boton = new Button(texto); // Botón de navegación</span>
+<span class="nc" id="L425">        boton.getStyleClass().add(&quot;boton-nav&quot;);</span>
+
+<span class="nc" id="L427">        return boton;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

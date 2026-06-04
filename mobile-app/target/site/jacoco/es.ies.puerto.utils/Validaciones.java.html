@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Validaciones.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-skills-sqlite-ejercicio</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.utils</a> &gt; <span class="el_source">Validaciones.java</span></div><h1>Validaciones.java</h1><pre class="source lang-java linenums">package es.ies.puerto.utils;
+import java.util.Date;
+import java.util.regex.Pattern;
+import es.ies.puerto.modelos.Actividades;
+import es.ies.puerto.modelos.Incidencias;
+import es.ies.puerto.modelos.Reservas;
+import es.ies.puerto.modelos.Usuarios;
+/**
+ * @author AlejandroDonGar y JavierReyPer
+ * @version 1.0.0
+ * 
+ * Clase Validaciones
+ */
+<span class="nc" id="L14">public class Validaciones {</span>
+    public static boolean esCadenaValida(String value) {
+<span class="nc bnc" id="L16" title="All 4 branches missed.">        return value!=null &amp;&amp; !value.isEmpty();</span>
+    }
+    public static boolean esIntegerValido(Integer value) {
+<span class="nc bnc" id="L19" title="All 4 branches missed.">        return value!=null &amp;&amp; value&gt;=1; </span>
+    }
+    public static boolean esDoubleValido(Double value) {
+<span class="nc bnc" id="L22" title="All 4 branches missed.">        return value!=null &amp;&amp; value&gt;0; </span>
+    }
+    public static boolean esDniValido(String value) {
+<span class="nc bnc" id="L25" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^[0-9]{8}[A-Z]$&quot;, value);</span>
+    }
+    public static boolean esEmailValido(String value) {
+<span class="nc bnc" id="L28" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^[A-ZÑÁÉÍÓÚa-zñáéíóú0-9-+_]+@[A-ZÑÁÉÍÓÚa-zñáéíóú0-9-+_]+\\.[A-Za-z]{2,}$&quot;, value);</span>
+    }
+    public static boolean esTelefonoValido(String value) {
+<span class="nc bnc" id="L31" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^[+34]?[0-9]{9}$&quot;, value);</span>
+    }
+    public static boolean esTipoUsuarioValido(String value) {
+<span class="nc bnc" id="L34" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^(ALUMNO|SOCIO|AMBOS)$&quot;, value);</span>
+    }
+    public static boolean esTipoActividadValida(String value) {
+<span class="nc bnc" id="L37" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^(ACADEMICA|DEPORTIVA)$&quot;, value);</span>
+    }
+    public static boolean esPlazasOcupadas(Integer value) {
+<span class="nc bnc" id="L40" title="All 4 branches missed.">        return value!=null &amp;&amp; value &gt;= 0;</span>
+    }
+    public static boolean esFechaValida(Date value) {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        return value!=null;</span>
+    }
+    public static boolean esEstadoReservaValido(String value) {
+<span class="nc bnc" id="L46" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^(ACTIVA|CANCELADA)$&quot;, value);</span>
+    }
+    public static boolean esEstadoIncidenciaValido(String value) {
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        return value!=null &amp;&amp; Pattern.matches(&quot;^(ABIERTA|EN_PROCESO|CERRADA)$&quot;, value);</span>
+    }
+    public static boolean esUsuarioValido(Usuarios usuario) {
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if(usuario==null </span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            || !esIntegerValido(usuario.getId())</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            || !esCadenaValida(usuario.getNombre())</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            || !esDniValido(usuario.getDni())</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            || !esEmailValido(usuario.getEmail())</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            || !esTelefonoValido(usuario.getTelefono())</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            || !esTipoUsuarioValido(usuario.getTipoUsuario())) {</span>
+<span class="nc" id="L59">                return false;</span>
+        }
+<span class="nc" id="L61">        return true;</span>
+    }
+    public static boolean esActividadValida(Actividades actividad) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if(actividad == null</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            || !esIntegerValido(actividad.getId())</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            || !esCadenaValida(actividad.getNombre())</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            || !esTipoActividadValida(actividad.getTipoActividad())</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            || !esIntegerValido(actividad.getDuracion())</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            || !esDoubleValido(actividad.getPrecio())</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            || !esIntegerValido(actividad.getPlazasMaximas())</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            || !esPlazasOcupadas(actividad.getPlazasOcupadas())) {</span>
+<span class="nc" id="L72">                return false;</span>
+        }
+<span class="nc" id="L74">        return true;</span>
+    }
+    public static boolean esReservaValida(Reservas reserva) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(reserva==null</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            || !esIntegerValido(reserva.getId())</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            || !esIntegerValido(reserva.getIdUsuario())</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            || !esIntegerValido(reserva.getIdActividad())</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            || !esFechaValida(reserva.getFecha())</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            || !esEstadoReservaValido(reserva.getEstado())) {</span>
+<span class="nc" id="L83">                return false;</span>
+            }
+<span class="nc" id="L85">        return true;</span>
+    }
+    public static boolean esIncidenciaValida(Incidencias incidencia) {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if(incidencia==null</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            || !esIntegerValido(incidencia.getId())</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            || !esIntegerValido(incidencia.getIdUsuario())</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            || !esCadenaValida(incidencia.getAsunto())</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            || !esCadenaValida(incidencia.getDescripcion())</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            || !esFechaValida(incidencia.getFecha())</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            || !esEstadoIncidenciaValido(incidencia.getEstado())) {</span>
+<span class="nc" id="L95">                return false;</span>
+            }
+<span class="nc" id="L97">            return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
