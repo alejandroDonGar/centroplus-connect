@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActividadRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee-skills-sqlite-ejercicio</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.repositories</a> &gt; <span class="el_source">ActividadRepository.java</span></div><h1>ActividadRepository.java</h1><pre class="source lang-java linenums">package es.ies.puerto.repositories;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActividadRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CentroPlus Connect</a> &gt; <a href="index.source.html" class="el_package">es.ies.puerto.repositories</a> &gt; <span class="el_source">ActividadRepository.java</span></div><h1>ActividadRepository.java</h1><pre class="source lang-java linenums">package es.ies.puerto.repositories;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,165 +8,165 @@ import es.ies.puerto.modelos.Actividades;
 import es.ies.puerto.modelos.Reservas;
 import es.ies.puerto.repositories.interfaces.IActividadRepository;
 /**
- * @author AlejandroDonGar y JavierReyPer
+ * @author AlejandroDonGar
  * @version 1.0.0
  * 
  * Clase ActividadRepository donde implementamos los metodos de IActividadRepository
  */
 public class ActividadRepository implements IActividadRepository {
     public ActividadRepository() {
-<span class="nc" id="L18">        super();</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L18">        super();</span>
+<span class="fc" id="L19">    }</span>
     @Override
     public List&lt;Actividades&gt; findAll() {
-<span class="nc" id="L22">        List&lt;Actividades&gt; actividadesEncontradas = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L23">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L24">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades&quot;)) {</span>
-<span class="nc" id="L25">                ResultSet resultado = sentencia.executeQuery();</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">                while(resultado.next()) {</span>
-<span class="nc" id="L27">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
-<span class="nc" id="L28">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
-<span class="nc" id="L29">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
-<span class="nc" id="L30">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
-<span class="nc" id="L31">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
-<span class="nc" id="L32">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
-<span class="nc" id="L33">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
-<span class="nc" id="L34">                    Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
-<span class="nc" id="L35">                    actividadesEncontradas.add(actividad);</span>
-<span class="nc" id="L36">                }</span>
-<span class="nc" id="L37">        } catch (Exception e) {</span>
-<span class="nc" id="L38">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
-<span class="nc" id="L39">            e.printStackTrace();</span>
-<span class="nc" id="L40">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L41">        }</span>
-<span class="nc" id="L42">        return actividadesEncontradas;</span>
+<span class="fc" id="L22">        List&lt;Actividades&gt; actividadesEncontradas = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L23">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L24">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades&quot;)) {</span>
+<span class="fc" id="L25">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">                while(resultado.next()) {</span>
+<span class="fc" id="L27">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L28">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
+<span class="fc" id="L29">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
+<span class="fc" id="L30">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
+<span class="fc" id="L31">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
+<span class="fc" id="L32">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
+<span class="fc" id="L33">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
+<span class="fc" id="L34">                    Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
+<span class="fc" id="L35">                    actividadesEncontradas.add(actividad);</span>
+<span class="fc" id="L36">                }</span>
+<span class="fc" id="L37">        } catch (Exception e) {</span>
+<span class="fc" id="L38">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
+<span class="fc" id="L39">            e.printStackTrace();</span>
+<span class="fc" id="L40">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L41">        }</span>
+<span class="fc" id="L42">        return actividadesEncontradas;</span>
     }
     @Override
     public Actividades findByID(Integer id) {
-<span class="nc" id="L46">        Actividades actividadEncontrada = null;</span>
-<span class="nc" id="L47">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L48">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades WHERE id=?&quot;)) {</span>
-<span class="nc" id="L49">                sentencia.setInt(1, id);</span>
-<span class="nc" id="L50">                ResultSet resultado = sentencia.executeQuery();</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">                while(resultado.next()) {</span>
-<span class="nc" id="L52">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
-<span class="nc" id="L53">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
-<span class="nc" id="L54">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
-<span class="nc" id="L55">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
-<span class="nc" id="L56">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
-<span class="nc" id="L57">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
-<span class="nc" id="L58">                    actividadEncontrada = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
-<span class="nc" id="L59">                    return actividadEncontrada;</span>
+<span class="fc" id="L46">        Actividades actividadEncontrada = null;</span>
+<span class="fc" id="L47">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L48">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades WHERE id=?&quot;)) {</span>
+<span class="fc" id="L49">                sentencia.setInt(1, id);</span>
+<span class="fc" id="L50">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                while(resultado.next()) {</span>
+<span class="fc" id="L52">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
+<span class="fc" id="L53">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
+<span class="fc" id="L54">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
+<span class="fc" id="L55">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
+<span class="fc" id="L56">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
+<span class="fc" id="L57">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
+<span class="fc" id="L58">                    actividadEncontrada = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
+<span class="fc" id="L59">                    return actividadEncontrada;</span>
                 }
-<span class="nc bnc" id="L61" title="All 4 branches missed.">        } catch (Exception e) {</span>
-<span class="nc" id="L62">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
-<span class="nc" id="L63">            e.printStackTrace();</span>
-<span class="nc" id="L64">            return null;</span>
-<span class="nc" id="L65">        }</span>
-<span class="nc" id="L66">        return actividadEncontrada;</span>
+<span class="pc bpc" id="L61" title="2 of 4 branches missed.">        } catch (Exception e) {</span>
+<span class="fc" id="L62">            System.err.println(&quot;No se han encontrado los resultados&quot;);</span>
+<span class="fc" id="L63">            e.printStackTrace();</span>
+<span class="fc" id="L64">            return null;</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        return actividadEncontrada;</span>
     }
     @Override
     public boolean save(Actividades actividad) {
-<span class="nc" id="L70">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L71">            PreparedStatement sentencia = connection.prepareStatement(&quot;INSERT INTO actividades VALUES(?,?,?,?,?,?,?)&quot;)) {</span>
-<span class="nc" id="L72">                sentencia.setInt(1, actividad.getId());</span>
-<span class="nc" id="L73">                sentencia.setString(2, actividad.getNombre());</span>
-<span class="nc" id="L74">                sentencia.setString(3, actividad.getTipoActividad());</span>
-<span class="nc" id="L75">                sentencia.setInt(4, actividad.getDuracion());</span>
-<span class="nc" id="L76">                sentencia.setDouble(5, actividad.getPrecio());</span>
-<span class="nc" id="L77">                sentencia.setInt(6, actividad.getPlazasMaximas());</span>
-<span class="nc" id="L78">                sentencia.setInt(7, actividad.getPlazasOcupadas());</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
-<span class="nc" id="L80">        } catch (Exception e) {</span>
-<span class="nc" id="L81">            System.err.println(&quot;No se ha podido guardar la actividad&quot;); </span>
-<span class="nc" id="L82">            e.printStackTrace();</span>
-<span class="nc" id="L83">            return false;</span>
+<span class="fc" id="L70">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L71">            PreparedStatement sentencia = connection.prepareStatement(&quot;INSERT INTO actividades VALUES(?,?,?,?,?,?,?)&quot;)) {</span>
+<span class="fc" id="L72">                sentencia.setInt(1, actividad.getId());</span>
+<span class="fc" id="L73">                sentencia.setString(2, actividad.getNombre());</span>
+<span class="fc" id="L74">                sentencia.setString(3, actividad.getTipoActividad());</span>
+<span class="fc" id="L75">                sentencia.setInt(4, actividad.getDuracion());</span>
+<span class="fc" id="L76">                sentencia.setDouble(5, actividad.getPrecio());</span>
+<span class="fc" id="L77">                sentencia.setInt(6, actividad.getPlazasMaximas());</span>
+<span class="fc" id="L78">                sentencia.setInt(7, actividad.getPlazasOcupadas());</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
+<span class="fc" id="L80">        } catch (Exception e) {</span>
+<span class="fc" id="L81">            System.err.println(&quot;No se ha podido guardar la actividad&quot;); </span>
+<span class="fc" id="L82">            e.printStackTrace();</span>
+<span class="fc" id="L83">            return false;</span>
         }
     }
     @Override
     public boolean update(Actividades actividad) {
-<span class="nc" id="L88">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L89">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET nombre=?, tipo_actividad=?, duracion=?, precio=?, plazas_maximas=?, plazas_ocupadas=? WHERE id=?&quot;)) {</span>
-<span class="nc" id="L90">                sentencia.setString(1, actividad.getNombre());</span>
-<span class="nc" id="L91">                sentencia.setString(2, actividad.getTipoActividad());</span>
-<span class="nc" id="L92">                sentencia.setInt(3, actividad.getDuracion());</span>
-<span class="nc" id="L93">                sentencia.setDouble(4, actividad.getPrecio());</span>
-<span class="nc" id="L94">                sentencia.setInt(5, actividad.getPlazasMaximas());</span>
-<span class="nc" id="L95">                sentencia.setInt(6, actividad.getPlazasOcupadas());</span>
-<span class="nc" id="L96">                sentencia.setInt(7, actividad.getId());</span>
-<span class="nc bnc" id="L97" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
-<span class="nc" id="L98">        } catch (Exception e) {</span>
-<span class="nc" id="L99">            System.err.println(&quot;No se ha podido actualizar la actividad&quot;); </span>
-<span class="nc" id="L100">            e.printStackTrace();</span>
-<span class="nc" id="L101">            return false;</span>
+<span class="fc" id="L88">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L89">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET nombre=?, tipo_actividad=?, duracion=?, precio=?, plazas_maximas=?, plazas_ocupadas=? WHERE id=?&quot;)) {</span>
+<span class="fc" id="L90">                sentencia.setString(1, actividad.getNombre());</span>
+<span class="fc" id="L91">                sentencia.setString(2, actividad.getTipoActividad());</span>
+<span class="fc" id="L92">                sentencia.setInt(3, actividad.getDuracion());</span>
+<span class="fc" id="L93">                sentencia.setDouble(4, actividad.getPrecio());</span>
+<span class="fc" id="L94">                sentencia.setInt(5, actividad.getPlazasMaximas());</span>
+<span class="fc" id="L95">                sentencia.setInt(6, actividad.getPlazasOcupadas());</span>
+<span class="fc" id="L96">                sentencia.setInt(7, actividad.getId());</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                return sentencia.executeUpdate() &gt; 0;</span>
+<span class="fc" id="L98">        } catch (Exception e) {</span>
+<span class="fc" id="L99">            System.err.println(&quot;No se ha podido actualizar la actividad&quot;); </span>
+<span class="fc" id="L100">            e.printStackTrace();</span>
+<span class="fc" id="L101">            return false;</span>
         }
     }
     @Override
     public boolean delete(Actividades actividad) {
-<span class="nc" id="L106">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L107">            PreparedStatement sentencia = connection.prepareStatement(&quot;DELETE FROM actividades WHERE id=?&quot;)) {</span>
-<span class="nc" id="L108">                sentencia.setInt(1, actividad.getId());</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
-<span class="nc" id="L110">        } catch (Exception e) {</span>
-<span class="nc" id="L111">            System.err.println(&quot;No se ha podido borrar la actividad&quot;); </span>
-<span class="nc" id="L112">            e.printStackTrace();</span>
-<span class="nc" id="L113">            return false;</span>
+<span class="fc" id="L106">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L107">            PreparedStatement sentencia = connection.prepareStatement(&quot;DELETE FROM actividades WHERE id=?&quot;)) {</span>
+<span class="fc" id="L108">                sentencia.setInt(1, actividad.getId());</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                return sentencia.executeUpdate() &gt; 0;</span>
+<span class="fc" id="L110">        } catch (Exception e) {</span>
+<span class="fc" id="L111">            System.err.println(&quot;No se ha podido borrar la actividad&quot;); </span>
+<span class="fc" id="L112">            e.printStackTrace();</span>
+<span class="fc" id="L113">            return false;</span>
         }
     }
     @Override
     public Reservas reservarPlaza(Integer idCliente, Integer idActividad) {
-<span class="nc" id="L118">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L119">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET plazas_ocupadas = plazas_ocupadas + 1 WHERE id=? AND plazas_ocupadas &lt; plazas_maximas&quot;)) {</span>
-<span class="nc" id="L120">                sentencia.setInt(1, idActividad);</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (sentencia.executeUpdate() &gt; 0) {</span>
-<span class="nc" id="L122">                    return new Reservas(null, idCliente, idActividad, new java.util.Date(), &quot;ACTIVA&quot;);</span>
+<span class="fc" id="L118">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L119">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET plazas_ocupadas = plazas_ocupadas + 1 WHERE id=? AND plazas_ocupadas &lt; plazas_maximas&quot;)) {</span>
+<span class="fc" id="L120">                sentencia.setInt(1, idActividad);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                if (sentencia.executeUpdate() &gt; 0) {</span>
+<span class="fc" id="L122">                    return new Reservas(null, idCliente, idActividad, new java.util.Date(), &quot;ACTIVA&quot;);</span>
                 }
-<span class="nc bnc" id="L124" title="All 4 branches missed.">        } catch (Exception e) {</span>
-<span class="nc" id="L125">            System.err.println(&quot;No se ha podido reservar la plaza&quot;); </span>
-<span class="nc" id="L126">            e.printStackTrace();</span>
-<span class="nc" id="L127">        }</span>
-<span class="nc" id="L128">        return null;</span>
+<span class="pc bpc" id="L124" title="2 of 4 branches missed.">        } catch (Exception e) {</span>
+<span class="fc" id="L125">            System.err.println(&quot;No se ha podido reservar la plaza&quot;); </span>
+<span class="fc" id="L126">            e.printStackTrace();</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return null;</span>
     }
     @Override
     public boolean cancelarPlaza(Integer idActividad) {
-<span class="nc" id="L132">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L133">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET plazas_ocupadas = plazas_ocupadas - 1 WHERE id=? AND plazas_ocupadas &gt; 0&quot;)) {</span>
-<span class="nc" id="L134">                sentencia.setInt(1, idActividad);</span>
-<span class="nc bnc" id="L135" title="All 2 branches missed.">                return sentencia.executeUpdate() &gt; 0;</span>
-<span class="nc" id="L136">        } catch (Exception e) {</span>
-<span class="nc" id="L137">            System.err.println(&quot;No se ha podido actualizar la actividad&quot;); </span>
-<span class="nc" id="L138">            e.printStackTrace();</span>
-<span class="nc" id="L139">            return false;</span>
+<span class="fc" id="L132">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L133">            PreparedStatement sentencia = connection.prepareStatement(&quot;UPDATE actividades SET plazas_ocupadas = plazas_ocupadas - 1 WHERE id=? AND plazas_ocupadas &gt; 0&quot;)) {</span>
+<span class="fc" id="L134">                sentencia.setInt(1, idActividad);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                return sentencia.executeUpdate() &gt; 0;</span>
+<span class="fc" id="L136">        } catch (Exception e) {</span>
+<span class="fc" id="L137">            System.err.println(&quot;No se ha podido actualizar la actividad&quot;); </span>
+<span class="fc" id="L138">            e.printStackTrace();</span>
+<span class="fc" id="L139">            return false;</span>
         }
     }
     @Override
     public List&lt;Actividades&gt; findCompletas() {
-<span class="nc" id="L144">        List&lt;Actividades&gt; actividadesCompletas = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L145">        try (Connection connection = Sqlite3Manager.getConnection();</span>
-<span class="nc" id="L146">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades WHERE plazas_ocupadas=plazas_maximas&quot;)) {</span>
-<span class="nc" id="L147">                ResultSet resultado = sentencia.executeQuery();</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">                while(resultado.next()) {</span>
-<span class="nc" id="L149">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
-<span class="nc" id="L150">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
-<span class="nc" id="L151">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
-<span class="nc" id="L152">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
-<span class="nc" id="L153">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
-<span class="nc" id="L154">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
-<span class="nc" id="L155">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
-<span class="nc" id="L156">                    Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
-<span class="nc" id="L157">                    actividadesCompletas.add(actividad);</span>
-<span class="nc" id="L158">                }</span>
-<span class="nc" id="L159">        } catch (Exception e) {</span>
-<span class="nc" id="L160">            System.err.println(&quot;No se han encontrado los resultados&quot;); </span>
-<span class="nc" id="L161">            e.printStackTrace();</span>
-<span class="nc" id="L162">            return new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L163">        }</span>
-<span class="nc" id="L164">        return actividadesCompletas;</span>
+<span class="fc" id="L144">        List&lt;Actividades&gt; actividadesCompletas = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L145">        try (Connection connection = Sqlite3Manager.getConnection();</span>
+<span class="fc" id="L146">            PreparedStatement sentencia = connection.prepareStatement(&quot;SELECT * FROM actividades WHERE plazas_ocupadas=plazas_maximas&quot;)) {</span>
+<span class="fc" id="L147">                ResultSet resultado = sentencia.executeQuery();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">                while(resultado.next()) {</span>
+<span class="fc" id="L149">                    Integer id = resultado.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L150">                    String nombre = resultado.getString(&quot;nombre&quot;);</span>
+<span class="fc" id="L151">                    String tipoActividad = resultado.getString(&quot;tipo_actividad&quot;);</span>
+<span class="fc" id="L152">                    Integer duracion = resultado.getInt(&quot;duracion&quot;);</span>
+<span class="fc" id="L153">                    Double precio = resultado.getDouble(&quot;precio&quot;);</span>
+<span class="fc" id="L154">                    Integer plazasMaximas = resultado.getInt(&quot;plazas_maximas&quot;);</span>
+<span class="fc" id="L155">                    Integer plazasOcupadas = resultado.getInt(&quot;plazas_ocupadas&quot;);</span>
+<span class="fc" id="L156">                    Actividades actividad = new Actividades(id, nombre, tipoActividad, duracion, precio, plazasMaximas, plazasOcupadas);</span>
+<span class="fc" id="L157">                    actividadesCompletas.add(actividad);</span>
+<span class="fc" id="L158">                }</span>
+<span class="fc" id="L159">        } catch (Exception e) {</span>
+<span class="fc" id="L160">            System.err.println(&quot;No se han encontrado los resultados&quot;); </span>
+<span class="fc" id="L161">            e.printStackTrace();</span>
+<span class="fc" id="L162">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L163">        }</span>
+<span class="fc" id="L164">        return actividadesCompletas;</span>
     }
     @Override
     public Double calcularIngresosTotales(Integer plazasOcupadas, Double precio) {
-<span class="nc" id="L168">        Double ingresosTotales = plazasOcupadas * precio;</span>
-<span class="nc" id="L169">        return ingresosTotales;</span>
+<span class="fc" id="L168">        Double ingresosTotales = plazasOcupadas * precio;</span>
+<span class="fc" id="L169">        return ingresosTotales;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

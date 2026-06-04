@@ -37,6 +37,16 @@ public class ReservaServiceTest {
     }
 
     /**
+     * Test constructor ReservaService()
+     * Comprueba que el constructor sin parámetros inicializa los repositorios
+     */
+    @Test
+    public void constructorDefaultTest() {
+        ReservaService service = new ReservaService();
+        Assertions.assertNotNull(service);
+    }
+
+    /**
      * Test findAll()
      * Comprueba que el método findAll llama al repositorio y devuelve la lista
      */
@@ -49,6 +59,16 @@ public class ReservaServiceTest {
         List<Reservas> resultado = reservaService.findAll();
         Assertions.assertEquals(1, resultado.size());
         verify(reservaRepository, times(1)).findAll();
+    }
+
+    /**
+     * Test findByID(Integer) con ID inválido
+     * Comprueba que devuelve null si el ID es nulo o negativo
+     */
+    @Test
+    public void findByIDTestInvalid() {
+        Assertions.assertNull(reservaService.findByID(null));
+        Assertions.assertNull(reservaService.findByID(-1));
     }
 
     /**
@@ -67,6 +87,57 @@ public class ReservaServiceTest {
     }
 
     /**
+     * Test save(Reservas) cubriendo todas las ramas de validación
+     */
+    @Test
+    public void saveTestAllBranches() {
+        // Caso reserva nula
+        Assertions.assertFalse(reservaService.save(null));
+
+        Reservas reserva = new Reservas(1, 1, 1, new Date(), "ACTIVA");
+
+        // Caso usuario no existe
+        when(usuarioRepository.findByID(1)).thenReturn(null);
+        Assertions.assertFalse(reservaService.save(reserva));
+
+        // Caso actividad no existe
+        when(usuarioRepository.findByID(1)).thenReturn(new es.ies.puerto.modelos.Usuarios());
+        when(actividadRepository.findByID(1)).thenReturn(null);
+        Assertions.assertFalse(reservaService.save(reserva));
+
+        // Caso sin plazas disponibles
+        when(actividadRepository.findByID(1)).thenReturn(new es.ies.puerto.modelos.Actividades());
+        when(reservaRepository.numeroDePlazasDisponibles(1)).thenReturn(0);
+        Assertions.assertFalse(reservaService.save(reserva));
+
+        // Caso reserva ya existente activa
+        when(reservaRepository.numeroDePlazasDisponibles(1)).thenReturn(5);
+        List<Reservas> todas = new ArrayList<>();
+        todas.add(new Reservas(2, 1, 1, new Date(), "ACTIVA"));
+        when(reservaRepository.findAll()).thenReturn(todas);
+        Assertions.assertFalse(reservaService.save(reserva));
+
+        // Caso error al reservar plaza (actividadRepository.reservarPlaza retorna null)
+        when(reservaRepository.findAll()).thenReturn(new ArrayList<>());
+        when(actividadRepository.reservarPlaza(1, 1)).thenReturn(null);
+        Assertions.assertFalse(reservaService.save(reserva));
+
+        // Caso éxito
+        when(actividadRepository.reservarPlaza(1, 1)).thenReturn(new Reservas());
+        when(reservaRepository.save(reserva)).thenReturn(true);
+        Assertions.assertTrue(reservaService.save(reserva));
+    }
+
+    /**
+     * Test update(Reservas) con reserva inválida
+     * Comprueba que devuelve false si la reserva es nula
+     */
+    @Test
+    public void updateTestInvalid() {
+        Assertions.assertFalse(reservaService.update(null));
+    }
+
+    /**
      * Test update(Reservas)
      * Comprueba que el método update llama al repositorio si la reserva es válida
      */
@@ -78,6 +149,16 @@ public class ReservaServiceTest {
         boolean resultado = reservaService.update(reserva);
         Assertions.assertTrue(resultado);
         verify(reservaRepository, times(1)).update(reserva);
+    }
+
+    /**
+     * Test delete(Integer) con ID inválido o inexistente
+     */
+    @Test
+    public void deleteTestInvalid() {
+        Assertions.assertFalse(reservaService.delete(null));
+        when(reservaRepository.findByID(1)).thenReturn(null);
+        Assertions.assertFalse(reservaService.delete(1));
     }
 
     /**
@@ -94,5 +175,24 @@ public class ReservaServiceTest {
         boolean resultado = reservaService.delete(1);
         Assertions.assertTrue(resultado);
         verify(reservaRepository, times(1)).delete(1);
+    }
+
+    /**
+     * Test numeroDePlazasDisponibles(Integer) con ID inválido
+     */
+    @Test
+    public void numeroDePlazasDisponiblesTestInvalid() {
+        Assertions.assertEquals(-1, reservaService.numeroDePlazasDisponibles(null));
+    }
+
+    /**
+     * Test numeroDePlazasDisponibles(Integer)
+     * Comprueba que el método numeroDePlazasDisponibles llama al repositorio y devuelve el valor
+     */
+    @Test
+    public void numeroDePlazasDisponiblesTest() {
+        when(reservaRepository.numeroDePlazasDisponibles(1)).thenReturn(10);
+        Integer resultado = reservaService.numeroDePlazasDisponibles(1);
+        Assertions.assertEquals(10, resultado);
     }
 }

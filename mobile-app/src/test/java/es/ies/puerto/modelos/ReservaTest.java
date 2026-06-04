@@ -146,4 +146,41 @@ public class ReservaTest {
         reserva.setEstado("ACTIVA");
         Assertions.assertEquals("ACTIVA", reserva.getEstado());
     }
+
+    /**
+     * Test constructor identificador de la reserva
+     * Comprueba que el constructor con ID devuelve el valor correcto
+     */
+    @Test
+    public void constructorIdTest() {
+        Reservas reserva = new Reservas(1);
+        Assertions.assertEquals(1, reserva.getId());
+    }
+
+    /**
+     * Test equals(Object)
+     * Comprueba que el método equals funciona correctamente comparando por ID
+     */
+    @Test
+    public void equalsTest() {
+        Reservas r1 = new Reservas(1);
+        Reservas r2 = new Reservas(1);
+        Reservas r3 = new Reservas(2);
+        
+        Assertions.assertEquals(r1, r1);
+        Assertions.assertEquals(r1, r2);
+        Assertions.assertNotEquals(r1, r3);
+        Assertions.assertNotEquals(r1, null);
+    }
+
+    /**
+     * Test hashCode()
+     * Comprueba que el método hashCode devuelve el mismo valor para objetos iguales
+     */
+    @Test
+    public void hashCodeTest() {
+        Reservas r1 = new Reservas(1);
+        Assertions.assertEquals(r1.hashCode(), new Reservas(1).hashCode());
+        Assertions.assertEquals(0, new Reservas().hashCode());
+    }
 }

@@ -195,25 +195,40 @@ public class ActividadTest {
         actividad.setPlazasOcupadas(10);
         Assertions.assertEquals(10, actividad.getPlazasOcupadas());
     }
-    // * ---- Equals ----
+
     /**
      * Test equals(Object)
-     * Comprueba que el método equals devuelve false cuando los objetos no son iguales
+     * Comprueba que el método equals funciona correctamente comparando por ID
      */
     @Test
-    public void equalsTestFalse() {
-        Actividades actividad1 = new Actividades();
-        Actividades actividad2 = new Actividades();
-        Assertions.assertFalse(actividad1.equals(actividad2));
+    public void equalsTest() {
+        Actividades actividad1 = new Actividades(1, "Yoga", "DEPORTIVA", 60, 20.0, 20, 10);
+        Actividades actividad2 = new Actividades(1, "Yoga", "DEPORTIVA", 60, 20.0, 20, 10);
+        Actividades actividad3 = new Actividades(2, "Yoga", "DEPORTIVA", 60, 20.0, 20, 10);
+        
+        Assertions.assertEquals(actividad1, actividad1);
+        Assertions.assertEquals(actividad1, actividad2);
+        Assertions.assertNotEquals(actividad1, actividad3);
+        Assertions.assertNotEquals(actividad1, null);
+        Assertions.assertNotEquals(actividad1, "String");
+        
+        Actividades actividadNullId1 = new Actividades();
+        Actividades actividadNullId2 = new Actividades();
+        Assertions.assertNotEquals(actividadNullId1, actividadNullId2);
     }
-    // * ---- HashCode ----
+
     /**
      * Test hashCode()
-     * Comprueba que el método hashCode devuelve un valor no nulo
+     * Comprueba que el método hashCode devuelve el mismo valor para objetos iguales
      */
     @Test
-    public void hashCodeTestOk() {
-        Actividades actividad = new Actividades();
-        Assertions.assertNotNull(actividad.hashCode());
+    public void hashCodeTest() {
+        Actividades actividad1 = new Actividades(1, "Yoga", "DEPORTIVA", 60, 20.0, 20, 10);
+        Actividades actividad2 = new Actividades(1, "Yoga", "DEPORTIVA", 60, 20.0, 20, 10);
+        
+        Assertions.assertEquals(actividad1.hashCode(), actividad2.hashCode());
+        
+        Actividades actividadNullId = new Actividades();
+        Assertions.assertEquals(0, actividadNullId.hashCode());
     }
 }

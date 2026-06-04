@@ -29,7 +29,7 @@ public class Incidencias {
      * @param id identificador de la incidencia
      * @param idUsuario identificador del usuario vinculado con la incidencia
      * @param asunto asunto del que se trata la incidencia
-     * @param descipcion descripcion de la incidencia
+     * @param descripcion descripcion de la incidencia
      * @param fecha fecha de la incidencia
      * @param estado estado de la incidencia
      */

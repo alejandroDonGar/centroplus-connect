@@ -169,4 +169,42 @@ public class IncidenciasTest {
         incidencia.setEstado("ABIERTA");
         Assertions.assertEquals("ABIERTA", incidencia.getEstado());
     }
+
+    /**
+     * Test constructor identificador de la incidencia
+     * Comprueba que el constructor con ID devuelve el valor correcto
+     */
+    @Test
+    public void constructorIdTest() {
+        Incidencias incidencia = new Incidencias(1);
+        Assertions.assertEquals(1, incidencia.getId());
+    }
+
+    /**
+     * Test equals(Object)
+     * Comprueba que el método equals funciona correctamente comparando por ID
+     */
+    @Test
+    public void equalsTest() {
+        Incidencias i1 = new Incidencias(1);
+        Incidencias i2 = new Incidencias(1);
+        Incidencias i3 = new Incidencias(2);
+        
+        Assertions.assertEquals(i1, i1);
+        Assertions.assertEquals(i1, i2);
+        Assertions.assertNotEquals(i1, i3);
+        Assertions.assertNotEquals(i1, null);
+        Assertions.assertNotEquals(i1, new Object());
+    }
+
+    /**
+     * Test hashCode()
+     * Comprueba que el método hashCode devuelve el mismo valor para objetos iguales
+     */
+    @Test
+    public void hashCodeTest() {
+        Incidencias i1 = new Incidencias(1);
+        Assertions.assertEquals(i1.hashCode(), new Incidencias(1).hashCode());
+        Assertions.assertEquals(0, new Incidencias().hashCode());
+    }
 }

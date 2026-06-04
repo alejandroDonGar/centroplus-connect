@@ -30,6 +30,16 @@ public class UsuarioServiceTest {
     }
 
     /**
+     * Test constructor UsuarioService()
+     * Comprueba que el constructor sin parámetros inicializa el repositorio
+     */
+    @Test
+    public void constructorDefaultTest() {
+        UsuarioService service = new UsuarioService();
+        Assertions.assertNotNull(service);
+    }
+
+    /**
      * Test findAll()
      * Comprueba que el método findAll llama al repositorio y devuelve la lista
      */
@@ -42,6 +52,16 @@ public class UsuarioServiceTest {
         List<Usuarios> resultado = usuarioService.findAll();
         Assertions.assertEquals(1, resultado.size());
         verify(usuarioRepository, times(1)).findAll();
+    }
+
+    /**
+     * Test findByID(Integer) con ID inválido
+     * Comprueba que devuelve null si el ID es nulo o negativo
+     */
+    @Test
+    public void findByIDTestInvalid() {
+        Assertions.assertNull(usuarioService.findByID(null));
+        Assertions.assertNull(usuarioService.findByID(-1));
     }
 
     /**
@@ -60,6 +80,15 @@ public class UsuarioServiceTest {
     }
 
     /**
+     * Test save(Usuarios) con usuario inválido
+     * Comprueba que devuelve false si el usuario es nulo
+     */
+    @Test
+    public void saveTestInvalid() {
+        Assertions.assertFalse(usuarioService.save(null));
+    }
+
+    /**
      * Test save(Usuarios)
      * Comprueba que el método save llama al repositorio si el usuario es válido
      */
@@ -74,6 +103,15 @@ public class UsuarioServiceTest {
     }
 
     /**
+     * Test update(Usuarios) con usuario inválido
+     * Comprueba que devuelve false si el usuario es nulo
+     */
+    @Test
+    public void updateTestInvalid() {
+        Assertions.assertFalse(usuarioService.update(null));
+    }
+
+    /**
      * Test update(Usuarios)
      * Comprueba que el método update llama al repositorio si el usuario es válido
      */
@@ -85,6 +123,15 @@ public class UsuarioServiceTest {
         boolean resultado = usuarioService.update(usuario);
         Assertions.assertTrue(resultado);
         verify(usuarioRepository, times(1)).update(usuario);
+    }
+
+    /**
+     * Test delete(Usuarios) con usuario inválido
+     * Comprueba que devuelve false si el usuario es nulo
+     */
+    @Test
+    public void deleteTestInvalid() {
+        Assertions.assertFalse(usuarioService.delete(null));
     }
 
     /**

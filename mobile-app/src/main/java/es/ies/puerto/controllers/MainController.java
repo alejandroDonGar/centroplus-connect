@@ -43,9 +43,16 @@ public class MainController {
      * Constructor de la clase MainController
      */
     public MainController() {
-        actividadService = new ActividadService();
-        reservaService = new ReservaService();
-        incidenciaService = new IncidenciaService();
+        this(new ActividadService(), new ReservaService(), new IncidenciaService());
+    }
+
+    /**
+     * Constructor con inyección de dependencias para testing
+     */
+    public MainController(ActividadService actividadService, ReservaService reservaService, IncidenciaService incidenciaService) {
+        this.actividadService = actividadService;
+        this.reservaService = reservaService;
+        this.incidenciaService = incidenciaService;
 
         root = new BorderPane();
         root.getStyleClass().add("root-mobile");
@@ -305,11 +312,14 @@ public class MainController {
     }
 
     /**
-     * Metodo generarIdReserva que genera un nuevo ID de reserva
+     * Metodo generarIdReserva que genera un nuevo ID de reserva buscando el maximo actual
      * @return El nuevo ID de reserva
      */
     private Integer generarIdReserva() {
-        return reservaService.findAll().size() + 1;
+        return reservaService.findAll().stream()
+                .mapToInt(r -> r.getId())
+                .max()
+                .orElse(0) + 1;
     }
 
      /**
@@ -441,11 +451,14 @@ public class MainController {
     }
 
     /**
-     * Metodo generarIdIncidencia que genera un nuevo ID de incidencia
+     * Metodo generarIdIncidencia que genera un nuevo ID de incidencia buscando el maximo actual
      * @return El nuevo ID de incidencia
      */
     private Integer generarIdIncidencia() {
-        return incidenciaService.findAll().size() + 1;
+        return incidenciaService.findAll().stream()
+                .mapToInt(i -> i.getId())
+                .max()
+                .orElse(0) + 1;
     }
 
     /**

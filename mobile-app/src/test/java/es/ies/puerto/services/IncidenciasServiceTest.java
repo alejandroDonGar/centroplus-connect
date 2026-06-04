@@ -31,6 +31,16 @@ public class IncidenciasServiceTest {
     }
 
     /**
+     * Test constructor IncidenciaService()
+     * Comprueba que el constructor sin parámetros inicializa el repositorio
+     */
+    @Test
+    public void constructorDefaultTest() {
+        IncidenciaService service = new IncidenciaService();
+        Assertions.assertNotNull(service);
+    }
+
+    /**
      * Test findAll()
      * Comprueba que el método findAll llama al repositorio y devuelve la lista
      */
@@ -43,6 +53,16 @@ public class IncidenciasServiceTest {
         List<Incidencias> resultado = incidenciaService.findAll();
         Assertions.assertEquals(1, resultado.size());
         verify(incidenciaRepository, times(1)).findAll();
+    }
+
+    /**
+     * Test findByID(Integer) con ID inválido
+     * Comprueba que devuelve null si el ID es nulo o negativo
+     */
+    @Test
+    public void findByIDTestInvalid() {
+        Assertions.assertNull(incidenciaService.findByID(null));
+        Assertions.assertNull(incidenciaService.findByID(-1));
     }
 
     /**
@@ -61,6 +81,15 @@ public class IncidenciasServiceTest {
     }
 
     /**
+     * Test save(Incidencias) con incidencia inválida
+     * Comprueba que devuelve false si la incidencia es nula
+     */
+    @Test
+    public void saveTestInvalid() {
+        Assertions.assertFalse(incidenciaService.save(null));
+    }
+
+    /**
      * Test save(Incidencias)
      * Comprueba que el método save llama al repositorio si la incidencia es válida
      */
@@ -72,6 +101,15 @@ public class IncidenciasServiceTest {
         boolean resultado = incidenciaService.save(incidencia);
         Assertions.assertTrue(resultado);
         verify(incidenciaRepository, times(1)).save(incidencia);
+    }
+
+    /**
+     * Test update(Incidencias) con incidencia inválida
+     * Comprueba que devuelve false si la incidencia es nula
+     */
+    @Test
+    public void updateTestInvalid() {
+        Assertions.assertFalse(incidenciaService.update(null));
     }
 
     /**
@@ -89,6 +127,15 @@ public class IncidenciasServiceTest {
     }
 
     /**
+     * Test delete(Integer) con ID inválido
+     * Comprueba que devuelve false si el ID es nulo
+     */
+    @Test
+    public void deleteTestInvalid() {
+        Assertions.assertFalse(incidenciaService.delete(null));
+    }
+
+    /**
      * Test delete(Integer)
      * Comprueba que el método delete llama al repositorio con el ID correcto
      */
@@ -99,5 +146,26 @@ public class IncidenciasServiceTest {
         boolean resultado = incidenciaService.delete(1);
         Assertions.assertTrue(resultado);
         verify(incidenciaRepository, times(1)).delete(1);
+    }
+
+    /**
+     * Test incidenciasPorIdUsuario(Integer) con ID inválido
+     * Comprueba que devuelve una lista vacía si el ID es inválido
+     */
+    @Test
+    public void incidenciasPorIdUsuarioTestInvalid() {
+        List<Incidencias> resultado = incidenciaService.incidenciasPorIdUsuario(null);
+        Assertions.assertTrue(resultado.isEmpty());
+    }
+
+    /**
+     * Test incidenciasPorIdUsuario(Integer)
+     * Comprueba que el método incidenciasPorIdUsuario llama al repositorio y devuelve una lista
+     */
+    @Test
+    public void incidenciasPorIdUsuarioTest() {
+        when(incidenciaRepository.incidenciasPorIdUsuario(1)).thenReturn(new ArrayList<>());
+        List<Incidencias> resultado = incidenciaService.incidenciasPorIdUsuario(1);
+        Assertions.assertNotNull(resultado);
     }
 }

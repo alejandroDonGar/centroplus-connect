@@ -165,4 +165,31 @@ public class UsuarioTest {
         usuario.setTipoUsuario("PROFESOR");
         Assertions.assertEquals("PROFESOR", usuario.getTipoUsuario());
     }
+
+    /**
+     * Test equals(Object)
+     * Comprueba que el método equals funciona correctamente comparando por ID
+     */
+    @Test
+    public void equalsTest() {
+        Usuarios u1 = new Usuarios(1, "A", "B", "C", "D", "E");
+        Usuarios u2 = new Usuarios(1, "A", "B", "C", "D", "E");
+        Usuarios u3 = new Usuarios(2, "A", "B", "C", "D", "E");
+        
+        Assertions.assertEquals(u1, u1);
+        Assertions.assertEquals(u1, u2);
+        Assertions.assertNotEquals(u1, u3);
+        Assertions.assertNotEquals(u1, null);
+    }
+
+    /**
+     * Test hashCode()
+     * Comprueba que el método hashCode devuelve el mismo valor para objetos iguales
+     */
+    @Test
+    public void hashCodeTest() {
+        Usuarios u1 = new Usuarios(1, "A", "B", "C", "D", "E");
+        Assertions.assertEquals(u1.hashCode(), new Usuarios(1, "A", "B", "C", "D", "E").hashCode());
+        Assertions.assertEquals(0, new Usuarios().hashCode());
+    }
 }

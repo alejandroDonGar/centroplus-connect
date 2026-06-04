@@ -85,6 +85,9 @@ public class Reservas {
     public String getEstado() {
         return estado;
     }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -97,8 +100,5 @@ public class Reservas {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
-    }
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 }
