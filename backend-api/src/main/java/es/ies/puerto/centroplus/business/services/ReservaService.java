@@ -8,7 +8,7 @@ import es.ies.puerto.centroplus.domain.model.Reserva;
 /**
  * Servicio de Reservas
  * 
- * @author Ismael Perez
+ * @author AlejandroDonGar
  * @version 1.0
  */
 @Service
@@ -59,7 +59,7 @@ public class ReservaService implements ReservaServicePort {
         if (reservaEncontrada.isEmpty()) {
             return Optional.empty();
         }
-        reserva.setId(id);
+        reserva.setId(id); // Se setea para actualizar la reserva en la base de datos
         Reserva reservaActualizada = reservaPersistenceAdapter.save(reserva);
         return Optional.of(reservaActualizada);
     }

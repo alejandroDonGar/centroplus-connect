@@ -36,7 +36,7 @@ public class ActividadService implements ActividadServicePort {
     @Override
     public Optional<Actividad> update(Long id, Actividad actividad) {
         return actividadPersistenceAdapter.findById(id).map(actividadExistente -> { // el '.map' utiliza una función lambda para transformar el objeto existente en uno nuevo
-            actividad.setId(id);
+            actividad.setId(id); // Se setea para actualizar la actividad en la base de datos
             return actividadPersistenceAdapter.save(actividad);
         });
     }

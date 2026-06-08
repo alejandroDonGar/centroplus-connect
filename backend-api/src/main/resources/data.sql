@@ -16,3 +16,8 @@ INSERT INTO reservas (id, id_usuario, id_actividad, fecha, estado)
 VALUES
 (1, 1, 1, '2025-01-10', 'ACTIVA'),
 (2, 2, 2, '2025-01-11', 'ACTIVA');
+
+INSERT INTO incidencias (id, id_usuario, asunto, descripcion, fecha, estado)
+VALUES
+(1, 1, 'Problema con reserva', 'No puedo reservar una plaza', '2025-01-12', 'ABIERTA'),
+(2, 2, 'Cambio de horario', 'El horario de la actividad no coincide', '2025-01-13', 'EN_PROCESO');

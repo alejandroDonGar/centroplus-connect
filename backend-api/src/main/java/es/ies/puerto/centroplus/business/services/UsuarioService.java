@@ -39,7 +39,7 @@ public class UsuarioService implements UsuarioServicePort {
         if (usuarioEncontrado.isEmpty()) {
             return Optional.empty();
         }
-        usuario.setId(id);
+        usuario.setId(id); // Se setea para actualizar el usuario en la base de datos
         Usuario usuarioActualizado = usuarioPersistenceAdapter.save(usuario);
         return Optional.of(usuarioActualizado);
     }
