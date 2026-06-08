@@ -48,3 +48,4 @@ public class ActividadService implements ActividadServicePort {
         actividadPersistenceAdapter.deleteById(id);
         return true;
     }
+}
