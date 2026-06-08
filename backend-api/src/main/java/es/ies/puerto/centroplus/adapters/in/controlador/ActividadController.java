@@ -88,15 +88,7 @@ public class ActividadController {
      * @return El objeto Actividad que representa la actividad
      */
     private Actividad toDomain(ActividadRequest request) {
-        return new Actividad(
-                null,
-                request.getNombre(),
-                request.getTipoActividad(),
-                request.getDuracion(),
-                request.getPrecio(),
-                request.getPlazasMaximas(),
-                request.getPlazasOcupadas()
-        );
+        return new Actividad(null, request.getNombre(), request.getTipoActividad(), request.getDuracion(), request.getPrecio(), request.getPlazasMaximas(), request.getPlazasOcupadas());
     }
     /**
      * Metodo para convertir un objeto Actividad a un objeto ActividadResponse
@@ -104,15 +96,6 @@ public class ActividadController {
      * @return El objeto ActividadResponse que representa la actividad
      */
     private ActividadResponse toResponse(Actividad actividad) {
-        return new ActividadResponse(
-                actividad.getId(),
-                actividad.getNombre(),
-                actividad.getTipoActividad(),
-                actividad.getDuracion(),
-                actividad.getPrecio(),
-                actividad.getPlazasMaximas(),
-                actividad.getPlazasOcupadas(),
-                actividad.getPlazasDisponibles()
-        );
+        return new ActividadResponse( actividad.getId(), actividad.getNombre(), actividad.getTipoActividad(), actividad.getDuracion(), actividad.getPrecio(), actividad.getPlazasMaximas(), actividad.getPlazasOcupadas(), actividad.getPlazasDisponibles());
     }
 }

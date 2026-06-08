@@ -83,33 +83,20 @@ public class UsuarioController {
         return ResponseEntity.noContent().build(); // Si se elimina el usuario, devolver una respuesta 204
     }
     /**
-     * Mapear un objeto Usuario domain a un objeto Usuario domain
+     * Mapear un objeto UsuarioRequest a un objeto Usuario domain
      * @param request El objeto UsuarioRequest a mapear
      * @return El objeto Usuario domain que contiene la información del usuario
      */
     private Usuario toDomain(UsuarioRequest request) {
-        return new Usuario(
-                null,
-                request.getNombre(),
-                request.getDni(),
-                request.getEmail(),
-                request.getTelefono(),
-                request.getTipoUsuario()
+        return new Usuario( null, request.getNombre(), request.getDni(), request.getEmail(), request.getTelefono(), request.getTipoUsuario()
         );
     }
     /**
-     * Mapear un objeto Usuario domain a un objeto Usuario domain
-     * @param request El objeto UsuarioRequest a mapear
+     * Mapear un objeto Usuario domain a un objeto UsuarioResponse
+     * @param usuario El objeto Usuario domain a mapear
      * @return El objeto UsuarioResponse que contiene la información del usuario
      */
     private UsuarioResponse toResponse(Usuario usuario) {
-        return new UsuarioResponse(
-                usuario.getId(),
-                usuario.getNombre(),
-                usuario.getDni(),
-                usuario.getEmail(),
-                usuario.getTelefono(),
-                usuario.getTipoUsuario()
-        );
+        return new UsuarioResponse( usuario.getId(), usuario.getNombre(), usuario.getDni(), usuario.getEmail(), usuario.getTelefono(), usuario.getTipoUsuario());
     }
 }

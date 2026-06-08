@@ -11,3 +11,8 @@ VALUES
 (3, 'Spinning', 'DEPORTIVA', 45, 18.00, 12, 12),
 (4, 'Inglés técnico', 'ACADEMICA', 60, 30.00, 18, 6),
 (5, 'Sistemas Linux', 'ACADEMICA', 120, 45.00, 16, 10);
+
+INSERT INTO reservas (id, id_usuario, id_actividad, fecha, estado)
+VALUES
+(1, 1, 1, '2025-01-10', 'ACTIVA'),
+(2, 2, 2, '2025-01-11', 'ACTIVA');
