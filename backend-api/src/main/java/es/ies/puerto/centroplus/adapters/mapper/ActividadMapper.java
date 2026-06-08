@@ -8,7 +8,7 @@ import es.ies.puerto.centroplus.domain.model.Actividad;
  * @author AlejandroDonGar
  * @version 1.0
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring") // El modelo de componente utilizado por MapStruct es Spring Bean para inyectar dependencias
 public interface ActividadMapper {
     /**
      * Metodo para mapear una actividad en la base de datos a un modelo de dominio
