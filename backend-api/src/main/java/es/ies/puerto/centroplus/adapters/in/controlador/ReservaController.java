@@ -6,12 +6,14 @@ import es.ies.puerto.centroplus.adapters.in.api.reserva.ReservaRequest;
 import es.ies.puerto.centroplus.adapters.in.api.reserva.ReservaResponse;
 import es.ies.puerto.centroplus.business.ports.ReservaServicePort;
 import es.ies.puerto.centroplus.domain.model.Reserva;
+import io.swagger.v3.oas.annotations.tags.Tag;
 /**
  * Controlador para manejar las operaciones de Reservas
  * 
  * @author AlejandroDonGar
  * @version 1.0
  */
+@Tag(name = "Reservas", description = "Gestión de reservas")
 @RestController
 @RequestMapping("/api/v1/reservas")
 public class ReservaController {

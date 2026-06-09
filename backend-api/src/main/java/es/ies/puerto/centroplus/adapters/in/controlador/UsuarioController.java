@@ -6,12 +6,14 @@ import es.ies.puerto.centroplus.adapters.in.api.usuario.UsuarioRequest;
 import es.ies.puerto.centroplus.adapters.in.api.usuario.UsuarioResponse;
 import es.ies.puerto.centroplus.business.ports.UsuarioServicePort;
 import es.ies.puerto.centroplus.domain.model.Usuario;
+import io.swagger.v3.oas.annotations.tags.Tag;
 /**
  * Controlador para manejar las operaciones de usuarios
  * 
  * @author AlejandroDonGar
  * @version 1.0
  */
+@Tag(name = "Incidencias", description = "Gestión de incidencias")
 @RestController
 @RequestMapping("/api/v1/usuarios")
 public class UsuarioController {
@@ -88,8 +90,7 @@ public class UsuarioController {
      * @return El objeto Usuario domain que contiene la información del usuario
      */
     private Usuario toDomain(UsuarioRequest request) {
-        return new Usuario( null, request.getNombre(), request.getDni(), request.getEmail(), request.getTelefono(), request.getTipoUsuario()
-        );
+        return new Usuario( null, request.getNombre(), request.getDni(), request.getEmail(), request.getTelefono(), request.getTipoUsuario());
     }
     /**
      * Mapear un objeto Usuario domain a un objeto UsuarioResponse

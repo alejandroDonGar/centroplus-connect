@@ -6,12 +6,14 @@ import es.ies.puerto.centroplus.adapters.in.api.incidencia.IncidenciaRequest;
 import es.ies.puerto.centroplus.adapters.in.api.incidencia.IncidenciaResponse;
 import es.ies.puerto.centroplus.business.ports.IncidenciaServicePort;
 import es.ies.puerto.centroplus.domain.model.Incidencia;
+import io.swagger.v3.oas.annotations.tags.Tag;
 /**
  * Controlador REST para la gestión de incidencias.
  * 
  * @author AlejandroDonGar
  * @version 1.0
  */
+@Tag(name = "Usuarios", description = "Gestión de usuarios")
 @RestController
 @RequestMapping("/api/v1/incidencias")
 public class IncidenciaController {

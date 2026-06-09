@@ -6,12 +6,14 @@ import es.ies.puerto.centroplus.adapters.in.api.actividad.ActividadRequest;
 import es.ies.puerto.centroplus.adapters.in.api.actividad.ActividadResponse;
 import es.ies.puerto.centroplus.business.ports.ActividadServicePort;
 import es.ies.puerto.centroplus.domain.model.Actividad;
+import io.swagger.v3.oas.annotations.tags.Tag;
 /**
  * Clase para representar un controlador de actividades
  * 
  * @author AlejandroDonGar
  * @version 1.0
  */
+@Tag(name = "Actividades", description = "Gestión de actividades")
 @RestController
 @RequestMapping("/api/v1/actividades")
 public class ActividadController {
