@@ -121,7 +121,10 @@ public class MainControllerTest extends ApplicationTest {
         when(reservaService.save(any())).thenReturn(true);
 
         clickOn("🎯");
-        clickOn("Yoga");
+        
+        // Esperar a que el nodo aparezca y hacer clic
+        Node yogaNode = lookup("Yoga").query();
+        clickOn(yogaNode);
         
         // Clic en reservar
         clickOn("Reservar plaza");
@@ -202,7 +205,8 @@ public class MainControllerTest extends ApplicationTest {
 
         // Error en reserva
         clickOn("🎯");
-        clickOn("Yoga");
+        Node yogaNode = lookup("Yoga").query();
+        clickOn(yogaNode);
         clickOn("Reservar plaza");
         type(KeyCode.ENTER); // Cerrar error
 

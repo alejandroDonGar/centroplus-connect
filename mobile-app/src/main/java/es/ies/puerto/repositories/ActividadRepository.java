@@ -35,8 +35,6 @@ public class ActividadRepository implements IActividadRepository {
                     actividadesEncontradas.add(actividad);
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los resultados");
-            e.printStackTrace();
             return new ArrayList<>();
         }
         return actividadesEncontradas;
@@ -59,8 +57,6 @@ public class ActividadRepository implements IActividadRepository {
                     return actividadEncontrada;
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los resultados");
-            e.printStackTrace();
             return null;
         }
         return actividadEncontrada;
@@ -78,8 +74,6 @@ public class ActividadRepository implements IActividadRepository {
                 sentencia.setInt(7, actividad.getPlazasOcupadas());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido guardar la actividad"); 
-            e.printStackTrace();
             return false;
         }
     }
@@ -96,8 +90,6 @@ public class ActividadRepository implements IActividadRepository {
                 sentencia.setInt(7, actividad.getId());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar la actividad"); 
-            e.printStackTrace();
             return false;
         }
     }
@@ -108,8 +100,6 @@ public class ActividadRepository implements IActividadRepository {
                 sentencia.setInt(1, actividad.getId());
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido borrar la actividad"); 
-            e.printStackTrace();
             return false;
         }
     }
@@ -122,8 +112,6 @@ public class ActividadRepository implements IActividadRepository {
                     return new Reservas(null, idCliente, idActividad, new java.util.Date(), "ACTIVA");
                 }
         } catch (Exception e) {
-            System.err.println("No se ha podido reservar la plaza"); 
-            e.printStackTrace();
         }
         return null;
     }
@@ -134,8 +122,6 @@ public class ActividadRepository implements IActividadRepository {
                 sentencia.setInt(1, idActividad);
                 return sentencia.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se ha podido actualizar la actividad"); 
-            e.printStackTrace();
             return false;
         }
     }
@@ -157,8 +143,6 @@ public class ActividadRepository implements IActividadRepository {
                     actividadesCompletas.add(actividad);
                 }
         } catch (Exception e) {
-            System.err.println("No se han encontrado los resultados"); 
-            e.printStackTrace();
             return new ArrayList<>();
         }
         return actividadesCompletas;
