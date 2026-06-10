@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CentroPlus Connect</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="loader-overlay" class="loader-overlay">
+    <div class="loader-card">
+        <div class="loader-ring"></div>
+        <h3>CentroPlus Connect</h3>
+        <p>Cargando panel...</p>
+    </div>
+</div>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">✦</span>
+            <div>
+                <h1>CentroPlus</h1>
+                <p>Connect</p>
+            </div>
+        </div>
+
+        <nav class="side-nav">
+            <a href="#inicio" class="active">Inicio</a>
+            <a href="#acciones">Acciones</a>
+            <a href="#ejecutivo">Ejecutivo</a>
+            <a href="#graficas">Gráficas</a>
+            <a href="#historico">Histórico</a>
+            <a href="#api-explorer">API Explorer</a>
+            <a href="#calendario">Calendario</a>
+            <a href="#exports">Exports</a>
+            <a href="#actividades">Actividades</a>
+            <a href="#reservas">Reservas</a>
+            <a href="#incidencias">Incidencias</a>
+            <a href="#usuarios">Usuarios</a>
+            <a href="#tecnologias">Tecnologías</a>
+            <a href="/swagger-ui/index.html">Swagger</a>
+        </nav>
+
+        <button id="theme-toggle" class="theme-toggle" type="button">
+            🌙 Modo oscuro
+        </button>
+
+        <div class="sidebar-status">
+            <span id="api-dot" class="status-dot"></span>
+            <div>
+                <strong>Backend</strong>
+                <p id="api-status">Comprobando API...</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section id="inicio" class="hero-panel">
+            <div class="hero-text">
+                <span class="eyebrow">API REST · JavaFX · SQLite</span>
+                <h2>Gestión integral para centros educativos</h2>
+                <p>
+                    Panel conectado a la API de CentroPlus Connect para consultar datos,
+                    registrar incidencias, crear reservas y gestionar el estado del sistema.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="btn primary" href="/swagger-ui/index.html">Abrir Swagger</a>
+                    <a class="btn ghost" href="/api/v1/health">Comprobar API</a>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img src="img/banner_centro_plus_connect.png" alt="CentroPlus Connect">
+            </div>
+        </section>
+
+        <section class="kpi-grid reveal">
+            <article class="kpi-card glow-blue">
+                <span>👤</span>
+                <div>
+                    <h3 id="usuarios-count">0</h3>
+                    <p>Usuarios</p>
+                </div>
+            </article>
+
+            <article class="kpi-card glow-green">
+                <span>📚</span>
+                <div>
+                    <h3 id="actividades-count">0</h3>
+                    <p>Actividades</p>
+                </div>
+            </article>
+
+            <article class="kpi-card glow-orange">
+                <span>📅</span>
+                <div>
+                    <h3 id="reservas-count">0</h3>
+                    <p>Reservas</p>
+                </div>
+            </article>
+
+            <article class="kpi-card glow-red">
+                <span>⚠️</span>
+                <div>
+                    <h3 id="incidencias-count">0</h3>
+                    <p>Incidencias</p>
+                </div>
+            </article>
+        </section>
+
+
+        <section id="ejecutivo" class="executive-grid reveal">
+            <article class="executive-card">
+                <span>💰</span>
+                <div>
+                    <p>Ingresos estimados</p>
+                    <h3 id="kpi-ingresos">0 €</h3>
+                </div>
+            </article>
+
+            <article class="executive-card">
+                <span>🏆</span>
+                <div>
+                    <p>Actividad top</p>
+                    <h3 id="kpi-actividad-top">-</h3>
+                </div>
+            </article>
+
+            <article class="executive-card">
+                <span>📊</span>
+                <div>
+                    <p>Ocupación media</p>
+                    <h3 id="kpi-ocupacion">0%</h3>
+                </div>
+            </article>
+
+            <article class="executive-card">
+                <span>🚨</span>
+                <div>
+                    <p>Incidencias abiertas</p>
+                    <h3 id="kpi-incidencias-abiertas">0</h3>
+                </div>
+            </article>
+        </section>
+
+        <section id="acciones" class="section compact-section reveal">
+            <div class="section-title">
+                <span>Operaciones rápidas</span>
+                <h2>Gestionar desde la web</h2>
+                <p>Acciones conectadas directamente con los endpoints POST, PATCH y DELETE de la API.</p>
+            </div>
+
+            <div class="actions-grid">
+                <article class="form-card">
+                    <h3>Crear incidencia</h3>
+                    <form id="incidencia-form">
+                        <label>
+                            Usuario
+                            <select id="incidencia-usuario" required></select>
+                        </label>
+
+                        <label>
+                            Asunto
+                            <input id="incidencia-asunto" type="text" placeholder="Ej: Problema con reserva" required>
+                        </label>
+
+                        <label>
+                            Descripción
+                            <textarea id="incidencia-descripcion" placeholder="Describe la incidencia..." required></textarea>
+                        </label>
+
+                        <label>
+                            Fecha
+                            <input id="incidencia-fecha" type="date" required>
+                        </label>
+
+                        <button type="submit" class="btn primary full">Enviar incidencia</button>
+                    </form>
+                </article>
+
+                <article class="form-card">
+                    <h3>Reservar actividad</h3>
+                    <form id="reserva-form">
+                        <label>
+                            Usuario
+                            <select id="reserva-usuario" required></select>
+                        </label>
+
+                        <label>
+                            Actividad
+                            <select id="reserva-actividad" required></select>
+                        </label>
+
+                        <label>
+                            Fecha
+                            <input id="reserva-fecha" type="date" required>
+                        </label>
+
+                        <button type="submit" class="btn primary full">Crear reserva</button>
+                    </form>
+                </article>
+
+                <article class="form-card">
+                    <h3>Crear usuario</h3>
+                    <form id="usuario-form">
+                        <label>
+                            Nombre
+                            <input id="usuario-nombre" type="text" placeholder="Ej: Laura Martín" required>
+                        </label>
+
+                        <label>
+                            DNI
+                            <input id="usuario-dni" type="text" placeholder="Ej: 44444444D" required>
+                        </label>
+
+                        <label>
+                            Email
+                            <input id="usuario-email" type="email" placeholder="Ej: laura@email.com" required>
+                        </label>
+
+                        <label>
+                            Teléfono
+                            <input id="usuario-telefono" type="text" placeholder="Ej: 600444444">
+                        </label>
+
+                        <label>
+                            Tipo de usuario
+                            <select id="usuario-tipo" required>
+                                <option value="ALUMNO">ALUMNO</option>
+                                <option value="SOCIO">SOCIO</option>
+                                <option value="AMBOS">AMBOS</option>
+                            </select>
+                        </label>
+
+                        <button type="submit" class="btn primary full">Crear usuario</button>
+                    </form>
+                </article>
+
+
+                <article class="form-card">
+                    <h3>Crear actividad</h3>
+                    <form id="actividad-form">
+                        <label>
+                            Nombre
+                            <input id="actividad-nombre" type="text" placeholder="Ej: Robótica" required>
+                        </label>
+
+                        <label>
+                            Tipo
+                            <select id="actividad-tipo" required>
+                                <option value="ACADEMICA">ACADEMICA</option>
+                                <option value="DEPORTIVA">DEPORTIVA</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Duración
+                            <input id="actividad-duracion" type="number" min="1" placeholder="60" required>
+                        </label>
+
+                        <label>
+                            Precio
+                            <input id="actividad-precio" type="number" min="0" step="0.01" placeholder="25.50" required>
+                        </label>
+
+                        <label>
+                            Plazas máximas
+                            <input id="actividad-plazas-maximas" type="number" min="1" placeholder="15" required>
+                        </label>
+
+                        <button type="submit" class="btn primary full">Crear actividad</button>
+                    </form>
+                </article>
+
+                <article class="system-card">
+                    <h3>Resumen del sistema</h3>
+
+                    <div class="bar-item">
+                        <span>Usuarios <strong id="usuarios-bar-value">0</strong></span>
+                        <div class="progress-bar"><div id="usuarios-bar" class="progress-fill"></div></div>
+                    </div>
+
+                    <div class="bar-item">
+                        <span>Actividades <strong id="actividades-bar-value">0</strong></span>
+                        <div class="progress-bar"><div id="actividades-bar" class="progress-fill"></div></div>
+                    </div>
+
+                    <div class="bar-item">
+                        <span>Reservas <strong id="reservas-bar-value">0</strong></span>
+                        <div class="progress-bar"><div id="reservas-bar" class="progress-fill"></div></div>
+                    </div>
+
+                    <div class="bar-item">
+                        <span>Incidencias <strong id="incidencias-bar-value">0</strong></span>
+                        <div class="progress-bar"><div id="incidencias-bar" class="progress-fill"></div></div>
+                    </div>
+                </article>
+            </div>
+
+            <p id="toast" class="toast hidden"></p>
+        </section>
+
+        <section id="graficas" class="section-card reveal">
+            <div class="section-title">
+                <span>Analítica</span>
+                <h2>Gráficas del sistema</h2>
+                <p>Resumen visual generado en tiempo real a partir de los datos de la API.</p>
+            </div>
+
+            <div class="charts-grid">
+                <article class="chart-card">
+                    <h3>Usuarios por tipo</h3>
+                    <div id="chart-usuarios-tipo" class="chart-bars"></div>
+                </article>
+
+                <article class="chart-card">
+                    <h3>Actividades por tipo</h3>
+                    <div id="chart-actividades-tipo" class="chart-bars"></div>
+                </article>
+
+                <article class="chart-card">
+                    <h3>Reservas por actividad</h3>
+                    <div id="chart-reservas-actividad" class="chart-bars"></div>
+                </article>
+
+                <article class="chart-card">
+                    <h3>Incidencias por estado</h3>
+                    <div id="chart-incidencias-estado" class="chart-bars"></div>
+                </article>
+            </div>
+        </section>
+
+
+        <section id="historico" class="section-card reveal">
+            <div class="section-title">
+                <span>Histórico</span>
+                <h2>Estadísticas históricas</h2>
+                <p>Vista simulada de evolución mensual para presentar el sistema como un producto más completo.</p>
+            </div>
+
+            <div class="historical-grid">
+                <article class="historical-card">
+                    <h3>Reservas por mes</h3>
+                    <div id="historico-reservas" class="timeline-bars"></div>
+                </article>
+
+                <article class="historical-card">
+                    <h3>Ingresos estimados por mes</h3>
+                    <div id="historico-ingresos" class="timeline-bars"></div>
+                </article>
+
+                <article class="historical-card">
+                    <h3>Incidencias por mes</h3>
+                    <div id="historico-incidencias" class="timeline-bars"></div>
+                </article>
+            </div>
+        </section>
+
+        <section id="api-explorer" class="section-card reveal">
+            <div class="section-title inline">
+                <div>
+                    <span>API Explorer</span>
+                    <h2>Swagger integrado</h2>
+                    <p>Acceso visual a la documentación técnica sin abandonar el panel principal.</p>
+                </div>
+
+                <div class="api-actions">
+                    <a class="btn primary" href="/swagger-ui/index.html" target="_blank">Abrir Swagger</a>
+                    <button class="btn ghost-light" type="button" onclick="recargarSwagger()">Recargar</button>
+                </div>
+            </div>
+
+            <div class="swagger-frame-wrapper">
+                <iframe id="swagger-frame" src="/swagger-ui/index.html" title="Swagger UI"></iframe>
+            </div>
+        </section>
+
+        <section id="exports" class="section-card reveal">
+            <div class="section-title">
+                <span>Exportación</span>
+                <h2>Exportar datos</h2>
+                <p>Descarga la información actual del sistema en formato CSV o JSON.</p>
+            </div>
+
+            <div class="export-grid">
+                <button class="btn primary" onclick="exportarCSV('usuarios')">Usuarios CSV</button>
+                <button class="btn ghost-light" onclick="exportarJSON('usuarios')">Usuarios JSON</button>
+                <button class="btn ghost-light" onclick="exportarPDF('usuarios')">Usuarios PDF</button>
+
+                <button class="btn primary" onclick="exportarCSV('actividades')">Actividades CSV</button>
+                <button class="btn ghost-light" onclick="exportarJSON('actividades')">Actividades JSON</button>
+                <button class="btn ghost-light" onclick="exportarPDF('actividades')">Actividades PDF</button>
+
+                <button class="btn primary" onclick="exportarCSV('reservas')">Reservas CSV</button>
+                <button class="btn ghost-light" onclick="exportarJSON('reservas')">Reservas JSON</button>
+                <button class="btn ghost-light" onclick="exportarPDF('reservas')">Reservas PDF</button>
+
+                <button class="btn primary" onclick="exportarCSV('incidencias')">Incidencias CSV</button>
+                <button class="btn ghost-light" onclick="exportarJSON('incidencias')">Incidencias JSON</button>
+                <button class="btn ghost-light" onclick="exportarPDF('incidencias')">Incidencias PDF</button>
+            </div>
+        </section>
+
+
+        <section id="calendario" class="section-card reveal">
+            <div class="section-title inline">
+                <div>
+                    <span>Calendario</span>
+                    <h2>Reservas programadas</h2>
+                    <p>Vista mensual generada a partir de las reservas actuales.</p>
+                </div>
+
+                <div class="calendar-controls">
+                    <button class="btn ghost-light" type="button" onclick="cambiarMesCalendario(-1)">Anterior</button>
+                    <strong id="calendar-title">Mes actual</strong>
+                    <button class="btn ghost-light" type="button" onclick="cambiarMesCalendario(1)">Siguiente</button>
+                </div>
+            </div>
+
+            <div id="calendar-grid" class="calendar-grid"></div>
+        </section>
+
+        <section class="split-layout reveal">
+            <div id="actividades" class="section-card reveal">
+                <div class="section-title inline">
+                    <div>
+                        <span>Catálogo</span>
+                        <h2>Actividades</h2>
+                    </div>
+                    <a href="/api/v1/actividades">Endpoint</a>
+                </div>
+
+                <div class="filters-row">
+                    <input id="buscar-actividad" type="search" placeholder="Buscar actividad...">
+                    <select id="filtro-tipo-actividad">
+                        <option value="TODAS">Todas</option>
+                        <option value="DEPORTIVA">Deportivas</option>
+                        <option value="ACADEMICA">Académicas</option>
+                    </select>
+                    <select id="filtro-plazas-actividad">
+                        <option value="TODAS">Todas las plazas</option>
+                        <option value="DISPONIBLES">Con plazas</option>
+                        <option value="COMPLETAS">Completas</option>
+                    </select>
+                </div>
+
+                <div id="latest-activities" class="cards-grid">
+                    <p>Cargando actividades...</p>
+                </div>
+            </div>
+
+            <div id="usuarios" class="section-card reveal">
+                <div class="section-title inline">
+                    <div>
+                        <span>Comunidad</span>
+                        <h2>Usuarios</h2>
+                    </div>
+                    <a href="/api/v1/usuarios">Endpoint</a>
+                </div>
+
+                <div class="filters-row two-columns">
+                    <input id="buscar-usuario" type="search" placeholder="Buscar usuario...">
+                    <select id="filtro-tipo-usuario">
+                        <option value="TODOS">Todos</option>
+                        <option value="ALUMNO">Alumnos</option>
+                        <option value="SOCIO">Socios</option>
+                        <option value="AMBOS">Ambos</option>
+                    </select>
+                </div>
+
+                <div id="usuarios-grid" class="cards-grid">
+                    <p>Cargando usuarios...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="split-layout reveal">
+            <div id="reservas" class="section-card reveal">
+                <div class="section-title inline">
+                    <div>
+                        <span>Inscripciones</span>
+                        <h2>Reservas</h2>
+                    </div>
+                    <a href="/api/v1/reservas">Endpoint</a>
+                </div>
+
+                <div class="filters-row two-columns">
+                    <input id="buscar-reserva" type="search" placeholder="Buscar reserva...">
+                    <select id="filtro-estado-reserva">
+                        <option value="TODAS">Todas</option>
+                        <option value="ACTIVA">Activas</option>
+                        <option value="CANCELADA">Canceladas</option>
+                        <option value="FINALIZADA">Finalizadas</option>
+                    </select>
+                </div>
+
+                <div id="reservas-grid" class="cards-grid">
+                    <p>Cargando reservas...</p>
+                </div>
+            </div>
+
+            <div id="incidencias" class="section-card reveal">
+                <div class="section-title inline">
+                    <div>
+                        <span>Soporte</span>
+                        <h2>Incidencias</h2>
+                    </div>
+                    <a href="/api/v1/incidencias">Endpoint</a>
+                </div>
+
+                <div class="filters-row two-columns">
+                    <input id="buscar-incidencia" type="search" placeholder="Buscar incidencia...">
+                    <select id="filtro-estado-incidencia">
+                        <option value="TODAS">Todas</option>
+                        <option value="ABIERTA">Abiertas</option>
+                        <option value="EN_PROCESO">En proceso</option>
+                        <option value="RESUELTA">Resueltas</option>
+                    </select>
+                </div>
+
+                <div id="incidencias-grid" class="cards-grid">
+                    <p>Cargando incidencias...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tecnologias" class="section-card reveal">
+            <div class="section-title">
+                <span>Stack técnico</span>
+                <h2>Tecnologías utilizadas</h2>
+                <p>Herramientas principales usadas en la aplicación JavaFX y en la API REST.</p>
+            </div>
+
+            <div class="tech-grid">
+                <span>Java 17</span>
+                <span>Spring Boot</span>
+                <span>Spring Data JPA</span>
+                <span>H2 Database</span>
+                <span>MapStruct</span>
+                <span>Swagger</span>
+                <span>JUnit 5</span>
+                <span>Mockito</span>
+                <span>JavaFX</span>
+                <span>SQLite</span>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div>
+                <strong>CentroPlus Connect</strong>
+                <p>Proyecto de gestión integral para centros educativos.</p>
+            </div>
+            <p>© 2026 Alejandro Donate García · IES Puerto de la Cruz</p>
+        </footer>
+    </main>
+</div>
+
+<div id="notification-center" class="notification-center"></div>
+
+<div id="edit-modal" class="modal hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 id="modal-title">Editar registro</h3>
+            <button type="button" class="modal-close" type="button" onclick="cerrarModal()">×</button>
+        </div>
+
+        <form id="edit-form" class="modal-form"></form>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

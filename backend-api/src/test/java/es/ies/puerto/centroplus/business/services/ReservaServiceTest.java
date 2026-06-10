@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import es.ies.puerto.centroplus.adapters.out.persistencia.actividad.ActividadPersistenceAdapter;
 import es.ies.puerto.centroplus.adapters.out.persistencia.reserva.ReservaPersistenceAdapter;
+import es.ies.puerto.centroplus.domain.model.Actividad;
 import es.ies.puerto.centroplus.domain.model.Reserva;
 /**
  * Clase de prueba para el servicio de reservas
@@ -15,6 +17,7 @@ import es.ies.puerto.centroplus.domain.model.Reserva;
  */
 class ReservaServiceTest {
     private ReservaPersistenceAdapter reservaPersistenceAdapter;
+    private ActividadPersistenceAdapter actividadPersistenceAdapter;
     private ReservaService reservaService;
     /**
      * Configuración inicial para cada prueba
@@ -22,7 +25,8 @@ class ReservaServiceTest {
     @BeforeEach
     void setUp() {
         reservaPersistenceAdapter = mock(ReservaPersistenceAdapter.class);
-        reservaService = new ReservaService(reservaPersistenceAdapter);
+        actividadPersistenceAdapter = mock(ActividadPersistenceAdapter.class);
+        reservaService = new ReservaService(reservaPersistenceAdapter, actividadPersistenceAdapter);
     }
     /**
      * Prueba para el método findAll del servicio de reservas
@@ -53,11 +57,19 @@ class ReservaServiceTest {
      */
     @Test
     void saveDebeGuardarReserva() {
-        Reserva reserva = new Reserva(1L, 1L, 1L, "2024-06-08", "CONFIRMADA");
-        when(reservaPersistenceAdapter.save(reserva)).thenReturn(reserva);
+        Reserva reserva = new Reserva(null, 1L, 1L, "2024-06-08", "CONFIRMADA");
+        Reserva reservaGuardada = new Reserva(3L, 1L, 1L, "2024-06-08", "CONFIRMADA");
+        Actividad actividad = new Actividad( 1L, "Yoga", "DEPORTIVA", 60, 25.50, 15, 8);
+        when(actividadPersistenceAdapter.findById(1L)).thenReturn(Optional.of(actividad));
+        when(actividadPersistenceAdapter.save(any(Actividad.class))).thenReturn(actividad);
+        when(reservaPersistenceAdapter.save(reserva)).thenReturn(reservaGuardada);
         Reserva resultado = reservaService.save(reserva);
         assertNotNull(resultado);
+        assertEquals(3L, resultado.getId());
         assertEquals(1L, resultado.getIdUsuario());
+        assertEquals(9, actividad.getPlazasOcupadas());
+        verify(actividadPersistenceAdapter, times(1)).findById(1L);
+        verify(actividadPersistenceAdapter, times(1)).save(actividad);
         verify(reservaPersistenceAdapter, times(1)).save(reserva);
     }
     /**
@@ -79,10 +91,17 @@ class ReservaServiceTest {
      */
     @Test
     void deleteDebeDevolverTrueSiExiste() {
-        when(reservaPersistenceAdapter.existsById(1L)).thenReturn(true);
+        Reserva reserva = new Reserva(1L, 1L, 1L, "2024-06-08", "ACTIVA");
+        Actividad actividad = new Actividad( 1L, "Yoga", "DEPORTIVA", 60, 25.50, 15, 8);
+        when(reservaPersistenceAdapter.findById(1L)).thenReturn(Optional.of(reserva));
+        when(actividadPersistenceAdapter.findById(1L)).thenReturn(Optional.of(actividad));
+        when(actividadPersistenceAdapter.save(any(Actividad.class))).thenReturn(actividad);
         boolean resultado = reservaService.delete(1L);
         assertTrue(resultado);
-        verify(reservaPersistenceAdapter, times(1)).existsById(1L);
+        assertEquals(7, actividad.getPlazasOcupadas());
+        verify(reservaPersistenceAdapter, times(1)).findById(1L);
+        verify(actividadPersistenceAdapter, times(1)).findById(1L);
+        verify(actividadPersistenceAdapter, times(1)).save(actividad);
         verify(reservaPersistenceAdapter, times(1)).deleteById(1L);
     }
     /**
@@ -90,10 +109,12 @@ class ReservaServiceTest {
      */
     @Test
     void deleteDebeDevolverFalseSiNoExiste() {
-        when(reservaPersistenceAdapter.existsById(99L)).thenReturn(false);
+        when(reservaPersistenceAdapter.findById(99L))
+                .thenReturn(Optional.empty());
         boolean resultado = reservaService.delete(99L);
         assertFalse(resultado);
-        verify(reservaPersistenceAdapter, times(1)).existsById(99L);
+        verify(reservaPersistenceAdapter, times(1)).findById(99L);
         verify(reservaPersistenceAdapter, never()).deleteById(99L);
+        verify(actividadPersistenceAdapter, never()).save(any(Actividad.class));
     }
 }

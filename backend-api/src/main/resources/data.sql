@@ -21,3 +21,8 @@ INSERT INTO incidencias (id, id_usuario, asunto, descripcion, fecha, estado)
 VALUES
 (1, 1, 'Problema con reserva', 'No puedo reservar una plaza', '2025-01-12', 'ABIERTA'),
 (2, 2, 'Cambio de horario', 'El horario de la actividad no coincide', '2025-01-13', 'EN_PROCESO');
+
+ALTER TABLE usuarios ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE actividades ALTER COLUMN id RESTART WITH 6;
+ALTER TABLE reservas ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE incidencias ALTER COLUMN id RESTART WITH 3;

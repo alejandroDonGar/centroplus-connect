@@ -1,6 +1,10 @@
 # CentroPlus API REST
 
-## 1. Introducción
+![Swagger Integrado](../imgs/swagger_integrado.png)
+
+---
+
+# 1. Introducción
 
 CentroPlus API REST es una aplicación desarrollada utilizando Spring Boot cuyo objetivo principal es proporcionar una interfaz de comunicación entre los clientes del sistema CentroPlus Connect y la capa de persistencia de datos.
 
@@ -35,13 +39,15 @@ Desarrollar un servicio backend robusto y mantenible que permita la gestión int
 
 # 3. Tecnologías utilizadas
 
+La siguiente imagen muestra las principales tecnologías empleadas durante el desarrollo del proyecto.
+
+![Tecnologías utilizadas](../imgs/tecnologias_usadas.png)
+
 El proyecto ha sido desarrollado utilizando las siguientes tecnologías:
 
 ## Java 17
 
 Lenguaje principal utilizado para el desarrollo de toda la aplicación.
-
-Java proporciona robustez, orientación a objetos y una amplia integración con el ecosistema Spring.
 
 ## Spring Boot 3
 
@@ -59,65 +65,35 @@ Entre sus ventajas destacan:
 
 Permite abstraer gran parte de las operaciones de persistencia mediante repositorios basados en interfaces.
 
-Gracias a esta tecnología se evita la escritura manual de consultas SQL para las operaciones CRUD más habituales.
-
 ## H2 Database
 
 Base de datos relacional utilizada durante el desarrollo y las pruebas.
 
-La información se carga automáticamente mediante scripts SQL definidos en el proyecto.
-
 ## MapStruct
 
-Framework utilizado para realizar conversiones entre:
-
-* Entidades JPA
-* Modelos de dominio
-
-Esto evita la escritura repetitiva de código de transformación.
+Framework utilizado para realizar conversiones entre entidades y modelos de dominio.
 
 ## Swagger / OpenAPI
 
 Permite generar documentación interactiva de todos los endpoints REST disponibles.
 
-Gracias a Swagger es posible probar cada endpoint directamente desde el navegador.
-
 ## Maven
 
 Herramienta de gestión y construcción del proyecto.
-
-Se utiliza para:
-
-* Gestión de dependencias.
-* Compilación.
-* Ejecución de pruebas.
-* Empaquetado de la aplicación.
 
 ## JUnit 5 y Mockito
 
 Utilizados para implementar las pruebas unitarias del sistema.
 
-JUnit proporciona la infraestructura de testing mientras que Mockito permite la simulación de dependencias mediante mocks.
+---
 
 # 4. Arquitectura Hexagonal
 
-La aplicación ha sido desarrollada siguiendo el patrón de Arquitectura Hexagonal, también conocido como Ports and Adapters.
+La aplicación ha sido desarrollada siguiendo el patrón de Arquitectura Hexagonal (Ports and Adapters).
 
 Este enfoque arquitectónico busca desacoplar la lógica de negocio de las tecnologías concretas utilizadas para la entrada y salida de información.
 
-De esta forma, la lógica principal del sistema permanece independiente de aspectos como:
-
-* Bases de datos.
-* Frameworks.
-* Interfaces gráficas.
-* APIs externas.
-* Sistemas de mensajería.
-
-La principal ventaja de esta arquitectura es que facilita la evolución del sistema a largo plazo, permitiendo sustituir tecnologías concretas sin modificar la lógica de negocio.
-
 ## Flujo de funcionamiento
-
-Cuando un cliente realiza una petición HTTP, ésta sigue el siguiente recorrido:
 
 ```text
 Cliente
@@ -143,561 +119,498 @@ Base de Datos
 
 La respuesta recorre el camino inverso hasta llegar nuevamente al cliente.
 
-Este desacoplamiento permite que la lógica de negocio pueda mantenerse estable incluso si en el futuro se sustituye la base de datos H2 por MySQL, PostgreSQL o cualquier otro sistema de persistencia.
+Esta separación facilita la mantenibilidad, el testing y la futura evolución del sistema.
 
 ---
 
-# 5. Estructura del proyecto
+# 5. Documentación mediante Swagger
 
-El proyecto se encuentra organizado en distintos paquetes siguiendo las responsabilidades de cada capa.
+Uno de los aspectos más importantes del proyecto es la integración de Swagger/OpenAPI.
 
-## Dominio
+Swagger permite consultar y probar todos los endpoints disponibles directamente desde el navegador sin necesidad de herramientas externas.
 
-```text
-domain/model
-```
+## Interfaz principal
 
-Contiene las entidades principales del sistema.
+![Swagger principal](../imgs/swagger_integrado.png)
 
-```text
-Actividad
-Usuario
-Reserva
-Incidencia
-```
+Figura 1. Vista principal de la documentación Swagger integrada en CentroPlus Connect.
 
-Estas clases representan los conceptos fundamentales del negocio y no dependen de ninguna tecnología concreta.
+## Funcionalidades disponibles
 
-Por ejemplo:
+Desde Swagger es posible:
 
-* Una Actividad representa una actividad ofertada por el centro.
-* Un Usuario representa una persona registrada en el sistema.
-* Una Reserva representa la inscripción de un usuario en una actividad.
-* Una Incidencia representa una comunicación realizada por un usuario.
+* Consultar todos los recursos disponibles.
+* Analizar modelos de petición y respuesta.
+* Ejecutar operaciones GET, POST, PATCH y DELETE.
+* Visualizar códigos de estado HTTP.
+* Comprobar el comportamiento de la API en tiempo real.
 
-Las entidades del dominio constituyen el núcleo de la aplicación.
+La documentación se genera automáticamente a partir de los controladores implementados en Spring Boot.
 
----
+# 6. Endpoints disponibles
 
-## Business
+La API REST de CentroPlus se organiza en cuatro módulos principales:
 
-```text
-business
-├── ports
-└── services
-```
+* Usuarios
+* Actividades
+* Reservas
+* Incidencias
 
-### Ports
+Además, incorpora un endpoint de monitorización del estado del sistema.
 
-Los puertos definen contratos que especifican qué operaciones puede realizar la lógica de negocio.
-
-Ejemplos:
-
-```text
-ActividadServicePort
-UsuarioServicePort
-ReservaServicePort
-IncidenciaServicePort
-```
-
-Estos contratos permiten que los servicios trabajen sin conocer detalles de implementación.
-
-### Services
-
-Los servicios implementan la lógica de negocio del sistema.
-
-Entre sus responsabilidades se encuentran:
-
-* Validación de datos.
-* Gestión de operaciones CRUD.
-* Coordinación entre diferentes componentes.
-* Aplicación de reglas de negocio.
-
-Ejemplos:
-
-```text
-ActividadService
-UsuarioService
-ReservaService
-IncidenciaService
-```
+Cada módulo dispone de operaciones CRUD completas mediante los métodos HTTP GET, POST, PATCH y DELETE.
 
 ---
 
-## Adaptadores de entrada
+# 6.1 Gestión de Usuarios
 
-```text
-adapters/in
-```
+La gestión de usuarios permite registrar, consultar, modificar y eliminar usuarios dentro del sistema.
 
-Permiten que sistemas externos interactúen con la aplicación.
+## Obtener todos los usuarios
 
-### API
+**GET /api/v1/usuarios**
 
-```text
-adapters/in/api
-```
+![GET Usuarios](../imgs/swagger_usuario_get.png)
 
-Contiene los objetos utilizados para intercambiar información mediante JSON.
+Este endpoint devuelve la colección completa de usuarios registrados.
 
-Ejemplos:
-
-```text
-ActividadRequest
-ActividadResponse
-
-UsuarioRequest
-UsuarioResponse
-```
-
-Estos DTOs evitan exponer directamente los modelos internos.
-
-### Controllers
-
-```text
-adapters/in/controlador
-```
-
-Gestionan las peticiones HTTP recibidas.
-
-Ejemplos:
-
-```text
-ActividadController
-UsuarioController
-ReservaController
-IncidenciaController
-HealthController
-```
-
-Cada controlador se encarga de:
-
-* Recibir peticiones.
-* Invocar la lógica de negocio.
-* Transformar resultados.
-* Generar respuestas HTTP.
-
----
-
-## Adaptadores de salida
-
-```text
-adapters/out/persistencia
-```
-
-Implementan el acceso a la base de datos.
-
-Cada módulo dispone de:
-
-```text
-JpaEntity
-JpaRepository
-PersistenceAdapter
-```
-
-Por ejemplo:
-
-```text
-ActividadJpaEntity
-ActividadJpaRepository
-ActividadPersistenceAdapter
-```
-
-El adaptador traduce las operaciones de negocio a operaciones concretas sobre la base de datos.
-
----
-
-## Mappers
-
-```text
-adapters/mapper
-```
-
-Los mappers son responsables de transformar objetos entre distintas capas.
-
-Ejemplos:
-
-```text
-ActividadMapper
-UsuarioMapper
-ReservaMapper
-IncidenciaMapper
-```
-
-Su utilización evita duplicar código de conversión y mejora la mantenibilidad.
-
----
-
-# 6. Modelo de dominio
-
-El modelo de dominio representa los conceptos centrales del sistema CentroPlus.
-
-## Actividad
-
-Representa una actividad ofertada por el centro.
-
-Información almacenada:
-
-* Identificador.
-* Nombre.
-* Tipo de actividad.
-* Duración.
-* Precio.
-* Plazas máximas.
-* Plazas ocupadas.
-
-Además, el sistema calcula automáticamente las plazas disponibles.
-
----
-
-## Usuario
-
-Representa una persona registrada dentro de la plataforma.
-
-Información almacenada:
-
-* Identificador.
-* Nombre.
-* DNI.
-* Correo electrónico.
-* Teléfono.
-* Tipo de usuario.
-
-Los usuarios pueden realizar reservas y generar incidencias.
-
----
-
-## Reserva
-
-Representa la inscripción de un usuario en una actividad.
-
-Información almacenada:
-
-* Identificador.
-* Usuario asociado.
-* Actividad asociada.
-* Fecha.
-* Estado.
-
-El estado permite conocer la situación actual de la reserva.
-
----
-
-## Incidencia
-
-Representa una comunicación realizada por un usuario.
-
-Información almacenada:
-
-* Identificador.
-* Usuario asociado.
-* Asunto.
-* Descripción.
-* Fecha.
-* Estado.
-
-Las incidencias permiten registrar problemas, sugerencias o consultas relacionadas con el funcionamiento del centro.
-
----
-
-# 7. Persistencia y acceso a datos
-
-La persistencia se implementa mediante Spring Data JPA.
-
-Esta tecnología proporciona una capa de abstracción que simplifica enormemente el acceso a la base de datos.
-
-Los repositorios extienden las interfaces proporcionadas por Spring, obteniendo automáticamente operaciones CRUD básicas.
-
-Por ejemplo:
-
-```java
-public interface ActividadJpaRepository
-       extends JpaRepository<ActividadJpaEntity, Long> {
-}
-```
-
-Gracias a ello es posible realizar operaciones como:
-
-* Guardar registros.
-* Buscar por identificador.
-* Obtener listados completos.
-* Eliminar registros.
-
-sin necesidad de escribir consultas SQL manuales.
-
-Esta aproximación reduce la cantidad de código y mejora la mantenibilidad del proyecto.
-
-La aplicación utiliza actualmente una base de datos H2 en memoria, cargando información inicial mediante el archivo:
-
-```text
-src/main/resources/data.sql
-```
-
-Esto permite disponer automáticamente de datos de prueba cada vez que se inicia la aplicación.
-
-# 8. Documentación de la API mediante Swagger
-
-Uno de los objetivos principales del proyecto ha sido facilitar la utilización y mantenimiento de la API REST.
-
-Para ello se ha incorporado Swagger/OpenAPI, una herramienta que permite generar automáticamente documentación interactiva a partir de los controladores desarrollados en Spring Boot.
-
-Gracias a Swagger, cualquier desarrollador puede consultar todos los endpoints disponibles sin necesidad de revisar el código fuente.
-
-Además, la herramienta permite ejecutar peticiones reales directamente desde el navegador.
-
-## Acceso a Swagger UI
-
-Una vez iniciada la aplicación, la documentación puede consultarse mediante la siguiente dirección:
-
-```text
-http://localhost:8080/swagger-ui/index.html
-```
-
-Desde esta interfaz es posible:
-
-* Consultar todos los endpoints disponibles.
-* Visualizar los parámetros requeridos.
-* Ejecutar peticiones GET, POST, PATCH y DELETE.
-* Analizar las respuestas generadas por el sistema.
-* Comprobar códigos de estado HTTP.
-
-Esta funcionalidad resulta especialmente útil durante las fases de desarrollo, pruebas y mantenimiento.
-
----
-
-## Documento OpenAPI
-
-Además de la interfaz gráfica, Swagger genera automáticamente la especificación OpenAPI en formato JSON.
-
-```text
-http://localhost:8080/v3/api-docs
-```
-
-Este documento puede utilizarse para:
-
-* Integración con otras aplicaciones.
-* Generación automática de clientes REST.
-* Herramientas de testing.
-* Sistemas de documentación externos.
-
----
-
-# 9. Endpoints disponibles
-
-La API proporciona operaciones CRUD completas para las cuatro entidades principales del sistema.
-
----
-
-## Gestión de actividades
-
-Permite administrar todas las actividades ofertadas por el centro.
-
-### Obtener todas las actividades
-
-```http
-GET /api/v1/actividades
-```
-
-Devuelve un listado completo de actividades registradas.
-
-Ejemplo de respuesta:
+### Respuesta
 
 ```json
 [
   {
     "id": 1,
-    "nombre": "Yoga",
-    "tipoActividad": "DEPORTIVA",
-    "duracion": 60,
-    "precio": 25.50,
-    "plazasMaximas": 15,
-    "plazasOcupadas": 8,
-    "plazasDisponibles": 7
+    "nombre": "Juan Pérez",
+    "dni": "12345678A",
+    "email": "juan@email.com",
+    "telefono": "600123123",
+    "tipoUsuario": "ALUMNO"
   }
 ]
 ```
 
-### Obtener una actividad
+---
 
-```http
-GET /api/v1/actividades/{id}
+## Crear usuario
+
+**POST /api/v1/usuarios**
+
+![POST Usuarios](../imgs/swagger_usuario_post.png)
+
+Permite registrar un nuevo usuario en el sistema.
+
+### Cuerpo de la petición
+
+```json
+{
+  "nombre": "Juan Pérez",
+  "dni": "12345678A",
+  "email": "juan@email.com",
+  "telefono": "600123123",
+  "tipoUsuario": "ALUMNO"
+}
 ```
 
-Permite recuperar una actividad concreta mediante su identificador.
+---
 
-### Crear actividad
+## Obtener usuario por ID
 
-```http
-POST /api/v1/actividades
+**GET /api/v1/usuarios/{id}**
+
+![GET Usuario por ID](../imgs/swagger_usuario_get_id.png)
+
+Recupera la información de un usuario específico mediante su identificador.
+
+### Parámetros
+
+| Parámetro | Tipo |
+| --------- | ---- |
+| id        | Long |
+
+---
+
+## Actualizar usuario
+
+**PATCH /api/v1/usuarios/{id}**
+
+![PATCH Usuario](../imgs/swagger_usuario_patch_id.png)
+
+Permite modificar parcialmente la información de un usuario existente.
+
+### Ejemplo
+
+```json
+{
+  "telefono": "600987654"
+}
 ```
+
+---
+
+## Eliminar usuario
+
+**DELETE /api/v1/usuarios/{id}**
+
+![DELETE Usuario](../imgs/swagger_usuario_delete_id.png)
+
+Elimina permanentemente un usuario del sistema.
+
+---
+
+# 6.2 Gestión de Actividades
+
+Las actividades representan los eventos o cursos ofertados por el centro.
+
+## Obtener actividades
+
+**GET /api/v1/actividades**
+
+![GET Actividades](../imgs/swagger_actividades_get.png)
+
+Devuelve el listado completo de actividades registradas.
+
+### Respuesta
+
+```json
+[
+  {
+    "id": 1,
+    "nombre": "Curso de Java",
+    "descripcion": "Programación Java",
+    "plazas": 20
+  }
+]
+```
+
+---
+
+## Crear actividad
+
+**POST /api/v1/actividades**
+
+![POST Actividad](../imgs/swagger_actividades_post.png)
 
 Permite registrar una nueva actividad.
 
-### Actualizar actividad
+### Cuerpo de la petición
 
-```http
-PATCH /api/v1/actividades/{id}
+```json
+{
+  "nombre": "Curso de Java",
+  "descripcion": "Programación Java",
+  "plazas": 20
+}
 ```
 
-Actualiza parcialmente los datos de una actividad existente.
+---
 
-### Eliminar actividad
+## Obtener actividad por ID
 
-```http
-DELETE /api/v1/actividades/{id}
+**GET /api/v1/actividades/{id}**
+
+![GET Actividad por ID](../imgs/swagger_actividades_get_id.png)
+
+Obtiene la información detallada de una actividad concreta.
+
+---
+
+## Actualizar actividad
+
+**PATCH /api/v1/actividades/{id}**
+
+![PATCH Actividad](../imgs/swagger_actividades_patch_id.png)
+
+Permite modificar los datos de una actividad existente.
+
+### Ejemplo
+
+```json
+{
+  "plazas": 25
+}
 ```
+
+---
+
+## Eliminar actividad
+
+**DELETE /api/v1/actividades/{id}**
+
+![DELETE Actividad](../imgs/swagger_actividades_delete_id.png)
 
 Elimina una actividad del sistema.
 
----
+# 6.3 Gestión de Reservas
 
-## Gestión de usuarios
+El módulo de reservas permite gestionar la inscripción de usuarios en las actividades disponibles del sistema.
 
-Permite administrar todos los usuarios registrados.
-
-### Obtener usuarios
-
-```http
-GET /api/v1/usuarios
-```
-
-Obtiene el listado completo de usuarios.
-
-### Obtener usuario por identificador
-
-```http
-GET /api/v1/usuarios/{id}
-```
-
-Devuelve la información de un usuario específico.
-
-### Crear usuario
-
-```http
-POST /api/v1/usuarios
-```
-
-Registra un nuevo usuario.
-
-### Actualizar usuario
-
-```http
-PATCH /api/v1/usuarios/{id}
-```
-
-Actualiza los datos de un usuario existente.
-
-### Eliminar usuario
-
-```http
-DELETE /api/v1/usuarios/{id}
-```
-
-Elimina un usuario del sistema.
+Cada reserva relaciona un usuario con una actividad y almacena información sobre la fecha y estado de la reserva.
 
 ---
 
-## Gestión de reservas
+## Obtener todas las reservas
 
-Permite controlar la inscripción de usuarios en actividades.
+**GET /api/v1/reservas**
 
-### Obtener reservas
+![GET Reservas](../imgs/swagger_reservas_get.png)
 
-```http
-GET /api/v1/reservas
+Devuelve el listado completo de reservas registradas.
+
+### Respuesta
+
+```json
+[
+  {
+    "id": 1,
+    "idUsuario": 2,
+    "idActividad": 3,
+    "fecha": "2025-06-15",
+    "estado": "ACTIVA"
+  }
+]
 ```
-
-Obtiene el listado completo de reservas.
-
-### Obtener reserva
-
-```http
-GET /api/v1/reservas/{id}
-```
-
-Recupera una reserva concreta.
-
-### Crear reserva
-
-```http
-POST /api/v1/reservas
-```
-
-Registra una nueva reserva.
-
-### Actualizar reserva
-
-```http
-PATCH /api/v1/reservas/{id}
-```
-
-Actualiza una reserva existente.
-
-### Eliminar reserva
-
-```http
-DELETE /api/v1/reservas/{id}
-```
-
-Elimina una reserva del sistema.
 
 ---
 
-## Gestión de incidencias
+## Crear reserva
 
-Permite gestionar problemas, sugerencias o consultas realizadas por los usuarios.
+**POST /api/v1/reservas**
 
-### Obtener incidencias
+![POST Reserva](../imgs/swagger_reservas_post.png)
 
-```http
-GET /api/v1/incidencias
+Permite crear una nueva reserva asociando un usuario a una actividad.
+
+### Cuerpo de la petición
+
+```json
+{
+  "idUsuario": 2,
+  "idActividad": 3,
+  "fecha": "2025-06-15",
+  "estado": "ACTIVA"
+}
 ```
 
-Obtiene el listado completo de incidencias registradas.
+### Respuesta
 
-### Obtener incidencia
-
-```http
-GET /api/v1/incidencias/{id}
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "idActividad": 3,
+  "fecha": "2025-06-15",
+  "estado": "ACTIVA"
+}
 ```
 
-Recupera una incidencia concreta.
+---
 
-### Crear incidencia
+## Obtener reserva por ID
 
-```http
-POST /api/v1/incidencias
+**GET /api/v1/reservas/{id}**
+
+![GET Reserva por ID](../imgs/swagger_reservas_get_id.png)
+
+Permite consultar una reserva específica utilizando su identificador.
+
+### Parámetros
+
+| Parámetro | Tipo |
+| --------- | ---- |
+| id        | Long |
+
+---
+
+## Actualizar reserva
+
+**PATCH /api/v1/reservas/{id}**
+
+![PATCH Reserva](../imgs/swagger_reservas_patch_id.png)
+
+Permite modificar parcialmente los datos de una reserva.
+
+### Ejemplo
+
+```json
+{
+  "estado": "CANCELADA"
+}
 ```
 
-Registra una nueva incidencia.
+### Respuesta
 
-### Actualizar incidencia
-
-```http
-PATCH /api/v1/incidencias/{id}
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "idActividad": 3,
+  "fecha": "2025-06-15",
+  "estado": "CANCELADA"
+}
 ```
 
-Permite modificar una incidencia existente.
+---
 
-### Eliminar incidencia
+## Eliminar reserva
 
-```http
-DELETE /api/v1/incidencias/{id}
+**DELETE /api/v1/reservas/{id}**
+
+![DELETE Reserva](../imgs/swagger_reservas_delete_id.png)
+
+Elimina una reserva existente del sistema.
+
+### Parámetros
+
+| Parámetro | Tipo |
+| --------- | ---- |
+| id        | Long |
+
+---
+
+# 6.4 Gestión de Incidencias
+
+El módulo de incidencias permite registrar problemas, incidencias técnicas o solicitudes de soporte asociadas a usuarios del sistema.
+
+Cada incidencia contiene información sobre su descripción, estado y fecha de creación.
+
+---
+
+## Obtener incidencias
+
+**GET /api/v1/incidencias**
+
+![GET Incidencias](../imgs/swagger_incidencia_get.png)
+
+Devuelve el listado completo de incidencias registradas.
+
+### Respuesta
+
+```json
+[
+  {
+    "id": 1,
+    "idUsuario": 2,
+    "asunto": "Error de acceso",
+    "descripcion": "No puedo acceder a la actividad",
+    "fecha": "2025-06-15",
+    "estado": "ABIERTA"
+  }
+]
 ```
+
+---
+
+## Crear incidencia
+
+**POST /api/v1/incidencias**
+
+![POST Incidencia](../imgs/swagger_incidencia_post.png)
+
+Permite registrar una nueva incidencia.
+
+### Cuerpo de la petición
+
+```json
+{
+  "idUsuario": 2,
+  "asunto": "Error de acceso",
+  "descripcion": "No puedo acceder a la actividad",
+  "fecha": "2025-06-15",
+  "estado": "ABIERTA"
+}
+```
+
+### Respuesta
+
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "asunto": "Error de acceso",
+  "descripcion": "No puedo acceder a la actividad",
+  "fecha": "2025-06-15",
+  "estado": "ABIERTA"
+}
+```
+
+---
+
+## Obtener incidencia por ID
+
+**GET /api/v1/incidencias/{id}**
+
+![GET Incidencia por ID](../imgs/swagger_incidencia_get_id.png)
+
+Recupera la información de una incidencia concreta mediante su identificador.
+
+### Parámetros
+
+| Parámetro | Tipo |
+| --------- | ---- |
+| id        | Long |
+
+---
+
+## Actualizar incidencia
+
+**PATCH /api/v1/incidencias/{id}**
+
+![PATCH Incidencia](../imgs/swagger_incidencia_patch_id.png)
+
+Permite modificar el contenido o estado de una incidencia existente.
+
+### Ejemplo
+
+```json
+{
+  "estado": "RESUELTA"
+}
+```
+
+### Respuesta
+
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "asunto": "Error de acceso",
+  "descripcion": "No puedo acceder a la actividad",
+  "fecha": "2025-06-15",
+  "estado": "RESUELTA"
+}
+```
+
+---
+
+## Eliminar incidencia
+
+**DELETE /api/v1/incidencias/{id}**
+
+![DELETE Incidencia](../imgs/swagger_incidencia_delete_id.png)
 
 Elimina una incidencia del sistema.
 
+### Parámetros
+
+| Parámetro | Tipo |
+| --------- | ---- |
+| id        | Long |
+
 ---
 
-## Endpoint de estado
+# 6.5 Monitorización del sistema
 
-La API incorpora un endpoint destinado a verificar que la aplicación se encuentra funcionando correctamente.
+Además de los módulos funcionales, la API incorpora un endpoint de monitorización que permite comprobar rápidamente si el servicio se encuentra operativo.
 
-```http
-GET /api/v1/health
-```
+## Health Check
 
-Respuesta esperada:
+**GET /api/v1/health**
+
+![Health Controller](../imgs/swagger_health_controller_get.png)
+
+Este endpoint devuelve una respuesta simple indicando que la API está funcionando correctamente.
+
+### Ejemplo de respuesta
 
 ```json
 {
@@ -705,380 +618,157 @@ Respuesta esperada:
 }
 ```
 
-Este endpoint suele utilizarse durante procesos de monitorización y despliegue.
+### Utilidad
+
+Este endpoint resulta especialmente útil para:
+
+- Verificar la disponibilidad de la API.
+- Integración con herramientas de monitorización.
+- Comprobaciones automáticas durante despliegues.
+- Diagnóstico rápido de incidencias.
 
 ---
 
-# 10. Estrategia de testing
+# 6.6 Schemas y modelos disponibles
 
-La calidad del software ha sido una prioridad durante el desarrollo del proyecto.
+Swagger genera automáticamente la definición de los modelos utilizados por la API.
 
-Por este motivo se han implementado pruebas unitarias para verificar el comportamiento de los distintos componentes del sistema.
+Estos esquemas permiten conocer exactamente la estructura de los datos intercambiados entre cliente y servidor.
 
-Las pruebas han sido desarrolladas utilizando:
+![Schemas Swagger](../imgs/swagger_schemas.png)
 
-* JUnit 5.
-* Mockito.
+Entre los modelos documentados se encuentran:
 
----
+## Usuario
 
-## Objetivos de las pruebas
-
-Las pruebas permiten verificar:
-
-* Correcto funcionamiento de la lógica de negocio.
-* Comportamiento esperado de los controladores.
-* Funcionamiento de los adaptadores de persistencia.
-* Correcta transformación realizada por los mappers.
-* Integridad de los modelos de dominio.
-
----
-
-## Cobertura implementada
-
-Se han desarrollado pruebas para los siguientes componentes:
-
-### Modelos de dominio
-
-```text
-Actividad
-Usuario
-Reserva
-Incidencia
+```json
+{
+  "id": 1,
+  "nombre": "Juan Pérez",
+  "dni": "12345678A",
+  "email": "juan@email.com",
+  "telefono": "600123123",
+  "tipoUsuario": "ALUMNO"
+}
 ```
 
-### DTOs
+## Actividad
 
-```text
-Request
-Response
+```json
+{
+  "id": 1,
+  "nombre": "Curso de Java",
+  "descripcion": "Programación Java",
+  "plazas": 20
+}
 ```
 
-### Servicios
+## Reserva
 
-```text
-ActividadService
-UsuarioService
-ReservaService
-IncidenciaService
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "idActividad": 3,
+  "fecha": "2025-06-15",
+  "estado": "ACTIVA"
+}
 ```
 
-### Adaptadores de persistencia
+## Incidencia
 
-```text
-PersistenceAdapter
-```
-
-### Mappers
-
-```text
-MapStruct Mappers
-```
-
-### Controladores
-
-```text
-REST Controllers
+```json
+{
+  "id": 1,
+  "idUsuario": 2,
+  "asunto": "Error de acceso",
+  "descripcion": "No puedo acceder a la actividad",
+  "fecha": "2025-06-15",
+  "estado": "ABIERTA"
+}
 ```
 
 ---
 
-## Ejecución de las pruebas
+# 7. Pruebas de la API mediante Swagger
 
-Para ejecutar todas las pruebas del sistema:
+Swagger UI proporciona una interfaz interactiva que permite probar todos los endpoints sin necesidad de utilizar herramientas externas como Postman.
 
-```bash
-mvn test
-```
+## Procedimiento de prueba
 
-Una ejecución correcta mostrará:
-
-```text
-BUILD SUCCESS
-```
-
-garantizando que todos los componentes continúan funcionando correctamente tras cualquier modificación del código.
-
-# 11. Base de datos
-
-La API utiliza actualmente una base de datos H2 en memoria durante el desarrollo y las pruebas.
-
-Esta elección permite disponer de un entorno ligero, rápido y fácilmente reproducible sin necesidad de instalar servidores externos.
-
-Cada vez que la aplicación se inicia, la base de datos se genera automáticamente y se cargan los datos iniciales definidos en el proyecto.
-
-## Configuración
-
-La configuración principal se encuentra en:
-
-```text
-src/main/resources/application.properties
-```
-
-Desde este fichero es posible modificar:
-
-* Puerto de ejecución.
-* Configuración de Hibernate.
-* Consola H2.
-* Inicialización de datos.
-* Nivel de logging.
-
-## Datos precargados
-
-La información inicial se encuentra definida en:
-
-```text
-src/main/resources/data.sql
-```
-
-Este archivo incorpora registros de prueba para:
-
-* Usuarios.
-* Actividades.
-* Reservas.
-* Incidencias.
-
-Gracias a ello, la API puede comenzar a utilizarse inmediatamente después de arrancar la aplicación.
-
-## Relación con la aplicación JavaFX
-
-Uno de los objetivos del proyecto CentroPlus Connect ha sido mantener una coherencia entre la aplicación de escritorio y la API REST.
-
-Por este motivo, ambas aplicaciones comparten la misma estructura lógica de datos.
-
-La versión JavaFX utiliza SQLite mediante los archivos:
-
-```text
-database/schema.sql
-database/seed.sql
-```
-
-Mientras que la API REST utiliza entidades JPA equivalentes sobre H2.
-
-Esta estrategia facilita futuras migraciones hacia una arquitectura completamente cliente-servidor.
-
----
-
-# 12. Ejecución y despliegue
-
-## Compilación
-
-Para compilar el proyecto:
-
-```bash
-mvn clean compile
-```
-
-Durante este proceso Maven:
-
-* Descarga dependencias.
-* Genera código MapStruct.
-* Compila todas las clases.
-* Verifica la estructura del proyecto.
-
-Si la compilación finaliza correctamente se mostrará:
-
-```text
-BUILD SUCCESS
-```
-
----
-
-## Ejecución local
-
-Para iniciar la aplicación:
-
-```bash
-mvn spring-boot:run
-```
-
-Spring Boot realizará automáticamente:
-
-1. Inicialización del contenedor Tomcat embebido.
-2. Configuración de Spring.
-3. Creación de la base de datos H2.
-4. Carga de los datos iniciales.
-5. Publicación de los endpoints REST.
-
-Una vez completado el proceso la aplicación quedará accesible desde:
-
-```text
-http://localhost:8080
-```
-
----
-
-## Verificación del sistema
-
-Puede verificarse el correcto funcionamiento utilizando:
+1. Acceder a Swagger UI.
 
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
 
-o bien:
+2. Seleccionar el endpoint deseado.
 
-```text
-GET /api/v1/health
-```
+3. Pulsar el botón **Try it out**.
 
----
+4. Introducir los parámetros o el cuerpo JSON necesario.
 
-# 13. Casos de uso principales
+5. Ejecutar la petición mediante **Execute**.
 
-La API ha sido diseñada para dar soporte a las necesidades de gestión del centro.
-
-A continuación se describen algunos escenarios habituales.
-
-## Consulta de actividades
-
-Un usuario desea conocer las actividades disponibles.
-
-Proceso:
-
-1. El cliente realiza una petición GET.
-2. El controlador recibe la solicitud.
-3. El servicio consulta los datos.
-4. El adaptador recupera la información de la base de datos.
-5. Se devuelve la lista de actividades.
-
-Resultado:
-
-El usuario obtiene un catálogo actualizado de actividades.
+6. Revisar la respuesta generada por el servidor.
 
 ---
 
-## Registro de una reserva
+## Ventajas de Swagger
 
-Un usuario desea inscribirse en una actividad.
-
-Proceso:
-
-1. El cliente envía una petición POST.
-2. El controlador valida la solicitud.
-3. El servicio procesa la reserva.
-4. Se almacena en la base de datos.
-5. Se devuelve la reserva creada.
-
-Resultado:
-
-La actividad queda asociada al usuario.
+- Documentación automática.
+- Pruebas rápidas desde navegador.
+- Validación de modelos.
+- Visualización de respuestas.
+- Reducción de errores durante el desarrollo.
+- Facilita la integración con otros equipos.
 
 ---
 
-## Gestión de incidencias
+# 8. Buenas prácticas de uso
 
-Un usuario detecta un problema y desea comunicarlo.
+Durante el uso de la API se recomienda:
 
-Proceso:
-
-1. Se crea una incidencia mediante POST.
-2. El sistema registra la información.
-3. La incidencia queda almacenada.
-4. Puede actualizarse posteriormente mediante PATCH.
-
-Resultado:
-
-El centro dispone de un mecanismo formal para gestionar incidencias.
+- Validar siempre los datos enviados.
+- Utilizar identificadores válidos.
+- Comprobar las respuestas HTTP.
+- Gestionar adecuadamente los errores.
+- Mantener actualizada la documentación.
 
 ---
 
-# 14. Ventajas de la arquitectura utilizada
+# 9. Conclusiones
 
-La utilización de Arquitectura Hexagonal aporta numerosos beneficios.
+La API REST de CentroPlus Connect proporciona una solución completa para la gestión de:
 
-## Desacoplamiento
+- Usuarios.
+- Actividades.
+- Reservas.
+- Incidencias.
 
-La lógica de negocio no depende de la tecnología utilizada para la persistencia.
+Gracias al uso de Spring Boot y Swagger/OpenAPI se dispone de una plataforma robusta, mantenible y fácilmente ampliable.
 
-Esto permite sustituir H2 por MySQL o PostgreSQL sin modificar los servicios.
+La arquitectura aplicada facilita la separación de responsabilidades y permite evolucionar el sistema sin afectar a otras capas de la aplicación.
 
----
+Entre las principales características destacan:
 
-## Mantenibilidad
-
-Cada componente tiene una responsabilidad claramente definida.
-
-Esto simplifica:
-
-* Corrección de errores.
-* Evolución del sistema.
-* Incorporación de nuevas funcionalidades.
-
----
-
-## Escalabilidad
-
-La arquitectura facilita la incorporación de:
-
-* Nuevos endpoints.
-* Nuevos adaptadores.
-* Nuevas bases de datos.
-* Sistemas externos.
+- Arquitectura Hexagonal.
+- CRUD completo para todas las entidades.
+- Persistencia mediante H2 Database.
+- Documentación automática con Swagger.
+- Testing automatizado con JUnit y Mockito.
+- Integración con la aplicación JavaFX.
 
 ---
 
-## Testabilidad
+# Autor
 
-La separación entre capas permite realizar pruebas unitarias independientes.
+**Alejandro Donate García**
 
-Cada componente puede verificarse de forma aislada mediante mocks y dobles de prueba.
+GitHub: https://github.com/alejandroDonGar
 
----
+IES Puerto de la Cruz
 
-# 15. Mejoras futuras
-
-Aunque la aplicación cumple completamente los objetivos establecidos, existen diversas líneas de evolución posibles.
-
-## Seguridad
-
-Incorporación de:
-
-* Spring Security.
-* JWT.
-* Control de roles.
+Proyecto DAM · CentroPlus Connect
 
 ---
-
-## Persistencia externa
-
-Sustitución de la base de datos H2 por:
-
-* MySQL.
-* PostgreSQL.
-* MariaDB.
-
----
-
-## Despliegue cloud
-
-Publicación en servicios como:
-
-* Railway.
-* Render.
-* AWS.
-* Azure.
-
----
-
-## Integración completa con JavaFX
-
-Actualmente ambas aplicaciones comparten modelo de datos.
-
-Una futura evolución permitiría que la aplicación JavaFX consumiese directamente la API REST mediante peticiones HTTP.
-
-Esto transformaría el sistema en una arquitectura cliente-servidor completamente distribuida.
-
----
-
-# 16. Conclusiones
-
-El proyecto CentroPlus API REST ha permitido desarrollar una solución moderna para la gestión de usuarios, actividades, reservas e incidencias.
-
-Durante el desarrollo se han aplicado tecnologías y patrones ampliamente utilizados en entornos profesionales como Spring Boot, JPA, MapStruct y Arquitectura Hexagonal.
-
-La aplicación proporciona una API REST completamente funcional, documentada mediante Swagger y respaldada por pruebas unitarias que garantizan la calidad del código.
-
-Además, la estructura modular del proyecto facilita futuras ampliaciones y convierte la solución en una base sólida para evolucionar hacia sistemas de mayor complejidad.
-
-El resultado final es una plataforma mantenible, escalable y preparada para integrarse con aplicaciones cliente como la aplicación JavaFX desarrollada dentro del mismo proyecto CentroPlus Connect.
