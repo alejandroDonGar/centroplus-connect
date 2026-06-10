@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
         description = "API REST para la gestión de usuarios, actividades, reservas e incidencias",  // La descripción de la API REST
         contact = @Contact(
             name = "Alejandro Donate García",                           // El nombre del contacto
-            email = "AlejandroDonGar.proyectoIntramodular@dam.com"      // El correo electrónico del contacto    
+            email = "alexdoga.work@gmail.com"      // El correo electrónico del contacto    
         )
     )
 )
