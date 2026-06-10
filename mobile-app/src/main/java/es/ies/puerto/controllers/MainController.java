@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Priority;
@@ -103,6 +104,14 @@ public class MainController {
         btnActividades.setMaxWidth(Double.MAX_VALUE);
         btnActividades.setOnAction(event -> mostrarActividades());
 
+        Double ingresosTotales = 0.0;
+        for (Actividades a : actividadService.findAll()) {
+            ingresosTotales += a.getPrecio() * a.getPlazasOcupadas();
+        }
+        Label lblIngresos = new Label("Ingresos Totales: " + ingresosTotales + " €");
+        lblIngresos.getStyleClass().add("card-subtitulo");
+        tarjeta.getChildren().add(lblIngresos);
+
         contenido.getChildren().addAll(titulo, descripcion, tarjeta, btnActividades);
         root.setCenter(contenido);
     }
@@ -116,6 +125,16 @@ public class MainController {
 
         Label titulo = new Label("Actividades");
         titulo.getStyleClass().add("titulo");
+
+        // Barra de búsqueda
+        HBox busquedaBox = new HBox(10);
+        TextField campoBusqueda = new TextField();
+        campoBusqueda.setPromptText("Buscar por ID o 'completas'");
+        campoBusqueda.getStyleClass().add("campo-texto");
+        campoBusqueda.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(campoBusqueda, Priority.ALWAYS);
+        Button btnBuscar = new Button("🔍");
+        btnBuscar.getStyleClass().add("boton-secundario");
 
         ListView<Actividades> listaActividades = new ListView<>();
         listaActividades.getStyleClass().add("lista");
@@ -147,6 +166,27 @@ public class MainController {
             }
         });
 
+        btnBuscar.setOnAction(event -> {
+            String texto = campoBusqueda.getText().trim().toLowerCase();
+            if (texto.equals("completas")) {
+                listaActividades.setItems(FXCollections.observableArrayList(actividadService.findCompletas()));
+            } else {
+                try {
+                    int id = Integer.parseInt(texto);
+                    Actividades a = actividadService.findByID(id);
+                    if (a != null) {
+                        listaActividades.setItems(FXCollections.observableArrayList(a));
+                    } else {
+                        listaActividades.setItems(FXCollections.emptyObservableList());
+                    }
+                } catch (NumberFormatException e) {
+                    listaActividades.setItems(FXCollections.observableArrayList(actividadService.findAll()));
+                }
+            }
+        });
+
+        busquedaBox.getChildren().addAll(campoBusqueda, btnBuscar);
+
         listaActividades.setOnMouseClicked(event -> {
             Actividades actividadSeleccionada = listaActividades.getSelectionModel().getSelectedItem();
             if (actividadSeleccionada != null) {
@@ -169,7 +209,7 @@ public class MainController {
 
         stack.getChildren().addAll(listaActividades, fadeTop, fadeBottom);
         
-        contenido.getChildren().addAll(titulo, stack);
+        contenido.getChildren().addAll(titulo, busquedaBox, stack);
         root.setCenter(contenido);
     }
 
@@ -180,25 +220,25 @@ public class MainController {
     private void mostrarDetalleActividad(Actividades actividad) {
         VBox contenido = crearContenedorPantalla();
 
-        Label titulo = new Label(actividad.getNombre()); // Título de la actividad
+        Label titulo = new Label(actividad.getNombre());
         titulo.getStyleClass().add("titulo");
         titulo.setWrapText(true);
 
         int plazasDisponibles = actividad.getPlazasMaximas() - actividad.getPlazasOcupadas();
 
-        Label tipo = new Label("Tipo: " + actividad.getTipoActividad()); // Tipo de actividad
+        Label tipo = new Label("Tipo: " + actividad.getTipoActividad());
         tipo.getStyleClass().add("texto");
 
-        Label duracion = new Label("Duración: " + actividad.getDuracion() + " minutos"); // Duración de la actividad
+        Label duracion = new Label("Duración: " + actividad.getDuracion() + " minutos");
         duracion.getStyleClass().add("texto");
 
-        Label precio = new Label("Precio: " + actividad.getPrecio() + "€"); // Precio de la actividad
+        Label precio = new Label("Precio: " + actividad.getPrecio() + "€");
         precio.getStyleClass().add("texto");
 
-        Label plazas = new Label("Plazas: " + plazasDisponibles); // Plazas disponibles
+        Label plazas = new Label("Plazas: " + plazasDisponibles);
         plazas.getStyleClass().add("texto");
 
-        Button btnReservar = new Button("Reservar plaza"); // Botón de reservar plaza
+        Button btnReservar = new Button("Reservar plaza");
         btnReservar.getStyleClass().add("boton-principal");
         btnReservar.setDisable(plazasDisponibles <= 0);
 
@@ -213,12 +253,81 @@ public class MainController {
             }
         });
 
-        Button btnVolver = new Button("Volver a actividades"); // Botón de volver a actividades
+        Button btnEditar = new Button("Editar Actividad");
+        btnEditar.getStyleClass().add("boton-secundario");
+        btnEditar.setOnAction(event -> mostrarFormularioEditarActividad(actividad));
+
+        Button btnVolver = new Button("Volver a actividades");
         btnVolver.getStyleClass().add("boton-secundario");
         btnVolver.setOnAction(event -> mostrarActividades());
 
-        contenido.getChildren().addAll(titulo, tipo, duracion, precio, plazas, btnReservar, btnVolver);
+        contenido.getChildren().addAll(titulo, tipo, duracion, precio, plazas, btnReservar, btnEditar, btnVolver);
 
+        root.setCenter(contenido);
+    }
+
+    /**
+     * Metodo mostrarFormularioEditarActividad que muestra el formulario de edición de una actividad del escenario
+     * @param actividad La actividad a editar
+     */
+    private void mostrarFormularioEditarActividad(Actividades actividad) {
+        VBox contenido = crearContenedorPantalla();
+
+        Label titulo = new Label("Editar Actividad");
+        titulo.getStyleClass().add("titulo");
+
+        TextField campoNombre = new TextField(actividad.getNombre());
+        campoNombre.setPromptText("Nombre de la actividad");
+        campoNombre.getStyleClass().add("campo-texto");
+
+        TextField campoTipo = new TextField(actividad.getTipoActividad());
+        campoTipo.setPromptText("Tipo de actividad");
+        campoTipo.getStyleClass().add("campo-texto");
+
+        TextField campoDuracion = new TextField(String.valueOf(actividad.getDuracion()));
+        campoDuracion.setPromptText("Duración en minutos");
+        campoDuracion.getStyleClass().add("campo-texto");
+
+        TextField campoPrecio = new TextField(String.valueOf(actividad.getPrecio()));
+        campoPrecio.setPromptText("Precio");
+        campoPrecio.getStyleClass().add("campo-texto");
+
+        TextField campoPlazasMax = new TextField(String.valueOf(actividad.getPlazasMaximas()));
+        campoPlazasMax.setPromptText("Plazas máximas");
+        campoPlazasMax.getStyleClass().add("campo-texto");
+
+        TextField campoPlazasOcup = new TextField(String.valueOf(actividad.getPlazasOcupadas()));
+        campoPlazasOcup.setPromptText("Plazas ocupadas");
+        campoPlazasOcup.getStyleClass().add("campo-texto");
+
+        Button btnGuardar = new Button("Guardar Cambios");
+        btnGuardar.getStyleClass().add("boton-principal");
+        btnGuardar.setOnAction(event -> {
+            try {
+                actividad.setNombre(campoNombre.getText());
+                actividad.setTipoActividad(campoTipo.getText());
+                actividad.setDuracion(Integer.parseInt(campoDuracion.getText()));
+                actividad.setPrecio(Double.parseDouble(campoPrecio.getText()));
+                actividad.setPlazasMaximas(Integer.parseInt(campoPlazasMax.getText()));
+                actividad.setPlazasOcupadas(Integer.parseInt(campoPlazasOcup.getText()));
+
+                boolean actualizado = actividadService.update(actividad);
+                if (actualizado) {
+                    mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Actividad actualizada correctamente.");
+                    mostrarActividades();
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido actualizar la actividad.");
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "Por favor, introduce valores numéricos válidos.");
+            }
+        });
+
+        Button btnVolver = new Button("Volver");
+        btnVolver.getStyleClass().add("boton-secundario");
+        btnVolver.setOnAction(event -> mostrarDetalleActividad(actividad));
+
+        contenido.getChildren().addAll(titulo, campoNombre, campoTipo, campoDuracion, campoPrecio, campoPlazasMax, campoPlazasOcup, btnGuardar, btnVolver);
         root.setCenter(contenido);
     }
 
@@ -231,6 +340,16 @@ public class MainController {
 
         Label titulo = new Label("Mis Reservas");
         titulo.getStyleClass().add("titulo");
+
+        // Barra de búsqueda por ID
+        HBox busquedaBox = new HBox(10);
+        TextField campoBusqueda = new TextField();
+        campoBusqueda.setPromptText("Buscar por ID de reserva");
+        campoBusqueda.getStyleClass().add("campo-texto");
+        campoBusqueda.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(campoBusqueda, Priority.ALWAYS);
+        Button btnBuscar = new Button("🔍");
+        btnBuscar.getStyleClass().add("boton-secundario");
 
         ListView<Reservas> listaReservas = new ListView<>();
         listaReservas.getStyleClass().add("lista");
@@ -263,6 +382,24 @@ public class MainController {
                 }
             }
         });
+
+        btnBuscar.setOnAction(event -> {
+            String texto = campoBusqueda.getText().trim();
+            try {
+                int id = Integer.parseInt(texto);
+                Reservas r = reservaService.findByID(id);
+                if (r != null) {
+                    listaReservas.setItems(FXCollections.observableArrayList(r));
+                } else {
+                    listaReservas.setItems(FXCollections.emptyObservableList());
+                }
+            } catch (NumberFormatException e) {
+                listaReservas.setItems(FXCollections.observableArrayList(reservaService.findAll()));
+            }
+        });
+
+        busquedaBox.getChildren().addAll(campoBusqueda, btnBuscar);
+
         Button btnCancelar = new Button("Cancelar reserva");
         btnCancelar.getStyleClass().add("boton-principal");
         btnCancelar.setDisable(true);
@@ -292,6 +429,17 @@ public class MainController {
             }
         });
 
+        Button btnEditar = new Button("Editar Reserva");
+        btnEditar.getStyleClass().add("boton-secundario");
+        btnEditar.setDisable(true);
+        listaReservas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnEditar.setDisable(newVal == null));
+        btnEditar.setOnAction(event -> {
+            Reservas reservaSeleccionada = listaReservas.getSelectionModel().getSelectedItem();
+            if (reservaSeleccionada != null) {
+                mostrarFormularioEditarReserva(reservaSeleccionada);
+            }
+        });
+
         StackPane stack = new StackPane();
         VBox.setVgrow(stack, Priority.ALWAYS);
         
@@ -307,7 +455,57 @@ public class MainController {
 
         stack.getChildren().addAll(listaReservas, fadeTop, fadeBottom);
 
-        contenido.getChildren().addAll(titulo, stack, btnCancelar);
+        contenido.getChildren().addAll(titulo, busquedaBox, stack, btnCancelar, btnEditar);
+        root.setCenter(contenido);
+    }
+    
+    /**
+     * Metodo mostrarFormularioEditarReserva que muestra el formulario de edición de una reserva del escenario
+     * @param reserva La reserva a editar
+     */
+    private void mostrarFormularioEditarReserva(Reservas reserva) {
+        VBox contenido = crearContenedorPantalla();
+
+        Label titulo = new Label("Editar Reserva");
+        titulo.getStyleClass().add("titulo");
+
+        TextField campoIdUsuario = new TextField(String.valueOf(reserva.getIdUsuario()));
+        campoIdUsuario.setPromptText("ID de usuario");
+        campoIdUsuario.getStyleClass().add("campo-texto");
+
+        TextField campoIdActividad = new TextField(String.valueOf(reserva.getIdActividad()));
+        campoIdActividad.setPromptText("ID de actividad");
+        campoIdActividad.getStyleClass().add("campo-texto");
+
+        TextField campoEstado = new TextField(reserva.getEstado());
+        campoEstado.setPromptText("Estado");
+        campoEstado.getStyleClass().add("campo-texto");
+
+        Button btnGuardar = new Button("Guardar Cambios");
+        btnGuardar.getStyleClass().add("boton-principal");
+        btnGuardar.setOnAction(event -> {
+            try {
+                reserva.setIdUsuario(Integer.parseInt(campoIdUsuario.getText()));
+                reserva.setIdActividad(Integer.parseInt(campoIdActividad.getText()));
+                reserva.setEstado(campoEstado.getText());
+
+                boolean actualizado = reservaService.update(reserva);
+                if (actualizado) {
+                    mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Reserva actualizada correctamente.");
+                    mostrarReservas();
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido actualizar la reserva.");
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "Por favor, introduce valores numéricos válidos.");
+            }
+        });
+
+        Button btnVolver = new Button("Volver");
+        btnVolver.getStyleClass().add("boton-secundario");
+        btnVolver.setOnAction(event -> mostrarReservas());
+
+        contenido.getChildren().addAll(titulo, campoIdUsuario, campoIdActividad, campoEstado, btnGuardar, btnVolver);
         root.setCenter(contenido);
     }
 
@@ -351,6 +549,16 @@ public class MainController {
         
         form.getChildren().addAll(campoAsunto, campoDescripcion, btnEnviar);
 
+        // Barra de búsqueda por ID o ID de usuario
+        HBox busquedaBox = new HBox(10);
+        TextField campoBusqueda = new TextField();
+        campoBusqueda.setPromptText("Buscar por ID de incidencia o ID de usuario");
+        campoBusqueda.getStyleClass().add("campo-texto");
+        campoBusqueda.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(campoBusqueda, Priority.ALWAYS);
+        Button btnBuscar = new Button("🔍");
+        btnBuscar.getStyleClass().add("boton-secundario");
+
         ListView<Incidencias> listaIncidencias = new ListView<>();
         listaIncidencias.getStyleClass().add("lista");
         VBox.setVgrow(listaIncidencias, Priority.ALWAYS);
@@ -376,11 +584,31 @@ public class MainController {
                     desc.getStyleClass().add("card-info");
                     desc.setWrapText(true);
                     
-                    card.getChildren().addAll(asunto, estado, desc);
+                    Label idUsuario = new Label("ID Usuario: " + incidencia.getIdUsuario());
+                    idUsuario.getStyleClass().add("card-info");
+                    
+                    card.getChildren().addAll(asunto, estado, idUsuario, desc);
                     setGraphic(card);
                 }
             }
         });
+
+        btnBuscar.setOnAction(event -> {
+            String texto = campoBusqueda.getText().trim();
+            try {
+                int id = Integer.parseInt(texto);
+                Incidencias i = incidenciaService.findByID(id);
+                if (i != null) {
+                    listaIncidencias.setItems(FXCollections.observableArrayList(i));
+                } else {
+                    listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.incidenciasPorIdUsuario(id)));
+                }
+            } catch (NumberFormatException e) {
+                listaIncidencias.setItems(FXCollections.observableArrayList(incidenciaService.findAll()));
+            }
+        });
+
+        busquedaBox.getChildren().addAll(campoBusqueda, btnBuscar);
 
         btnEnviar.setOnAction(event -> {
             String asunto = campoAsunto.getText();
@@ -413,6 +641,17 @@ public class MainController {
             }
         });
 
+        Button btnEditar = new Button("Editar Incidencia");
+        btnEditar.getStyleClass().add("boton-secundario");
+        btnEditar.setDisable(true);
+        listaIncidencias.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> btnEditar.setDisable(newVal == null));
+        btnEditar.setOnAction(event -> {
+            Incidencias incidenciaSeleccionada = listaIncidencias.getSelectionModel().getSelectedItem();
+            if (incidenciaSeleccionada != null) {
+                mostrarFormularioEditarIncidencia(incidenciaSeleccionada);
+            }
+        });
+
         StackPane stack = new StackPane();
         VBox.setVgrow(stack, Priority.ALWAYS);
         
@@ -431,8 +670,67 @@ public class MainController {
         contenido.getChildren().addAll(
             titulo,
             form,
-            stack
+            busquedaBox,
+            stack,
+            btnEditar
         );
+        root.setCenter(contenido);
+    }
+    
+    /**
+     * Metodo mostrarFormularioEditarIncidencia que muestra el formulario de edición de una incidencia del escenario
+     * @param incidencia La incidencia a editar
+     */
+    private void mostrarFormularioEditarIncidencia(Incidencias incidencia) {
+        VBox contenido = crearContenedorPantalla();
+
+        Label titulo = new Label("Editar Incidencia");
+        titulo.getStyleClass().add("titulo");
+
+        TextField campoIdUsuario = new TextField(String.valueOf(incidencia.getIdUsuario()));
+        campoIdUsuario.setPromptText("ID de usuario");
+        campoIdUsuario.getStyleClass().add("campo-texto");
+
+        TextField campoAsunto = new TextField(incidencia.getAsunto());
+        campoAsunto.setPromptText("Asunto");
+        campoAsunto.getStyleClass().add("campo-texto");
+
+        TextArea campoDescripcion = new TextArea(incidencia.getDescripcion());
+        campoDescripcion.setPromptText("Descripción");
+        campoDescripcion.setWrapText(true);
+        campoDescripcion.setPrefRowCount(3);
+        campoDescripcion.getStyleClass().add("campo-texto");
+
+        TextField campoEstado = new TextField(incidencia.getEstado());
+        campoEstado.setPromptText("Estado");
+        campoEstado.getStyleClass().add("campo-texto");
+
+        Button btnGuardar = new Button("Guardar Cambios");
+        btnGuardar.getStyleClass().add("boton-principal");
+        btnGuardar.setOnAction(event -> {
+            try {
+                incidencia.setIdUsuario(Integer.parseInt(campoIdUsuario.getText()));
+                incidencia.setAsunto(campoAsunto.getText());
+                incidencia.setDescripcion(campoDescripcion.getText());
+                incidencia.setEstado(campoEstado.getText());
+
+                boolean actualizado = incidenciaService.update(incidencia);
+                if (actualizado) {
+                    mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Incidencia actualizada correctamente.");
+                    mostrarIncidencias();
+                } else {
+                    mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se ha podido actualizar la incidencia.");
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "Por favor, introduce valores numéricos válidos.");
+            }
+        });
+
+        Button btnVolver = new Button("Volver");
+        btnVolver.getStyleClass().add("boton-secundario");
+        btnVolver.setOnAction(event -> mostrarIncidencias());
+
+        contenido.getChildren().addAll(titulo, campoIdUsuario, campoAsunto, campoDescripcion, campoEstado, btnGuardar, btnVolver);
         root.setCenter(contenido);
     }
 
@@ -466,7 +764,7 @@ public class MainController {
      * @return El contenedor VBox
      */
     private VBox crearContenedorPantalla() {
-        VBox contenedor = new VBox(25);
+        VBox contenedor = new VBox(20);
         contenedor.setPadding(new Insets(30, 25, 30, 25));
         contenedor.setAlignment(Pos.TOP_CENTER);
         return contenedor;
