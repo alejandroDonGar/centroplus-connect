@@ -8,7 +8,7 @@ import es.ies.puerto.centroplus.domain.model.Reserva;
  * @author Ismael Perez
  * @version 1.0
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring") // El modelo de componente utilizado por MapStruct es Spring Bean para inyectar dependencias
 public interface ReservaMapper {
     /**
      * Mapea una entidad ReservaJpaEntity a un objeto Reserva

@@ -19,19 +19,19 @@ public class ActividadJpaEntity {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id") // El nombre de la columna en la base de datos
     private Long id;
-    @Column(name = "nombre")
+    @Column(name = "nombre") // El nombre de la columna en la base de datos
     private String nombre;
-    @Column(name = "tipo_actividad")
+    @Column(name = "tipo_actividad") // El nombre de la columna en la base de datos
     private String tipoActividad;
-    @Column(name = "duracion")
+    @Column(name = "duracion") // El nombre de la columna en la base de datos
     private Integer duracion;
-    @Column(name = "precio")
+    @Column(name = "precio") // El nombre de la columna en la base de datos
     private Double precio;
-    @Column(name = "plazas_maximas")
+    @Column(name = "plazas_maximas") // El nombre de la columna en la base de datos
     private Integer plazasMaximas;
-    @Column(name = "plazas_ocupadas")
+    @Column(name = "plazas_ocupadas") // El nombre de la columna en la base de datos
     private Integer plazasOcupadas;
     /**
      * Metodo constructor por defecto

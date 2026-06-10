@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author AlejandroDonGar
  * @version 1.0
  */
-@Tag(name = "Usuarios", description = "Gestión de usuarios")
+@Tag(name = "Incidencias", description = "Gestión de incidencias")
 @RestController
 @RequestMapping("/api/v1/incidencias")
 public class IncidenciaController {
