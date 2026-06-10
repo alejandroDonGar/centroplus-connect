@@ -2,9 +2,41 @@
 
 ![Banner](imgs/banner_proyecto.png)
 
-CentroPlus Connect es un proyecto desarrollado como solución de gestión para un centro educativo, permitiendo administrar usuarios, actividades, reservas e incidencias mediante una aplicación de escritorio desarrollada en JavaFX y una API REST desarrollada con Spring Boot.
+CentroPlus Connect es una solución de gestión desarrollada para centros educativos que permite administrar usuarios, actividades, reservas e incidencias mediante una aplicación de escritorio desarrollada con JavaFX y una API REST construida con Spring Boot.
 
-El proyecto ha sido diseñado siguiendo buenas prácticas de desarrollo software, aplicando separación por capas, Arquitectura Hexagonal en el backend y persistencia de datos mediante SQLite y H2.
+El proyecto ha sido diseñado aplicando buenas prácticas de ingeniería del software, utilizando una arquitectura desacoplada, persistencia de datos relacional y documentación automática mediante Swagger/OpenAPI.
+
+---
+
+## Vista previa
+
+### Aplicación JavaFX
+
+![Aplicación JavaFX](imgs/pagina_principal_aplicacion.png)
+
+### API REST documentada con Swagger
+
+![Swagger](imgs/swagger_integrado.png)
+
+---
+
+## Características destacadas
+
+✅ Aplicación de escritorio desarrollada con JavaFX
+
+✅ API REST desarrollada con Spring Boot
+
+✅ Arquitectura Hexagonal en el backend
+
+✅ Persistencia mediante SQLite y H2 Database
+
+✅ CRUD completo para usuarios, actividades, reservas e incidencias
+
+✅ Documentación automática con Swagger/OpenAPI
+
+✅ Testing unitario con JUnit 5 y Mockito
+
+✅ Conversión automática de modelos mediante MapStruct
 
 ---
 
@@ -22,7 +54,8 @@ El proyecto ha sido diseñado siguiendo buenas prácticas de desarrollo software
 * Creación de actividades.
 * Consulta de actividades disponibles.
 * Gestión de plazas.
-* Actualización y eliminación de actividades.
+* Actualización de actividades.
+* Eliminación de actividades.
 
 ### Gestión de reservas
 
@@ -42,30 +75,25 @@ El proyecto ha sido diseñado siguiendo buenas prácticas de desarrollo software
 
 ## Arquitectura del proyecto
 
-El repositorio se divide en tres bloques principales:
+El repositorio se encuentra organizado en tres módulos principales:
 
 ```text
 CentroPlus Connect
 │
 ├── backend-api
+│
 ├── mobile-app
-└── database
+│
+├── database
+│
+├── docs
+│
+└── imgs
 ```
 
-### backend-api
+### Backend API
 
-API REST desarrollada con Spring Boot.
-
-Tecnologías principales:
-
-* Java 17
-* Spring Boot
-* Spring Data JPA
-* H2 Database
-* MapStruct
-* Swagger/OpenAPI
-* JUnit 5
-* Mockito
+API REST desarrollada utilizando Spring Boot.
 
 Arquitectura:
 
@@ -83,19 +111,9 @@ Repository
 Database
 ```
 
----
+### Aplicación JavaFX
 
-### mobile-app
-
-Aplicación de escritorio desarrollada con JavaFX.
-
-Tecnologías principales:
-
-* JavaFX
-* FXML
-* CSS
-* SQLite
-* Maven
+Aplicación de escritorio desarrollada utilizando JavaFX.
 
 Arquitectura:
 
@@ -109,11 +127,9 @@ Repository
 SQLite
 ```
 
----
+### Database
 
-### database
-
-Contiene la estructura compartida de la base de datos:
+Contiene la estructura compartida de la base de datos.
 
 ```text
 database
@@ -127,68 +143,113 @@ Estos scripts permiten recrear la estructura y los datos iniciales utilizados po
 
 ## Tecnologías utilizadas
 
-| Tecnología      | Uso                      |
+| Tecnología      | Función                  |
 | --------------- | ------------------------ |
 | Java 17         | Lenguaje principal       |
 | JavaFX          | Interfaz gráfica         |
-| Spring Boot     | API REST                 |
+| Spring Boot     | Backend REST             |
 | Spring Data JPA | Persistencia             |
 | SQLite          | Base de datos local      |
-| H2              | Base de datos en memoria |
-| MapStruct       | Conversión entre capas   |
-| Swagger         | Documentación API        |
+| H2 Database     | Base de datos en memoria |
+| MapStruct       | Conversión DTO ↔ Modelo  |
+| Swagger/OpenAPI | Documentación REST       |
 | Maven           | Gestión de dependencias  |
-| JUnit 5         | Testing                  |
+| JUnit 5         | Testing unitario         |
 | Mockito         | Mocking                  |
+| CSS             | Personalización visual   |
+| FXML            | Diseño de interfaces     |
 
 ---
 
-## Ejecución
+## Instalación y ejecución
 
-### Aplicación JavaFX
+### Requisitos previos
+
+* Java 17 o superior
+* Maven 3.9 o superior
+* Git
+
+### Clonar repositorio
+
+```bash
+git clone https://github.com/alejandroDonGar/centroplus-connect.git
+cd centroplus-connect
+```
+
+---
+
+## Ejecución de la aplicación JavaFX
 
 ```bash
 cd mobile-app
 mvn clean javafx:run
 ```
 
-### API REST
+La aplicación iniciará utilizando SQLite como sistema de persistencia local.
+
+---
+
+## Ejecución de la API REST
 
 ```bash
 cd backend-api
 mvn spring-boot:run
 ```
 
-Swagger:
+Por defecto la API estará disponible en:
+
+```text
+http://localhost:8080
+```
+
+---
+
+## Documentación Swagger
+
+Una vez iniciada la API REST, la documentación interactiva estará disponible en:
 
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
 
+Swagger permite:
+
+* Consultar todos los endpoints disponibles.
+* Realizar peticiones directamente desde el navegador.
+* Visualizar modelos de datos.
+* Probar operaciones CRUD sin herramientas externas.
+
 ---
 
 ## Testing
 
-Ejecutar pruebas:
+El proyecto incluye pruebas unitarias para garantizar la calidad y estabilidad del sistema.
+
+Ejecutar todas las pruebas:
 
 ```bash
 mvn test
 ```
 
-El proyecto incluye pruebas unitarias para:
+Cobertura principal:
 
-* Modelos.
-* DTOs.
-* Servicios.
-* Mappers.
-* Adaptadores de persistencia.
-* Controladores.
+* DTOs
+* Entidades
+* Servicios
+* Mappers
+* Adaptadores de persistencia
+* Controladores REST
+
+Tecnologías utilizadas:
+
+* JUnit 5
+* Mockito
 
 ---
 
-## Documentación
+## Documentación adicional
 
-La documentación detallada se encuentra disponible en:
+La documentación detallada del proyecto se encuentra disponible en:
 
 ```text
 docs/
@@ -200,11 +261,15 @@ docs/
 
 ## Autor
 
-**Alejandro Donate García**
+### Alejandro Donate García
+
+🔗 GitHub
+
+https://github.com/alejandroDonGar
 
 IES Puerto de la Cruz
 
-Proyecto DAM · CentroPlus Connect
+Proyecto Final DAM · CentroPlus Connect
 
 ---
 
@@ -214,12 +279,20 @@ Proyecto DAM · CentroPlus Connect
 
 ✅ API REST funcional
 
-✅ CRUD completo de usuarios, actividades, reservas e incidencias
+✅ CRUD completo de usuarios
 
-✅ Swagger/OpenAPI
+✅ CRUD completo de actividades
 
-✅ Arquitectura Hexagonal
+✅ CRUD completo de reservas
+
+✅ CRUD completo de incidencias
+
+✅ Arquitectura Hexagonal implementada
+
+✅ Swagger/OpenAPI integrado
 
 ✅ Persistencia mediante SQLite y H2
 
 ✅ Tests unitarios implementados
+
+✅ Proyecto finalizado
